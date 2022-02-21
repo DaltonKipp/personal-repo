@@ -1,3 +1,4 @@
+import platform
 import tkinter as tk
 import screeninfo
 from screeninfo import get_monitors
@@ -5,7 +6,14 @@ from screeninfo import get_monitors
 def main():
     # for m in get_monitors():
     #    print('\n'+str(m)+'\n')
-
+    
+    # platform.machine()
+    # platform.version()
+    # platform.platform()
+    # platform.uname()
+    # platform.system()
+    # platform.processor()
+    
     # Gets screen dimensions from primary monitor
     for m in get_monitors():
         if m.is_primary==True:
