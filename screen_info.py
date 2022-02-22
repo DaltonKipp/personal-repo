@@ -6,14 +6,10 @@ from screeninfo import get_monitors
 def main():
     # for m in get_monitors():
     #    print('\n'+str(m)+'\n')
-    
-    # platform.machine()
-    # platform.version()
-    # platform.platform()
-    # platform.uname()
-    # platform.system()
-    # platform.processor()
-    
+    for a in platform.uname():
+        print("[{0:^19s}][{1:^16s}{2:^6s}][{3:^17s}{4:^6s}][{5:^16s}{6:^6s}][{7:^17s}{8:^6s}]".format(
+            'A',a.system,'B',a.node,'C',a.release,'D',a.verion,'E',a.machine,'F',a.processor))
+
     # Gets screen dimensions from primary monitor
     for m in get_monitors():
         if m.is_primary==True:
