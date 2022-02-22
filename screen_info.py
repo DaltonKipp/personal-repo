@@ -4,27 +4,36 @@ import screeninfo
 from screeninfo import get_monitors
 
 def main():
-    # for m in get_monitors():
-    #    print('\n'+str(m)+'\n')
-    for a in platform.uname():
-        print("[{0:^19s}][{1:^16s}{2:^6s}][{3:^17s}{4:^6s}][{5:^16s}{6:^6s}][{7:^17s}{8:^6s}]".format(
-            'A',a.system,'B',a.node,'C',a.release,'D',a.verion,'E',a.machine,'F',a.processor))
-
-    # Gets screen dimensions from primary monitor
+    i = 0
+    # Prints Screen Information
+    for m in get_monitors():
+        i += 1 
+        istr = "[ " + str(i) + " ]"
+        print("\n<{0:-^120s}>".format(istr))
+        print('\n'+str(m)+'\n')
+    
+    # Prints System Information
+    info = platform.uname()
+    print("<{0:-^120s}>".format("[ SYSTEM INFO ]"))
+    print("\n[{0:^s}{1:^s}][{2:^s}{3:^s}][{4:^s}{5:^s}][{6:^s}{7:^s}][{8:^s}{9:^s}][{10:^s}{11:^s}]".format(
+        'OS:',info.system,'Device Name:',info.node,'Release:',info.release,'Version:',info.version,'Machine:',info.machine,'Processor:',info.processor))        
+    
+    # Prints Screen Information
     for m in get_monitors():
         if m.is_primary==True:
             print('\n')
-            print('{0:-^120s}'.format(""),) # SEPARATION LINE
-            print("[{0:^19s}][{1:^16s}{2:^6d}][{3:^17s}{4:^6d}][{5:^16s}{6:^6d}][{7:^17s}{8:^6d}]".format(
-                'Primary Display','Screen Width: ',m.width,'Screen Height: ',m.height,'Width (mm): ',m.width_mm,'Height (mm): ',m.height_mm))
-            print('{0:-^120s}'.format(""),) # SEPARATION LINE
+            print('<{0:-^87s}>'.format(""),)
+            print("[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]".format(
+                'Primary Display','Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
+            print('<{0:-^87s}>'.format(""))
 
-        if m.is_primary==False:
             i = 2
-            print("[{0:^11s}{1:^8d}][{2:^16s}{3:^6d}][{4:^17s}{5:^6d}][{6:^16s}{7:^6d}][{8:^17s}{9:^6d}]".format(
-                'Display',i,'Screen Width: ',m.width,'Screen Height: ',m.height,'Width (mm): ',m.width_mm,'Height (mm): ',m.height_mm))
-            print('{0:-^120s}'.format(""),) # SEPARATION LINE
+        if m.is_primary==False:
+            print("[{0:^s}{1:^d}][{2:^s}{3:^d}][{4:^s}{5:^d}][{6:^s}{7:^d}][{8:^s}{9:^d}]".format(
+                'Display ',i,'Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
+            print('<{0:-^87s}>'.format(""))
             i = i+1
     print('\n')
+    
 if __name__ == '__main__':
     exit(main())
