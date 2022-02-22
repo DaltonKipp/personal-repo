@@ -15,7 +15,7 @@ def main():
     # Prints System Information
     info = platform.uname()
     print("<{0:-^120s}>".format("[ SYSTEM INFO ]"))
-    print("\n[ {0:^s}{1:^s} ]\n[ {2:^s}{3:^s} ]\n[ {4:^s}{5:^s} ]\n[ {6:^s}{7:^s} ]\n[ {8:^s}{9:^s} ]\n[ {10:^s}{11:^s} ]\n".format(
+    print("\n{0:>60s}{1:<60s}\n{2:>60s}{3:<60s}\n{4:>60s}{5:<60s}\n{6:>60s}{7:<60s}\n{8:>60s}{9:<60s}\n{10:>60s}{11:<60s}\n".format(
         'OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor))        
     
     # Prints Screen Information
