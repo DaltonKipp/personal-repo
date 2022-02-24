@@ -4,6 +4,12 @@ import screeninfo
 from screeninfo import get_monitors
 
 def main():
+    # Prints System Information
+    info = platform.uname()
+    print("\n<{0:-^120s}>".format("[ SYSTEM INFO ]"))
+    print("\n{0:>60s}{1:<60s}\n{2:>60s}{3:<60s}\n{4:>60s}{5:<60s}\n{6:>60s}{7:<60s}\n{8:>60s}{9:<60s}\n{10:>60s}{11:<60s}\n".format(
+        'OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor))
+
     i = 0
     # Prints Screen Information
     for m in get_monitors():
@@ -11,12 +17,6 @@ def main():
         istr = "[ " + str(i) + " ]"
         print("\n<{0:-^120s}>".format(istr))
         print('\n'+str(m)+'\n')
-    
-    # Prints System Information
-    info = platform.uname()
-    print("<{0:-^120s}>".format("[ SYSTEM INFO ]"))
-    print("\n{0:>60s}{1:<60s}\n{2:>60s}{3:<60s}\n{4:>60s}{5:<60s}\n{6:>60s}{7:<60s}\n{8:>60s}{9:<60s}\n{10:>60s}{11:<60s}\n".format(
-        'OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor))        
     
     # Prints Screen Information
     for m in get_monitors():
