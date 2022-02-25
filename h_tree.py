@@ -5,20 +5,20 @@ Robin Andrews - https://compucademy.net/
 
 import turtle
 
-SPEED = 5
-BG_COLOR = "blue"
+SPEED = 'fastest'
+BG_COLOR = "black"
 PEN_COLOR = "lightgreen"
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 DRAWING_WIDTH = 700
 DRAWING_HEIGHT = 700
-PEN_WIDTH = 5
+PEN_WIDTH = 4
 TITLE = "H-Tree Fractal with Python Turtle Graphics"
-FRACTAL_DEPTH = 3
+FRACTAL_DEPTH = 4
 
 
 def draw_line(tur, pos1, pos2):
-    # print("Drawing from", pos1, "to", pos2)  # Uncomment for tracing the algorithm.
+    print("Drawing from", pos1, "to", pos2)
     tur.penup()
     tur.goto(pos1[0], pos1[1])
     tur.pendown()
