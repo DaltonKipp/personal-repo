@@ -3,7 +3,6 @@ import subprocess
 import platform as sysplatform
 import sys
 from sys import platform
-import screeninfo
 from screeninfo import get_monitors
 
 def main():
