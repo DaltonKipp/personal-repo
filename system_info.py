@@ -7,12 +7,16 @@ import screeninfo
 from screeninfo import get_monitors
 
 def main():
-    print('\n')
-    line = "\n<{0:-^120s}>" # line format
+    def new_line():
+        print('\n')
+        
+    new_line()
+    line = "\n<{0:-^120s}>" # Separation line format    tsize = os.get_terminal_size()
     
     tsize = os.get_terminal_size()
     col = tsize.columns
     row = tsize.lines
+    
     print(line.format("[ TERMINAL INFO ]"))
     print("\n{0:>60s}{1:<60d}\n{2:>60s}{3:<60d}".format('ROWS: ',row,'COLUMNS: ',col))
     
@@ -39,9 +43,8 @@ def main():
                 'Display ',i,'Screen Width: ',m.width,'Screen Height: ',m.height,'Width (mm): ',
                 m.width_mm,'Height (mm): ',m.height_mm))
             print(line.format(""))
-            i = i+1
-
-    print('\n')
+            i = i+1        
+    new_line()
     
 if __name__ == '__main__':
     exit(main())
