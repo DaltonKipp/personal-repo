@@ -33,8 +33,7 @@ def main():
     # Prints System Information
     info = sysplatform.uname()
     div_line("[ SYSTEM INFO ]")
-    print(
-        """\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}
+    print("""\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}
         \n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}"""
         .format('OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,
         'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor,h=h)
@@ -43,7 +42,6 @@ def main():
     # Prints Screen Information
     for m in get_monitors():
         if m.is_primary==True:
-            #print('\n')
             div_line("[ MONITOR INFO ]")
             print("\n[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]".format(
                 'Primary Display','Screen Width:',m.width,'Screen Height:',m.height,
@@ -53,7 +51,7 @@ def main():
             i = 2
         if m.is_primary==False:
             print("\n[{0:^s}{1:^d}][{2:^s}{3:^d}][{4:^s}{5:^d}][{6:^s}{7:^d}][{8:^s}{9:^d}]".format(
-                'Display',i,'Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',
+                'Display ',i,'Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',
                 m.width_mm,'Height (mm):',m.height_mm))
             div_line("")
             i = i+1        
