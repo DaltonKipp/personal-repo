@@ -14,24 +14,28 @@ def main():
             os.system('cls')
         else:
             os.system('clear')     
-            
+
+    def div_line(title): # Divider Line w/ a String in the Middle
+        print("\n<{0:-^{col}}>".format(title,col=(col-2)))            
+
     tsize = os.get_terminal_size()
     col = tsize.columns
     h = col/2
     row = tsize.lines
     
     clear(), new_line()
-    def div_line(title): # Divider Line w/ a String in the Middle
-        print("\n<{0:-^{col}}>".format(title,col=(col-2)))
-    
+
+    # Prints Terminal Information
     div_line("[ TERMINAL INFO ]")
-    print("\n{0:>{h}s}{1:<{h}f}\n{2:>{h}s}{3:<{h}f}".format('ROWS: ',row,'COLUMNS: ',col,h=h))
+    print("\n{0:>{h}s}{1:<{h}f}\n{2:>{h}s}{3:<{h}f}"
+          .format('ROWS: ',row,'COLUMNS: ',col,h=h))
     
     # Prints System Information
     info = sysplatform.uname()
     div_line("[ SYSTEM INFO ]")
     print(
-        "\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}\n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}"
+        """\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}
+        \n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}"""
         .format('OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,
         'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor,h=h)
         )
