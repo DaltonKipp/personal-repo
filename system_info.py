@@ -19,15 +19,15 @@ def main():
         print("\n<{0:-^{col}}>".format(title,col=(col-2)))            
 
     tsize = os.get_terminal_size()
-    col = tsize.columns
-    h = col/2
-    row = tsize.lines
+    col = int(tsize.columns)
+    h = int(col/2)
+    row = int(tsize.lines)
     
-    clear(), new_line()
+    clear()
 
     # Prints Terminal Information
     div_line("[ TERMINAL INFO ]")
-    print("\n{0:>{h}s}{1:<{h}f}\n{2:>{h}s}{3:<{h}f}"
+    print("\n{0:>{h}s}{1:<{h}d}\n{2:>{h}s}{3:<{h}d}"
           .format('ROWS: ',row,'COLUMNS: ',col,h=h))
     
     # Prints System Information
@@ -35,17 +35,17 @@ def main():
     div_line("[ SYSTEM INFO ]")
     print("""\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}
         \n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}"""
-        .format('OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,
-        'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor,h=h)
-        )
+        .format('OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'OS RELEASE: ',
+        info.release,'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',
+        info.processor,h=h))
 
     # Prints Screen Information
     for m in get_monitors():
         if m.is_primary==True:
             div_line("[ MONITOR INFO ]")
-            print("\n[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]".format(
-                'Primary Display','Screen Width:',m.width,'Screen Height:',m.height,
-                'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
+            print("\n[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]"
+                  .format('Primary Display','Screen Width:',m.width,'Screen Height:',
+                          m.height,'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
             div_line("")
 
             i = 2
@@ -56,6 +56,6 @@ def main():
             div_line("")
             i = i+1        
     new_line()
-    
+
 if __name__ == '__main__':
     exit(main())
