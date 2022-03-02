@@ -7,7 +7,7 @@ import turtle
 
 SPEED = 'fastest'
 BG_COLOR = "black"
-PEN_COLOR = "lightgreen"
+PEN_COLOR = "lightblue"
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 DRAWING_WIDTH = 700
@@ -54,7 +54,6 @@ def recursive_draw(tur, x, y, width, height, count):
         recursive_draw(tur, x, y + width // 2, width // 2, height // 2, count)
         # Bottom right
         recursive_draw(tur, x + width // 2, y + width // 2, width // 2, height // 2, count)
-
 
 if __name__ == "__main__":
     # Screen setup
