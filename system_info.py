@@ -8,40 +8,51 @@ from screeninfo import get_monitors
 def main():
     def new_line():
         print('\n')
-        
-    new_line()
-    line = "\n<{0:-^120s}>" # Separation line format    tsize = os.get_terminal_size()
-    
+
+    def clear(): # Manages clearing the terminal screen based on OS
+        if sysplatform.system() == 'Windows':
+            os.system('cls')
+        else:
+            os.system('clear')     
+            
     tsize = os.get_terminal_size()
     col = tsize.columns
+    h = col/2
     row = tsize.lines
     
-    print(line.format("[ TERMINAL INFO ]"))
-    print("\n{0:>60s}{1:<60d}\n{2:>60s}{3:<60d}".format('ROWS: ',row,'COLUMNS: ',col))
+    clear()    
+    new_line()
+    def div_line(title): # Divider Line w/ a String in the Middle
+        print("\n<{0:-^{col}}>".format(title,col=(col-2)))
+    
+    div_line("[ TERMINAL INFO ]")
+    print("\n{0:>{h}s}{1:<{h}f}\n{2:>{h}s}{3:<{h}f}".format('ROWS: ',row,'COLUMNS: ',col,h=h))
     
     # Prints System Information
     info = sysplatform.uname()
-    print(line.format("[ SYSTEM INFO ]"))
-    print("\n{0:>60s}{1:<60s}\n{2:>60s}{3:<60s}\n{4:>60s}{5:<60s}\n{6:>60s}{7:<60s}\n{8:>60s}{9:<60s}\n{10:>60s}{11:<60s}".format(
-        'OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,
-        'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor))
+    div_line("[ SYSTEM INFO ]")
+    print(
+        "\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}\n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}"
+        .format('OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'RELEASE: ',info.release,
+        'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',info.processor,h=h)
+        )
 
     # Prints Screen Information
     for m in get_monitors():
         if m.is_primary==True:
             #print('\n')
-            print(line.format("[ MONITOR INFO ]"),)
-            print("\n[ {0:^s} ][ {1:^s}{2:^d} ][ {3:^s}{4:^d} ][ {5:^s}{6:^d} ][ {7:^s}{8:^d} ]".format(
-                'Primary Display','Screen Width: ',m.width,'Screen Height: ',m.height,
-                'Width (mm): ',m.width_mm,'Height (mm): ',m.height_mm))
-            print(line.format(""))
+            div_line("[ MONITOR INFO ]")
+            print("\n[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]".format(
+                'Primary Display','Screen Width:',m.width,'Screen Height:',m.height,
+                'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
+            div_line("")
 
             i = 2
         if m.is_primary==False:
-            print("\n[ {0:^s}{1:^d} ][ {2:^s}{3:^d} ][ {4:^s}{5:^d} ][ {6:^s}{7:^d} ][ {8:^s}{9:^d} ]".format(
-                'Display ',i,'Screen Width: ',m.width,'Screen Height: ',m.height,'Width (mm): ',
-                m.width_mm,'Height (mm): ',m.height_mm))
-            print(line.format(""))
+            print("\n[{0:^s}{1:^d}][{2:^s}{3:^d}][{4:^s}{5:^d}][{6:^s}{7:^d}][{8:^s}{9:^d}]".format(
+                'Display',i,'Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',
+                m.width_mm,'Height (mm):',m.height_mm))
+            div_line("")
             i = i+1        
     new_line()
     
