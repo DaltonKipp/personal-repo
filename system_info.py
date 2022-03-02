@@ -20,8 +20,7 @@ def main():
     h = col/2
     row = tsize.lines
     
-    clear()    
-    new_line()
+    clear(), new_line()
     def div_line(title): # Divider Line w/ a String in the Middle
         print("\n<{0:-^{col}}>".format(title,col=(col-2)))
     
