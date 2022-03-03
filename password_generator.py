@@ -1,5 +1,5 @@
 # PASSWORD GENERATOR
-
+import string
 import random
 
 def main():
@@ -11,8 +11,13 @@ def main():
     char = ['!','@','#','$','%','^','&','*','(',')',':',';','-','_','+','=','~'] # List of available special characters
     alph = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q',
             'r','s','t','u','v','w','x','y','z'] # List of available letters
+    
+    # Equivalent as above
+    numb = string.digits
+    char = string.punctuation 
+    alph = string.ascii_letters
 
-    print('\nHere are [' + str(inst) + '] different [' + str(length) + '] character generated password(s): \n')
+    print('\nHere are [ ' + str(inst) + ' ] different [ ' + str(length) + ' ] character generated password(s): \n')
 
     for x in range(0,inst):                         # Generates given number of passwords
         store = []                                  # Generated Character Storage
