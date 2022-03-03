@@ -4,15 +4,15 @@ import random
 
 def main():
 
-    length = int(input('\nHow long will the password be?: '))           # Choose the length of the password
-    inst = int(input('How many different passwords would you like?: ')) # Choose the number of generated passwords
+    length = int(input('\nHow many characters long will the password be?: '))           # Choose the length of the password
+    inst = int(input('How many different passwords would you like to generate?: ')) # Choose the number of generated passwords
     
     numb = [0,1,2,3,4,5,6,7,8,9] # List of availabe numbers
     char = ['!','@','#','$','%','^','&','*','(',')',':',';','-','_','+','=','~'] # List of available special characters
     alph = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q',
             'r','s','t','u','v','w','x','y','z'] # List of available letters
 
-    print('\nHere are ' + str(inst) + ' different ' + str(length) + ' character generated password(s): \n')
+    print('\nHere are [' + str(inst) + '] different [' + str(length) + '] character generated password(s): \n')
 
     for x in range(0,inst):                         # Generates given number of passwords
         store = []                                  # Generated Character Storage
@@ -29,7 +29,7 @@ def main():
             for z in range(0,length):               # Chooses characters for password from storage
                 rx = random.randrange(0,len(store)) # Random slot in store
                 new_password.append(store[rx])      # Adds characters to the list
-        print('[ {0:^s} ]'.format(str(x+1)))        # Password counter
+        print('[ {0:<s} ]'.format(str(x+1),))       # Password counter
         print(''.join(new_password))                # Prints joined password
         print('\n')                                 # New line
         
