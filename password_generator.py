@@ -4,24 +4,18 @@ import random
 
 def main():
 
-    length = int(input('\nHow many characters long will the password be?: '))           # Choose the length of the password
-    inst = int(input('How many different passwords would you like to generate?: ')) # Choose the number of generated passwords
+    length = int(input('\nHow many characters long will the password be?\n(Suggested 16+): ')) # Choose the length of the password
+    inst = int(input('How many different passwords would you like to generate?: '))            # Choose the number of generated passwords
     
-    numb = [0,1,2,3,4,5,6,7,8,9] # List of availabe numbers
-    char = ['!','@','#','$','%','^','&','*','(',')',':',';','-','_','+','=','~'] # List of available special characters
-    alph = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q',
-            'r','s','t','u','v','w','x','y','z'] # List of available letters
-    
-    # Equivalent as above
-    numb = string.digits
-    char = string.punctuation 
-    alph = string.ascii_letters
+    numb = string.digits        # String of numbers
+    char = string.punctuation   # String of special characters
+    alph = string.ascii_letters # String of lowercase and uppercase letters
 
     print('\nHere are [ ' + str(inst) + ' ] different [ ' + str(length) + ' ] character generated password(s): \n')
 
-    for x in range(0,inst):                         # Generates given number of passwords
-        store = []                                  # Generated Character Storage
-        for y in range(0,100):                      # Generates 100 of each type
+    for x in range(0,inst):                         # Generates specified number of passwords
+        store = []                                  # Generated character storage
+        for y in range(0,100):                      # Generates 100 of each character type
             rn = random.randrange(0,len(numb))      # Random integer for numbers
             rs = random.randrange(0,len(char))      # Random integer for special characters
             ra = random.randrange(0,len(alph))      # Random integer for lowercase letters
