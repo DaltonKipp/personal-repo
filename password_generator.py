@@ -3,14 +3,16 @@ import string
 import random
 
 def main():
-
-    length = int(input('\nHow many characters long will the password be?\n(Suggested 16+): ')) # Choose the length of the password
-    inst = int(input('How many different passwords would you like to generate?: '))            # Choose the number of generated passwords
+    
+    # Choose the length of the password
+    length = int(input('\nHow many characters long will the password be?\n(Suggested 16+): '))
+    # Choose the number of generated passwords
+    inst = int(input('How many different passwords would you like to generate?: ')) 
     
     numb = string.digits        # String of numbers
     char = string.punctuation   # String of special characters
     alph = string.ascii_letters # String of lowercase and uppercase letters
-
+    
     print('\nHere are [ ' + str(inst) + ' ] different [ ' + str(length) + ' ] character generated password(s): \n')
 
     for x in range(0,inst):                         # Generates specified number of passwords
