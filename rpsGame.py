@@ -1,5 +1,7 @@
 import random, sys
 import time
+import platform
+import os
 import colorama
 from colorama import Fore, Style
 from colorama.ansi import clear_line, clear_screen
@@ -21,6 +23,12 @@ space = print('\n')
 wins = 0
 losses = 0
 ties = 0
+
+def clear(): # Manages clearing the terminal screen based on OS
+    if platform.system() == 'Windows':
+        os.system('cls')
+    else:
+        os.system('clear')     
 
 
 while True: # Start Menu while loop
@@ -164,6 +172,7 @@ while startMove == '2': # Auto Mode Option.
     space
     print('{0:^60s}'.format("How many games do you want to simulate?"),end="\n\n") # Start message
     games = int(input('                            '))
+    clear()
     print('\n')
     print('{0:=^60s}'.format((" START "),end="\n\n"))
     print('{0:<13s}{1:^12s}{2:^12s}{3:^12s}{4:^5s}{5:^5}'.format("GAME","USER MOVE","VS.","COMPUTER MOVE","","TALLY"))
