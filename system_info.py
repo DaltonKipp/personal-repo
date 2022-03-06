@@ -39,16 +39,16 @@ def main():
         info.release,'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',
         info.processor,h=h))
 
-    # Prints Screen Information
+    # Prints Screen Information        
+    div_line("[ MONITOR INFO ]")
     for m in get_monitors():
         if m.is_primary==True:
-            div_line("[ MONITOR INFO ]")
             print("\n[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]"
                   .format('Primary Display','Screen Width:',m.width,'Screen Height:',
                           m.height,'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
             div_line("")
 
-            i = 2
+        i = 2
         if m.is_primary==False:
             print("\n[{0:^s}{1:^d}][{2:^s}{3:^d}][{4:^s}{5:^d}][{6:^s}{7:^d}][{8:^s}{9:^d}]".format(
                 'Display ',i,'Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',

@@ -19,7 +19,7 @@ def getAnswer(answerNumber):
         return 'Outlook not so good'
     elif answerNumber == 9:
         return 'Very doubtful'
-        elif answerNumber == 10:
-        	return 'github test'
+    elif answerNumber == 10:
+        return 'github test'
 
 print('Your fortune is: ' + getAnswer(random.randint(1, 9)))

@@ -12,9 +12,9 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 DRAWING_WIDTH = 700
 DRAWING_HEIGHT = 700
-PEN_WIDTH = 4
+PEN_WIDTH = 2
 TITLE = "H-Tree Fractal with Python Turtle Graphics"
-FRACTAL_DEPTH = 4
+FRACTAL_DEPTH = 5
 
 
 def draw_line(tur, pos1, pos2):
