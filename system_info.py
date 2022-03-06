@@ -48,6 +48,7 @@ def main():
                           m.height,'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
             div_line("")
 
+    for m in get_monitors():
         i = 2
         if m.is_primary==False:
             print("\n[{0:^s}{1:^d}][{2:^s}{3:^d}][{4:^s}{5:^d}][{6:^s}{7:^d}][{8:^s}{9:^d}]".format(
