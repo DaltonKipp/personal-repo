@@ -1,3 +1,4 @@
+# https://pypi.org/project/PyDictionary/
 from PyDictionary import Pydictionary
 dict = PyDictionary()
 def meaning(word):
