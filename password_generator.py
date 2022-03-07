@@ -1,6 +1,7 @@
 # PASSWORD GENERATOR
 import string
 import random
+import re
 
 def main():
     
@@ -26,12 +27,13 @@ def main():
             store.append(str(char[rs]))             # Adds random special character to the list
             store.append(str(alph[ra]))             # Adds random lowercase letter to the list
             store.append(str(alph[RA]).upper())     # Adds random uppercase letter to the list
-            new_password = []                       # New Password Storage
+            store_password = []                     # New Password Storage
             for z in range(0,length):               # Chooses characters for password from storage
                 rx = random.randrange(0,len(store)) # Random slot in store
-                new_password.append(store[rx])      # Adds characters to the list
+                store_password.append(store[rx])    # Adds characters to the list
+        password = ''.join(store_password)          # Converts password to a string
         print('[ {0:<s} ]'.format(str(x+1),))       # Password counter
-        print(''.join(new_password))                # Prints joined password
+        print(password)                             # Prints password
         print('\n')                                 # New line
         
 if __name__ == '__main__':
