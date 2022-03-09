@@ -15,8 +15,10 @@
 import string
 import random
 import csv
+import pandas as pd
 import colorama
 from colorama import Fore, Style
+from numpy import append
 
 blue = Fore.BLUE + Style.BRIGHT     # Blue
 cyan = Fore.CYAN + Style.BRIGHT     # Cyan
@@ -40,7 +42,8 @@ def main():
     length_str = yellow + str(length) + reset
     inst_str = yellow + str(inst) + reset
     print(reset+'\nHere are [ '+inst_str+' ] different [ '+length_str+' ] character generated password(s):\n')
-
+    store_passwords = []
+    store_number = []
     for x in range(0,inst):                                 # Generates specified number of passwords
         store = []                                          # Generated character storage
         for y in range(0,100):                              # Generates 100 of each character type
@@ -52,12 +55,31 @@ def main():
             store.append(str(char[rs]))                     # Adds random special character to the list
             store.append(str(alph[ra]))                     # Adds random lowercase letter to the list
             store.append(str(alph[RA]).upper())             # Adds random uppercase letter to the list
-            store_password = []                             # New Password Storage
+            generated_list = []                             # New Password Storage
             for z in range(0,length):                       # Chooses characters for password from storage
                 rx = random.randrange(0,len(store))         # Random slot in store
-                store_password.append(store[rx])            # Adds characters to the list
-        password = green + ''.join(store_password) + reset  # Converts password to a string
-        print('{0:>6d} - {1:s}\n'.format(x+1,password))     # Prints password and counter
+                generated_list.append(store[rx])            # Adds characters to the list
+        password = green + ''.join(generated_list) + reset  # Converts password to a string
+        print('{0:>6d} - {1:s}\n'.format(x,password))       # Prints password and counter
         
+        store_passwords.append(''.join(generated_list))     # Stores all passwords in a list
+    for row in range(0,len(store_passwords)):
+        store_number.append(row)
+    dict = {'Password':store_passwords,'Name':store_number}
+    df = pd.DataFrame(dict)
+    df.to_csv('pandas_test.csv')
+    print(df)
+
+    print('\n Password Storage:')
+    print(store_passwords)
+    print(store_number)
+
+    csv_file = open('./test_file.csv','w+',newline='\n')
+    with csv_file:
+        write = csv.writer(csv_file)
+        for item in store_number:
+            for item in store_passwords:
+                write.writerow((item))
+
 if __name__ == '__main__':
     exit(main())
