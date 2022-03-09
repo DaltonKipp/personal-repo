@@ -1,10 +1,22 @@
 # PASSWORD GENERATOR
 
+"""
+    To Do:
+    - Write to a .csv file
+    - Write to a .json file
+    - Write to a .txt file
+    - Flags for file write
+    - Help flag 
+    - Option to name passwords
+    - Upload to online storage
+    - Check password strength
+"""
+
 import string
 import random
+import csv
 import colorama
 from colorama import Fore, Style
-from colorama.ansi import clear_line, clear_screen
 
 blue = Fore.BLUE + Style.BRIGHT     # Blue
 cyan = Fore.CYAN + Style.BRIGHT     # Cyan
@@ -19,7 +31,7 @@ def main():
     # Choose the length of the password
     length = int(input('\nHow many characters long will the password be? (Suggested 16+): '+yellow))
     # Choose the number of generated passwords
-    inst = int(input(reset+'How many different passwords would you like to generate?: '+yellow)) 
+    inst = int(input(reset+'\nHow many different passwords would you like to generate?: '+yellow)) 
     
     numb = string.digits        # String of numbers
     char = string.punctuation   # String of special characters
@@ -27,7 +39,7 @@ def main():
     
     length_str = yellow + str(length) + reset
     inst_str = yellow + str(inst) + reset
-    print(reset+'\nHere are [ '+inst_str+' ] different [ '+length_str+' ] character generated password(s): \n')
+    print(reset+'\nHere are [ '+inst_str+' ] different [ '+length_str+' ] character generated password(s):\n')
 
     for x in range(0,inst):                                 # Generates specified number of passwords
         store = []                                          # Generated character storage
@@ -45,8 +57,7 @@ def main():
                 rx = random.randrange(0,len(store))         # Random slot in store
                 store_password.append(store[rx])            # Adds characters to the list
         password = green + ''.join(store_password) + reset  # Converts password to a string
-        print('{0:>6d} - {1:s}'.format(x+1,password))       # Password counter
-        print('\n')                                         # New line
+        print('{0:>6d} - {1:s}\n'.format(x+1,password))     # Prints password and counter
         
 if __name__ == '__main__':
     exit(main())
