@@ -6,7 +6,7 @@ import re
 def main():
     
     # Choose the length of the password
-    length = int(input('\nHow many characters long will the password be?\n(Suggested 16+): '))
+    length = int(input('\nHow many characters long will the password be? (Suggested 16+): '))
     # Choose the number of generated passwords
     inst = int(input('How many different passwords would you like to generate?: ')) 
     

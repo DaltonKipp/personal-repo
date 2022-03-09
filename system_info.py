@@ -15,7 +15,7 @@ def main():
         else:
             os.system('clear')     
 
-    def div_line(title): # Divider Line w/ a String in the Middle
+    def div_line(title): # Divider line with a centered string
         print("\n<{0:-^{col}}>".format(title,col=(col-2)))            
 
     tsize = os.get_terminal_size()
@@ -33,30 +33,29 @@ def main():
     # Prints System Information
     info = sysplatform.uname()
     div_line("[ SYSTEM INFO ]")
-    print("""\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}
-        \n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}"""
+    print('\n{0:>{h}s}{1:<{h}s}\n{2:>{h}s}{3:<{h}s}\n{4:>{h}s}{5:<{h}s}\n{6:>{h}s}{7:<{h}s}\n{8:>{h}s}{9:<{h}s}\n{10:>{h}s}{11:<{h}s}'
         .format('OPERATING SYSTEM: ',info.system,'DEVICE NAME: ',info.node,'OS RELEASE: ',
         info.release,'VERSION: ',info.version,'MACHINE: ',info.machine,'PROCESSOR: ',
         info.processor,h=h))
 
-    # Prints Screen Information        
+    # Prints Monitor Information        
     div_line("[ MONITOR INFO ]")
     for m in get_monitors():
         if m.is_primary==True:
-            print("\n[{0:^s}][{1:^s}{2:^d}][{3:^s}{4:^d}][{5:^s}{6:^d}][{7:^s}{8:^d}]"
-                  .format('Primary Display','Screen Width:',m.width,'Screen Height:',
-                          m.height,'Width(mm):',m.width_mm,'Height(mm):',m.height_mm))
+            print('\n{0:^{c}}\n\n{1:>{h}}{2:}p\n{3:>{h}}{4:}p\n{5:>{h}}{6:}mm\n{7:>{h}}{8:}mm'
+                .format('PRIMARY DISPLAY ','SCREEN WIDTH: ',m.width,'SCREEN HEIGHT: ',
+                m.height,'WIDTH: ',m.width_mm,'HEIGHT: ',m.height_mm,h=h,c=col))
             div_line("")
 
     for m in get_monitors():
         i = 2
         if m.is_primary==False:
-            print("\n[{0:^s}{1:^d}][{2:^s}{3:^d}][{4:^s}{5:^d}][{6:^s}{7:^d}][{8:^s}{9:^d}]".format(
-                'Display ',i,'Screen Width:',m.width,'Screen Height:',m.height,'Width(mm):',
-                m.width_mm,'Height (mm):',m.height_mm))
+            print('\n{0:>{h}}{1:<{h}}\n\n{2:>{h}}{3:}p\n{4:>{h}}{5:}p\n{6:>{h}}{7:}mm\n{8:>{h}}{9:}mm'
+                .format('DISPLAY ',i,'SCREEN WIDTH: ',m.width,'SCREEN HEIGHT: ',m.height,'WIDTH: ',
+                m.width_mm,'HEIGHT: ',m.height_mm,h=h))
             div_line("")
             i = i+1        
     new_line()
 
 if __name__ == '__main__':
-    exit(main())
+    sys.exit(main())
