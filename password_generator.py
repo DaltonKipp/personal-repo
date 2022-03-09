@@ -59,7 +59,7 @@ def main():
                 rx = random.randrange(0,len(store))        # Random slot in store
                 generated_list.append(store[rx])           # Adds characters to the list
         password = green + ''.join(generated_list) + reset # Converts password to a string
-        print('{0:>6d} - {1:s}\n'.format(x,password))      # Prints password and counter
+        print('{0:>4d}: {1:s}\n'.format(x,password))      # Prints password and counter
         
         store_passwords.append(''.join(generated_list))                  # Stores all passwords in a list
     csv_path = './test_files/pandas_test.csv'                            # Defines file path
