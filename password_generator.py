@@ -2,9 +2,7 @@
 
 """
     To Do:
-    - Write to a .csv file
     - Write to a .json file
-    - Write to a .txt file
     - Flags for file write
     - Help flag 
     - Option to name passwords
@@ -29,7 +27,15 @@ white = Fore.WHITE + Style.BRIGHT   # White
 reset = Style.RESET_ALL             # Resets all colors
 
 def main():
+    def new_line():
+        print('\n')
     
+    def g(val): # Turns a string green
+        x = green + str(val) + reset
+        return x
+    def y(val): # turns a string yellow
+        y = yellow + str(val) + reset
+        return y
     # Choose the length of the password
     length = int(input('\nHow many characters long will the password be? (Suggested 16+): '+yellow))
     # Choose the number of generated passwords
@@ -39,8 +45,8 @@ def main():
     char = string.punctuation   # String of special characters
     alph = string.ascii_letters # String of lowercase and uppercase letters
     
-    length_str = yellow + str(length) + reset
-    inst_str = yellow + str(inst) + reset
+    length_str = y(str(length))
+    inst_str = y(str(inst))
     print(reset+'\nHere are [ '+inst_str+' ] different [ '+length_str+' ] character generated password(s):\n')
     store_passwords = []                                   # Empty list to store generated passwords
     for x in range(0,inst):                                # Generates specified number of passwords
@@ -59,7 +65,7 @@ def main():
                 rx = random.randrange(0,len(store))        # Random slot in store
                 generated_list.append(store[rx])           # Adds characters to the list
         password = green + ''.join(generated_list) + reset # Converts password to a string
-        print('{0:>4d}: {1:s}\n'.format(x,password))      # Prints password and counter
+        print('{0:>4d}: {1:s}\n'.format(x,password))       # Prints password and counter
         
         store_passwords.append(''.join(generated_list))                  # Stores all passwords in a list
     csv_path = './test_files/pandas_test.csv'                            # Defines file path
