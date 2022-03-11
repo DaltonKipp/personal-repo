@@ -1,4 +1,13 @@
 # https://pypi.org/project/PyDictionary/
+
+"""
+To Do:
+    Find a way to use web scraping to replace PyDictionary
+    - Dictionary.com
+    - Thesaurus.com
+    - Synonym.com
+"""
+
 from PyDictionary import PyDictionary
 import string
 import re
