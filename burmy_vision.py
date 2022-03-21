@@ -110,21 +110,21 @@ def main():
     other2 = RealTimeGraph()
     sin_graph = GraphObj(title='sin', val_fmt='{:6.2f}',
                          val_symbol='>', max_val=1,
-                         axis_length= 210, negative_symbol='<',
+                         axis_length= 50, negative_symbol='<',
                          color=MAGENTA + BRIGHT)
 
     cos_graph = GraphObj(title='cos', val_fmt='{:6.2f}',
                          val_symbol=">", max_val=1,
-                         axis_length= 210, negative_symbol='<',
+                         axis_length= 50, negative_symbol='<',
                          color=GREEN + BRIGHT)
     sin_graph2 = GraphObj(title='sin', val_fmt='{:6.2f}',
                          val_symbol='>', max_val=1,
-                         axis_length= 210, negative_symbol='<',
+                         axis_length= 50, negative_symbol='<',
                          color=RED + BRIGHT)
 
     cos_graph2 = GraphObj(title='cos', val_fmt='{:6.2f}',
                          val_symbol=">", max_val=1,
-                         axis_length= 210, negative_symbol='<',
+                         axis_length= 50, negative_symbol='<',
                          color=BLUE + BRIGHT)
 
     while True:
