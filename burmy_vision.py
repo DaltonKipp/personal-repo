@@ -109,27 +109,38 @@ def main():
     test_plot2 = RealTimeGraph()
     other2 = RealTimeGraph()
     sin_graph = GraphObj(title='sin', val_fmt='{:6.2f}',
-                         val_symbol='/', max_val=1,
-                         axis_length= 210, negative_symbol='>',
+                         val_symbol='>', max_val=1,
+                         axis_length= 210, negative_symbol='<',
                          color=MAGENTA + BRIGHT)
 
     cos_graph = GraphObj(title='cos', val_fmt='{:6.2f}',
-                         val_symbol="?", max_val=1,
+                         val_symbol=">", max_val=1,
                          axis_length= 210, negative_symbol='<',
                          color=GREEN + BRIGHT)
+    sin_graph2 = GraphObj(title='sin', val_fmt='{:6.2f}',
+                         val_symbol='>', max_val=1,
+                         axis_length= 210, negative_symbol='<',
+                         color=RED + BRIGHT)
+
+    cos_graph2 = GraphObj(title='cos', val_fmt='{:6.2f}',
+                         val_symbol=">", max_val=1,
+                         axis_length= 210, negative_symbol='<',
+                         color=BLUE + BRIGHT)
 
     while True:
-        x += 0.5
+        x += 0.01
 
-        test_plot.add_plot(sin_graph.new_value(math.sin(x*2)))
-        other.add_plot(cos_graph.new_value(math.cos(x*3)))
-        test_plot2.add_plot(cos_graph.new_value(math.cos(x/2-1)))
-        other2.add_plot(sin_graph.new_value(math.sin(x)))
+        test_plot.add_plot(sin_graph.new_value(math.sin(x)))
+        other.add_plot(cos_graph.new_value(math.cos(x)))
+        test_plot2.add_plot(cos_graph2.new_value(math.cos(x*2.5)))
+        other2.add_plot(sin_graph2.new_value(math.sin(x*3.6)))
 
         test_plot.disp_graph()
         other.disp_graph()
+        test_plot2.disp_graph()
+        other2.disp_graph()
 
-        time.sleep(0.05)
+        time.sleep(0.025)
 
 if __name__ == '__main__':
     main()
