@@ -108,31 +108,31 @@ class RealTimeGraph:
 
         return graph_str
     
-B = u'\u2588'
+B = u'\u2588' # Solid Block Unicode
 
 def main():                                                     # Main function
-    x = 0                                                       # Defines x variable
+    x = 0                                                       # Establishes x variable
     test_plot = RealTimeGraph()                                 # test_plot instance of the RealTimeGraph() Class
     other = RealTimeGraph()                                     # other instance of the RealTimeGraph() Class
     test_plot2 = RealTimeGraph()                                # test_plot2 instance of the RealTimeGraph() Class
     other2 = RealTimeGraph()                                    # other2 instance of the RealTimeGraph() Class
     sin_graph = GraphObj(title='sin', val_fmt='{:6.2f}',        # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 108, negative_symbol='<', # 
+                         axis_length= 108, negative_symbol=B,   # 
                          color=WHITE)                           # 
 
     cos_graph = GraphObj(title='cos', val_fmt='{:6.2f}',        # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 108, negative_symbol='<', # 
-                         color=GREEN + BRIGHT)                  # 
+                         axis_length= 108, negative_symbol=B,   # 
+                         color=GREEN)                           # 
     sin_graph2 = GraphObj(title='sin', val_fmt='{:6.2f}',       # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 108, negative_symbol='<', # 
-                         color=RED + BRIGHT)                    # 
+                         axis_length= 108, negative_symbol=B,   # 
+                         color=RED)                             # 
 
     cos_graph2 = GraphObj(title='cos', val_fmt='{:6.2f}',       # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 108, negative_symbol='<', # 
+                         axis_length= 108, negative_symbol=B,   # 
                          color=BLUE + BRIGHT)                   # 
 
     while True:
@@ -148,7 +148,7 @@ def main():                                                     # Main function
         test_plot2.disp_graph()
         other2.disp_graph()
 
-        time.sleep(0.02)
+        time.sleep(0.03)
 
 if __name__ == '__main__':
     main()
