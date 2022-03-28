@@ -1,3 +1,10 @@
+"""
+To Do:
+    - Add terminal size dependency
+    - Add different graph types (Triangle, user defined, square, etc.)
+    - Replace 
+"""
+
 import time
 import re
 import argparse
@@ -52,23 +59,22 @@ class RealTimeGraph:
 
     def disp_graph(self):
         # graphs everything 
-        elapsed_time = str(time.time() - self.data_start)
-        re_match = re.search(r'\.[0-9]{2}', elapsed_time)
+        elapsed_time = str(time.time() - self.data_start) # Defines the elapsed time
+        re_match = re.search(r'\.[0-9]{2}', elapsed_time) # Defines str format search
         if re_match:
             ms_str = re_match.group(0)
             time_str = 'T:{} |'.format(ms_str)
         else:
-            ms_str = 'mnmnmnm'
+            ms_str = 'xxx'
             time_str = 'T:{} |'.format(ms_str)
         graph_str = time_str
 
-        for g in self.graph_list:
-            graph_str += self.plot_graph(g)
+        for g in self.graph_list: # For each item in graph_list
+            graph_str += self.plot_graph(g) # Add each plot_graph(g) to graph_str
 
-        print(graph_str)
+        print(graph_str) # Prints the graph string
 
-        # clear the graphlist so that it can be populated next loop
-        self.graph_list = []
+        self.graph_list = [] # Clears the graph_list so that it can be populated next loop
 
     def add_plot(self, graph_obj):
         self.graph_list.append(graph_obj)
@@ -97,40 +103,42 @@ class RealTimeGraph:
         
         val_hist_format = '{:<' + str(axis_length) + '}'
 
-        graph_str = ' ' + val_title + ':' + val_format + ' ' + color + val_hist_format + RESET_ALL +'|'
+        graph_str = ' ' + val_title + ':' + val_format + ' |' + color + val_hist_format + RESET_ALL +'|'
         graph_str = graph_str.format(val, histogram)
 
         return graph_str
+    
+B = u'\u2588'
 
-def main():
-    x = 0
-    test_plot = RealTimeGraph()
-    other = RealTimeGraph()
-    test_plot2 = RealTimeGraph()
-    other2 = RealTimeGraph()
-    sin_graph = GraphObj(title='sin', val_fmt='{:6.2f}',
-                         val_symbol='/', max_val=1,
-                         axis_length= 80, negative_symbol='<',
-                         color=BLACK + BRIGHT)
+def main():                                                     # Main function
+    x = 0                                                       # Defines x variable
+    test_plot = RealTimeGraph()                                 # test_plot instance of the RealTimeGraph() Class
+    other = RealTimeGraph()                                     # other instance of the RealTimeGraph() Class
+    test_plot2 = RealTimeGraph()                                # test_plot2 instance of the RealTimeGraph() Class
+    other2 = RealTimeGraph()                                    # other2 instance of the RealTimeGraph() Class
+    sin_graph = GraphObj(title='sin', val_fmt='{:6.2f}',        # 
+                         val_symbol=B, max_val=1,               # 
+                         axis_length= 108, negative_symbol='<', # 
+                         color=WHITE)                           # 
 
-    cos_graph = GraphObj(title='cos', val_fmt='{:6.2f}',
-                         val_symbol="/", max_val=1,
-                         axis_length= 80, negative_symbol='<',
-                         color=GREEN + BRIGHT)
-    sin_graph2 = GraphObj(title='sin', val_fmt='{:6.2f}',
-                         val_symbol='/', max_val=1,
-                         axis_length= 80, negative_symbol='<',
-                         color=RED + BRIGHT)
+    cos_graph = GraphObj(title='cos', val_fmt='{:6.2f}',        # 
+                         val_symbol=B, max_val=1,               # 
+                         axis_length= 108, negative_symbol='<', # 
+                         color=GREEN + BRIGHT)                  # 
+    sin_graph2 = GraphObj(title='sin', val_fmt='{:6.2f}',       # 
+                         val_symbol=B, max_val=1,               # 
+                         axis_length= 108, negative_symbol='<', # 
+                         color=RED + BRIGHT)                    # 
 
-    cos_graph2 = GraphObj(title='cos', val_fmt='{:6.2f}',
-                         val_symbol="/", max_val=1,
-                         axis_length= 80, negative_symbol='<',
-                         color=BLUE + BRIGHT)
+    cos_graph2 = GraphObj(title='cos', val_fmt='{:6.2f}',       # 
+                         val_symbol=B, max_val=1,               # 
+                         axis_length= 108, negative_symbol='<', # 
+                         color=BLUE + BRIGHT)                   # 
 
     while True:
         x += 0.01
 
-        test_plot.add_plot(sin_graph.new_value(math.sin(x)))
+        test_plot.add_plot(sin_graph.new_value(math.sin(5*x)))
         other.add_plot(cos_graph.new_value(math.cos(x)))
         test_plot2.add_plot(cos_graph2.new_value(math.cos(x*2.5)))
         other2.add_plot(sin_graph2.new_value(math.sin(x*3.6)))
