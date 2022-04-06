@@ -26,10 +26,6 @@ BK_CYAN = Back.CYAN
 RESET_ALL = Fore.RESET + Style.RESET_ALL
 BRIGHT = Style.BRIGHT
 
-# Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
-# Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
-# Style: DIM, NORMAL, BRIGHT, RESET_ALL
-
 class GraphObj:
     def __init__(self, title='->',     # str - Title of the value being graphed
                  val_fmt='{:5.2f}',    # str - Number format of value

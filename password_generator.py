@@ -47,7 +47,7 @@ def main():
     char = string.punctuation   # String of special characters
     alph = string.ascii_letters # String of lowercase and uppercase letters
     
-    length_str = y(str(length))
+    length_str = y(str(length)) 
     inst_str = y(str(inst))
     print(reset+'\nHere are [ '+inst_str+' ] different [ '+length_str+' ] character generated password(s):\n')
     store_passwords = []                                   # Empty list to store generated passwords
@@ -69,21 +69,21 @@ def main():
         password = green + ''.join(generated_list) + reset # Converts password to a string
         print('{0:>4d}: {1:s}\n'.format(x,password))       # Prints password and counter
         
-        store_passwords.append(''.join(generated_list))                  # Stores all passwords in a list
-    csv_path = './test_files/pandas_test.csv'                            # Defines file path
-    dict = {'Password':store_passwords}                                  # .csv data dictionary
-    data_frame = pd.DataFrame(dict)                                      # Creates data frame
-    data_frame.to_csv(csv_path)                                          # Creates .csv file
-    print(cyan+'--> Passwords saved to: "{0:}"\n'.format(csv_path)+reset) # Prints .csv file creation confirmation
+        store_passwords.append(''.join(generated_list))                     # Stores all passwords in a list
+    csv_path = './test_files/pandas_test.csv'                               # Defines file path
+    dict = {'Password':store_passwords}                                     # .csv data dictionary
+    data_frame = pd.DataFrame(dict)                                         # Creates data frame
+    data_frame.to_csv(csv_path)                                             # Creates .csv file
+    print(yellow+'--> Passwords saved to: "{0:}"\n'.format(csv_path)+reset) # Prints .csv file creation confirmation
 
-    txt_path = './test_files/test_text_file.txt'                         # .txt file path
-    text_file = open(txt_path,"w")                                       # Opens new .txt file to write to
-    i = 0                                                                # Iterations
-    for element in store_passwords:                                      # Iterates for each item in the list
-        i += 1                                                           # Iteration counter
-        text_file.write('['+str(i)+'] - '+element+"\n\n")                # Writes the element and two new lines
-    text_file.close()                                                    # Closes the .txt file
-    print(cyan+'--> Passwords saved to: "{0:}"\n'.format(txt_path)+reset) # Prints .txt file creation confirmation
+    txt_path = './test_files/test_text_file.txt'                            # .txt file path
+    text_file = open(txt_path,"w")                                          # Opens new .txt file to write to
+    i = 0                                                                   # Iterations
+    for element in store_passwords:                                         # Iterates for each item in the list
+        i += 1                                                              # Iteration counter
+        text_file.write('['+str(i)+'] - '+element+"\n\n")                   # Writes the element and two new lines
+    text_file.close()                                                       # Closes the .txt file
+    print(yellow+'--> Passwords saved to: "{0:}"\n'.format(txt_path)+reset) # Prints .txt file creation confirmation
 
 if __name__ == '__main__':
     exit(main())
