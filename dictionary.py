@@ -35,7 +35,7 @@ def y(val): # turns a string yellow
 def r(val): # turns a string red
     r = red + str(val) + reset
     return r
-def div_line(title): # Divider line with a centered string
+def line(title): # Divider line with a centered string
     print("\n<{0:-^{col}}>\n".format(title,col=(col-2)))            
 
 tsize = os.get_terminal_size()
@@ -48,37 +48,40 @@ char = string.punctuation
 def mean(word):
     
     output = dict.meaning(word)
+    if output == None:
+        print(r("Error: No results found"))
+        exit()
     print('\nPyDictionary:\n',r(output))
 
     if output.get('Noun') is not None:
-        div_line('[ NOUN ]')
+        line('[ NOUN ]')
         count_1 = 0
         for i in output.get('Noun'):
             count_1 += 1
             print(y("{0:>3}:").format(count_1),i)
 
     if output.get('Verb') is not None:
-        div_line('[ VERB ]')
+        line('[ VERB ]')
         count_2= 0
         for i in output.get('Verb'):
             count_2 += 1
             print(y("{0:>3}:").format(count_2),i)
 
     if output.get('Adjective') is not None:
-        div_line('[ ADJECTIVE ]')
+        line('[ ADJECTIVE ]')
         count_3 = 0
         for i in output.get('Adjective'):
             count_3 += 1
             print(y("{0:>3}:").format(count_3),i)
 
     if output.get('Adverb') is not None:
-        div_line('[ ADVERB ]')
+        line('[ ADVERB ]')
         count_4 = 0
         for i in output.get('Adverb'):
             count_4 += 1
             print(y("{0:>3}:").format(count_4),i)    
 
-    div_line("")
+    line("")
 
-word = input('\nChoose a word: ')
+word = input('\nChoose a word: '+yellow)
 mean(word) # Prints the meaning of the specified word
