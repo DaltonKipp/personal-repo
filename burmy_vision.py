@@ -27,13 +27,13 @@ RESET_ALL = Fore.RESET + Style.RESET_ALL
 BRIGHT = Style.BRIGHT
 
 class GraphObj:
-    def __init__(self, title='->',     # str - Title of the value being graphed
-                 val_fmt='{:5.2f}',    # str - Number format of value
-                 val_symbol='#',       # str - single ascii char that will represent the value
+    def __init__(self, title='->',      # str - Title of the value being graphed
+                 val_fmt='{:5.2f}',     # str - Number format of value
+                 val_symbol='#',        # str - single ascii char that will represent the value
                  max_val=100.0,         # float - maximum value 
                  axis_length=100,       # int - length of axis in char length
-                 negative_symbol='-',  # str - symbol to use for negative values
-                 color=''              # colors - colors listed under Available Colors above.
+                 negative_symbol='-',   # str - symbol to use for negative values
+                 color=''               # colors - colors listed under Available Colors above.
                 ):
         self.title=title
         self.val_fmt=val_fmt
@@ -114,26 +114,26 @@ def main():                                                     # Main function
     other2 = RealTimeGraph()                                    # other2 instance of the RealTimeGraph() Class
     sin_graph = GraphObj(title='sin', val_fmt='{:6.2f}',        # 
                          val_symbol=B, max_val=1,               # 
-                         negative_symbol=B,   # 
+                         negative_symbol=B,                     # 
                          color=WHITE)                           # 
 
     cos_graph = GraphObj(title='cos', val_fmt='{:6.2f}',        # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 50, negative_symbol=B,   # 
+                         axis_length= 50, negative_symbol=B,    # 
                          color=GREEN)                           # 
     sin_graph2 = GraphObj(title='sin', val_fmt='{:6.2f}',       # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 50, negative_symbol=B,   # 
+                         axis_length= 50, negative_symbol=B,    # 
                          color=RED)                             # 
 
     cos_graph2 = GraphObj(title='cos', val_fmt='{:6.2f}',       # 
                          val_symbol=B, max_val=1,               # 
-                         axis_length= 50, negative_symbol=B,   # 
+                         axis_length= 50, negative_symbol=B,    # 
                          color=BLUE + BRIGHT)                   # 
 
     while True:
-        x += 0.1
-        if math.sin(x)<=0:
+        x += 0.01
+        if math.sin(x)<0:
             sin_graph.color = RED
         if math.sin(x)>0:
             sin_graph.color = BLUE
@@ -143,9 +143,9 @@ def main():                                                     # Main function
         # other2.add_plot(sin_graph2.new_value(math.sin(x*4)))
 
         test_plot.disp_graph()
-        #other.disp_graph()
-        # test_plot.disp_graph()
-        #other2.disp_graph()
+        # other.disp_graph()
+        # test_plot2.disp_graph()
+        # other2.disp_graph()
 
         time.sleep(0.01)
 
