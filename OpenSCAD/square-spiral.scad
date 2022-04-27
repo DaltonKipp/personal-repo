@@ -2,7 +2,7 @@
  
  for (i = [0:125])
    {
-       angle = i*360/60;
+       angle = i*360/80;
        distance = i*10;
        r = i*30;
        {
