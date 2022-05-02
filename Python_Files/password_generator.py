@@ -70,13 +70,13 @@ def main():
         print('{0:>4d}: {1:s}\n'.format(x,password))       # Prints password and counter
         
         store_passwords.append(''.join(generated_list))                     # Stores all passwords in a list
-    csv_path = './test_files/pandas_test.csv'                               # Defines file path
+    csv_path = '../test_files/pandas_test.csv'                               # Defines file path
     dict = {'Password':store_passwords}                                     # .csv data dictionary
     data_frame = pd.DataFrame(dict)                                         # Creates data frame
     data_frame.to_csv(csv_path)                                             # Creates .csv file
     print(yellow+'--> Passwords saved to: "{0:}"\n'.format(csv_path)+reset) # Prints .csv file creation confirmation
 
-    txt_path = './test_files/test_text_file.txt'                            # .txt file path
+    txt_path = '../test_files/test_text_file.txt'                            # .txt file path
     text_file = open(txt_path,"w")                                          # Opens new .txt file to write to
     i = 0                                                                   # Iterations
     for element in store_passwords:                                         # Iterates for each item in the list
