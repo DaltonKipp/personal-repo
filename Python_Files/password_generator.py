@@ -27,17 +27,21 @@ white = Fore.WHITE + Style.BRIGHT   # White
 reset = Style.RESET_ALL             # Resets all colors
 
 def main():
+
     def new_line():
         print('\n')
-    
+
     def g(val): # Turns a string green
         x = green + str(val) + reset
         return x
+
     def y(val): # turns a string yellow
         y = yellow + str(val) + reset
         return y
+
     def nl(): # New  line
         print('\n')
+
     # Choose the length of the password
     length = int(input('\nHow many characters long will the password be? (Suggested 16+): '+yellow))
     # Choose the number of generated passwords
@@ -46,7 +50,6 @@ def main():
     numb = string.digits        # String of numbers
     char = string.punctuation   # String of special characters
     alph = string.ascii_letters # String of lowercase and uppercase letters
-    
     length_str = y(str(length)) 
     inst_str = y(str(inst))
     print(reset+'\nHere are [ '+inst_str+' ] different [ '+length_str+' ] character generated password(s):\n')
@@ -70,7 +73,7 @@ def main():
         print('{0:>4d}: {1:s}\n'.format(x,password))       # Prints password and counter
         
         store_passwords.append(''.join(generated_list))                     # Stores all passwords in a list
-    csv_path = '../test_files/pandas_test.csv'                               # Defines file path
+    csv_path = '../test_files/pandas_test.csv'                              # Defines file path
     dict = {'Password':store_passwords}                                     # .csv data dictionary
     data_frame = pd.DataFrame(dict)                                         # Creates data frame
     data_frame.to_csv(csv_path)                                             # Creates .csv file
