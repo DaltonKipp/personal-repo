@@ -65,9 +65,9 @@ class Manager(Employee):                              # Subclass of Employee
         for emp in self.employees:                      # For each emp in the employees list
             print('\n    Employee --> ',emp.fullname()) # Print the emp's full name from the Employee class
 
-print(help(Employee))  # Prints information regarding the Employee class
-print(help(Developer)) # Prints information regarding the Developer class
-print(help(Manager))   # Prints information regarding the Manager class
+# print(help(Employee))  # Prints information regarding the Employee class
+# print(help(Developer)) # Prints information regarding the Developer class
+# print(help(Manager))   # Prints information regarding the Manager class
 
 emp_1 = Employee('Dalton','Kipp',50000)             # Employee class instance
 emp_2 = Employee('Test','Employee',100000)          # Employee class instance 2
@@ -87,6 +87,8 @@ emp_str_2 = 'Steve-Smith-30000' # Employee String to be put into from_string()
 emp_str_3 = 'Jane-Doe-90000'    # Employee String to be put into from_string()
 
 new_emp_1 = Employee.from_string(emp_str_1)                 # Creates a class instance from a string
+new_emp_2 = Employee.from_string(emp_str_2)                 # Creates a class instance from a string
+new_emp_3 = Employee.from_string(emp_str_3)                 # Creates a class instance from a string
 print('\nnew_emp_1.email --> ',new_emp_1.email)             # Prints the employee email from emp_str_1
 print('\nEmployee.raise_amount --> ',Employee.raise_amount) # Prints the class variable raise_amount
 emp_1.raise_amount = 1.25                                   # Defines class instance raise_amount
