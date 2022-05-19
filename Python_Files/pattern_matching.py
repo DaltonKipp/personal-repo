@@ -97,7 +97,7 @@ for groups in emailRegex.findall(text):                     # For groups in emai
 
 if len(matches) > 0:                                        # If there are matches found...
     pyperclip.copy(g+'\n'.join(matches)+rst)                # Copy the matches to the clipboard
-    print(y+'\n\nCopied to clipboard'+rst)                  # Confirmation message
+    print(y+'\n\n---- Copied to clipboard ----\n'+rst)      # Confirmation message
     print(g+'\n'.join(matches)+rst,'\n')                    # Prints what was copied to the clipboard
 
 else:
