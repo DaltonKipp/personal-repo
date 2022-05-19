@@ -15,6 +15,9 @@ g = Fore.GREEN + Style.BRIGHT  # Green
 w = Fore.WHITE + Style.BRIGHT  # White
 rst = Style.RESET_ALL          # Resets all colors
 
+'''
+EXAMPLE CODE
+
 def isPhoneNumber(text):
     if len(text) != 12: # checks length of string
         return False
@@ -52,6 +55,7 @@ match_objects = PhoneNumRegex.search('\nMy number is: (303)-493-1477.')
 print('\nRegex --> '+y+'Phone Number: '+g+match_objects.group()+rst)
 print('\nRegex -->    '+y+'Area Code: '+g+match_objects.group(1)+rst)
 print('\nRegex -->       '+y+'Number: '+g+match_objects.group(2)+'\n'+rst)
+'''
 
 phoneRegex = re.compile(r'''(      # PHONE NUMBER REGEX
     (\d{3}|\(\d{3}\))?             # Finds the area code - Matches a digit exactly 3x or alternatively a set of 3 digits between parenthesis between zero and one times (?)
@@ -104,7 +108,7 @@ else:
     print('\nNo phone numbers or email addresses found.\n') # Otherwise print message saying there were not any matches
 
 '''
-EXAMPLE TEXT
+EXAMPLE COPIED TEXT
 800-420-7240 x 495
 415-863-9900 ext. 112
 415-863-9950 ext 13
