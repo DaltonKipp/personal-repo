@@ -2,17 +2,17 @@
 # CHAPTER 7 - PATTERN MATCHING WITH REGUALR EXPRESSIONS
 
 import re
-from turtle import resetscreen        # Imports Regex
-import pyperclip # Imports pyperclip - copies to clipboard
-from colorama import Fore, Style
+from turtle import resetscreen   # Imports Regex
+import pyperclip                 # Imports pyperclip - copies to clipboard
+from colorama import Fore, Style # Text coloring
 
-b = Fore.BLUE + Style.BRIGHT     # Blue
-c = Fore.CYAN + Style.BRIGHT     # Cyan
-r = Fore.RED + Style.BRIGHT       # Red
+b = Fore.BLUE + Style.BRIGHT   # Blue
+c = Fore.CYAN + Style.BRIGHT   # Cyan
+r = Fore.RED + Style.BRIGHT    # Red
 y = Fore.YELLOW + Style.BRIGHT # Yellow
-g = Fore.GREEN + Style.BRIGHT   # Green
-w = Fore.WHITE + Style.BRIGHT   # White
-rst = Style.RESET_ALL             # Resets all colors
+g = Fore.GREEN + Style.BRIGHT  # Green
+w = Fore.WHITE + Style.BRIGHT  # White
+rst = Style.RESET_ALL          # Resets all colors
 
 def isPhoneNumber(text):
     if len(text) != 12: # checks length of string
@@ -27,7 +27,7 @@ def isPhoneNumber(text):
             return False
     if text[7] !='-': # hyphen check
         return False
-    for i in range(8,12): # last three digits
+    for i in range(8,12): # last four digits
         if not text[i].isdecimal():
             return False
     return True
@@ -52,13 +52,12 @@ print('\nRegex --> '+y+'Phone Number: '+g+match_objects.group()+rst)
 print('\nRegex -->    '+y+'Area Code: '+g+match_objects.group(1)+rst)
 print('\nRegex -->       '+y+'Number: '+g+match_objects.group(2)+'\n'+rst)
 
-
 phoneRegex = re.compile(r'''(     # PHONE NUMBER REGEX
     (\d{3}|\(\d{3}\))?            # Finds the area code - Matches a digit exactly 3x or alternatively a set of 3 digits between parenthesis between zero and one times (?)
     (\s|-|\.)?                    # Finds the separator - Matches a whitespace character (\s), a dash (-), or a period (.), between zero and one times (?)
-    \d{3}                         # Finds the first 3 digits - Matches a digit exactly three times
+    (\d{3})                       # Finds the first 3 digits - Matches a digit exactly three times
     (\s|-|\.)                     # Finds the separator - Matches a space (\s), a dash (-), or a period (.) once
-    \d{4}                         # Finds the last 4 digits - Matches 4 digits exactly once
+    (\d{4})                       # Finds the last 4 digits - Matches 4 digits exactly once
     (\s*(ext|x|ext.)\s*\d{2,5})?  # Finds the extension - Matches a whitespace character (\s) zero to inf times (*), 2nd group matches ext|x|ext., whitespace character 0 to inf, digits 2-5 times, 0 to 1 times (?)
     )''', re.VERBOSE)             # Allows the separation of expressions for better visibility
 
@@ -69,16 +68,19 @@ emailRegex = re.compile(r'''      # EMAIL REGEX
     (\.[a-zA-Z]{2,4})             # .something - Matches a period (.) followed by any letter 2-4 times
     ''',re.VERBOSE)               # Allows the separation of expressions for better visibility
 
-Test_Text = '\nMy email is: dalton8kipp.7678@gmail.com and my phone number is: 303.493.1477 ext. 22'
+Test_Text = '\nMy email is: daltonkipp@gmail.com and my phone number is: (303).493.1477 ext. 22' # Sample text
 
-if emailRegex.search(Test_Text):
-    matchEmail = g+emailRegex.search(Test_Text).group()+rst
+if emailRegex.search(Test_Text):                            # Searches given text for an email
+    matchEmail = g+emailRegex.search(Test_Text).group()+rst # Matching phone number
 else:
-    matchEmail = r+'NOT FOUND'+rst
+    matchEmail = r+'NOT FOUND'+rst                          # Error message
 
-if phoneRegex.search(Test_Text):
-    matchPhone = g+phoneRegex.search(Test_Text).group()+rst
+if phoneRegex.search(Test_Text):                            # Seaches given text for a phone number
+    matchPhone = g+phoneRegex.search(Test_Text).group()+rst # Matching phone number
 else:
-    matchPhone = r+'Not Found'+rst
-    
-print('Email: ' + matchEmail + '\nPhone: ' + matchPhone)
+    matchPhone = r+'NOT FOUND'+rst                          # Error Message
+
+print('Email: '+matchEmail+'\nPhone: '+matchPhone+'\n')     # Prints the found email and phone number
+# print('\nGroups  : '+Groups)
+# print('\nGroup 1 : '+Group1)
+# print('\nGroup 2 : '+Group2)
