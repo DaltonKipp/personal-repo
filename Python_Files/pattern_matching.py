@@ -1,8 +1,18 @@
 # AUTOMATE THE BORING STUFF
 # CHAPTER 7 - PATTERN MATCHING WITH REGUALR EXPRESSIONS
 
-import re        # Imports Regex
+import re
+from turtle import resetscreen        # Imports Regex
 import pyperclip # Imports pyperclip - copies to clipboard
+from colorama import Fore, Style
+
+b = Fore.BLUE + Style.BRIGHT     # Blue
+c = Fore.CYAN + Style.BRIGHT     # Cyan
+r = Fore.RED + Style.BRIGHT       # Red
+y = Fore.YELLOW + Style.BRIGHT # Yellow
+g = Fore.GREEN + Style.BRIGHT   # Green
+w = Fore.WHITE + Style.BRIGHT   # White
+rst = Style.RESET_ALL             # Resets all colors
 
 def isPhoneNumber(text):
     if len(text) != 12: # checks length of string
@@ -38,26 +48,37 @@ print('-- Done --')
 # Use Regex to accomplish the code above much more simply
 PhoneNumRegex = re.compile(r'(\(\d\d\d\))-(\d\d\d-\d\d\d\d)')
 match_objects = PhoneNumRegex.search('\nMy number is: (412)-343-5467.')
-print('\nRegex --> Phone Number: '+ match_objects.group())
-print('\nRegex -->    Area Code: '+ match_objects.group(1))
-print('\nRegex -->       Number: '+ match_objects.group(2) + '\n')
+print('\nRegex --> '+y+'Phone Number: '+g+match_objects.group()+rst)
+print('\nRegex -->    '+y+'Area Code: '+g+match_objects.group(1)+rst)
+print('\nRegex -->       '+y+'Number: '+g+match_objects.group(2)+'\n'+rst)
 
 
 phoneRegex = re.compile(r'''(     # PHONE NUMBER REGEX
-    (\d{3}|\(\d{3}\))?            # Finds the area code
-    (\s|-|\.)?                    # Finds the separator
-    \d{3}                         # Finds the first 3 digits
-    (\s|-|\.)                     # Finds the separator
-    \d{4}                         # Finds the last 4 digits
-    (\s*(ext|x|ext.)\s*\d{2,5})?  # Finds the extension
-    )''', re.VERBOSE)
+    (\d{3}|\(\d{3}\))?            # Finds the area code - Matches a digit exactly 3x or alternatively a set of 3 digits between parenthesis between zero and one times (?)
+    (\s|-|\.)?                    # Finds the separator - Matches a whitespace character (\s), a dash (-), or a period (.), between zero and one times (?)
+    \d{3}                         # Finds the first 3 digits - Matches a digit exactly three times
+    (\s|-|\.)                     # Finds the separator - Matches a space (\s), a dash (-), or a period (.) once
+    \d{4}                         # Finds the last 4 digits - Matches 4 digits exactly once
+    (\s*(ext|x|ext.)\s*\d{2,5})?  # Finds the extension - Matches a whitespace character (\s) zero to inf times (*), 2nd group matches ext|x|ext., whitespace character 0 to inf, digits 2-5 times, 0 to 1 times (?)
+    )''', re.VERBOSE)             # Allows the separation of expressions for better visibility
 
-EmailRegex = re.compile(r'''    # EMAIL REGEX
-            ([a-zA-Z0-9._%+-]+) # Finds the username
-            @                   # Seaparated by @
-            [a-zA-z0-9.-]+      # Finds domain name
-            (\.[a-zA-Z]{2,4})   # .something
-            ''',re.VERBOSE)
+emailRegex = re.compile(r'''      # EMAIL REGEX
+    ([a-zA-Z0-9._%+-]+)           # Finds the username - Matches any letter (upper or lowercase), digit, period, character in the list (._%+-), 0 to inf times (+)
+    @                             # Seaparated by @ - Matches exactly @ once
+    [a-zA-z0-9.-]+                # Finds domain name - Matches any letter or digit 0 to inf times
+    (\.[a-zA-Z]{2,4})             # .something - Matches a period (.) followed by any letter 2-4 times
+    ''',re.VERBOSE)               # Allows the separation of expressions for better visibility
 
-matchEmail = EmailRegex.search('\nMy email is: dalton8kipp.7678@gmail.com and my other email is dk@dk.com')
-print('Email: ' + matchEmail.group())
+Test_Text = '\nMy email is: dalton8kipp.7678@gmail.com and my phone number is: 303.493.1477 ext. 22'
+
+if emailRegex.search(Test_Text):
+    matchEmail = g+emailRegex.search(Test_Text).group()+rst
+else:
+    matchEmail = r+'NOT FOUND'+rst
+
+if phoneRegex.search(Test_Text):
+    matchPhone = g+phoneRegex.search(Test_Text).group()+rst
+else:
+    matchPhone = r+'Not Found'+rst
+    
+print('Email: ' + matchEmail + '\nPhone: ' + matchPhone)
