@@ -85,14 +85,14 @@ if phoneRegex.search(Test_Text):                            # Seaches given text
 else:
     matchPhone = r+'NOT FOUND'+rst                          # Error Message
 
-print('Email: '+matchEmail+'\nPhone: '+matchPhone)          # Prints the found email and phone number
+print('\nEmail: '+matchEmail+'\nPhone: '+matchPhone)        # Prints the found email and phone number
 
-text = str(pyperclip.paste())                               # Find matches in the clipboard text
-matches = []                                                # Creates an empty array for matches
+text = str(pyperclip.paste())                               # Turns text in the clipboard into a string.
+matches = []                                                # Creates an empty array for matches.
 
 for groups in phoneRegex.findall(text):                     # Sorts through the groups of the phoneRegex
     PhoneNum = '-'.join([groups[1],groups[3],groups[5]])    # Joins groups into one phone number
-    if groups[8] != '':                                     # If there is an extension
+    if groups[8] != '':                                     # If there is an extension...
         PhoneNum += ' ext. ' + groups[8]                    # add the extension
     matches.append(PhoneNum)                                # Add the phone numbers to the matches array
 
@@ -101,7 +101,7 @@ for groups in emailRegex.findall(text):                     # For groups in emai
 
 if len(matches) > 0:                                        # If there are matches found...
     pyperclip.copy(g+'\n'.join(matches)+rst)                # Copy the matches to the clipboard
-    print(y+'\n\n---- Copied to clipboard ----\n'+rst)      # Confirmation message
+    print(y+'\n---- Copied to clipboard ----\n'+rst)        # Confirmation message
     print(g+'\n'.join(matches)+rst,'\n')                    # Prints what was copied to the clipboard
 
 else:
