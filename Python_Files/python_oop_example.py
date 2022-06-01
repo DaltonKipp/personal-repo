@@ -2,6 +2,9 @@
 from calendar import weekday
 from hashlib import new
 import datetime
+import time
+
+from numpy import ix_
 import terminal_formatting as tf
 class Employee:         # Class
     numb = 0            # Class variable
@@ -78,6 +81,8 @@ mgr_2 = Manager('Test','Manager',700000,[emp_2])    # Manager class instance
 
 date = datetime.date(2022,3,10) # Defines date
 
+tf.dl('[ TEST ]','=',':')
+
 print('\nEmployee.is_workday(date) --> ',Employee.is_workday(date)) # Calls static method from the employee class with specified date
 
 Employee.set_raise_amt(1.05) # == Employee.raise_amount = 1.05
@@ -109,5 +114,5 @@ mgr_1.add_emp(emp_1)    # Adds emp_2 to mgr_1 employees
 mgr_1.remove_emp(dev_1) # Removes dev_1 from mgr_1 employees
 mgr_1.print_emps()      # Prints manager 1 and their employees
 mgr_2.print_emps()      # Prints manager 2 and their employees
-tf.dl('test//test')
+tf.dl('[ TEST ]','=',':')
 tf.nl()
