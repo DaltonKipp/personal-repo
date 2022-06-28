@@ -17,6 +17,7 @@ import pandas as pd
 import colorama
 from colorama import Fore, Style
 from numpy import append
+import terminal_formatting as tf
 
 blue = Fore.BLUE + Style.BRIGHT     # Blue
 cyan = Fore.CYAN + Style.BRIGHT     # Cyan
@@ -28,9 +29,6 @@ reset = Style.RESET_ALL             # Resets all colors
 
 def main():
 
-    def new_line():
-        print('\n')
-
     def g(val): # Turns a string green
         x = green + str(val) + reset
         return x
@@ -41,7 +39,8 @@ def main():
 
     def nl(): # New  line
         print('\n')
-
+    
+    tf.cl(), tf.dl('  PASSWORD GENERATOR  ','/','/') # Title Bar
     # Choose the length of the password
     length = int(input('\nHow many characters long will the password be? (Suggested 16+): '+yellow))
     # Choose the number of generated passwords
@@ -79,7 +78,7 @@ def main():
     data_frame.to_csv(csv_path)                                             # Creates .csv file
     print(yellow+'--> Passwords saved to: "{0:}"\n'.format(csv_path)+reset) # Prints .csv file creation confirmation
 
-    txt_path = '../test_files/test_text_file.txt'                            # .txt file path
+    txt_path = '../test_files/test_text_file.txt'                           # .txt file path
     text_file = open(txt_path,"w")                                          # Opens new .txt file to write to
     i = 0                                                                   # Iterations
     for element in store_passwords:                                         # Iterates for each item in the list
@@ -87,6 +86,7 @@ def main():
         text_file.write('['+str(i)+'] - '+element+"\n\n")                   # Writes the element and two new lines
     text_file.close()                                                       # Closes the .txt file
     print(yellow+'--> Passwords saved to: "{0:}"\n'.format(txt_path)+reset) # Prints .txt file creation confirmation
+    tf.dl('  END  ','/','/'), tf.nl() # End Message
 
 if __name__ == '__main__':
     exit(main())
