@@ -8,4 +8,4 @@ from rich.console import Console
 from random import choice
 from words import word_list
 
-tf.cl(), tf.dl('[ WORDLE ] ','/','+'), tf.nl()
+tf.cl(), tf.dl(' [ W O R D L E ] ','/','+'), tf.nl()
