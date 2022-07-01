@@ -32,6 +32,10 @@ def w(val): # turns a string white
     white = Fore.WHITE + Style.BRIGHT   # White
     w = white + str(val) + reset
     return W
+def bk(val):
+    black = Fore.BLACK
+    bk = black + str(val) + reset
+    return bk
 
 def cl(): # Manages clearing the terminal screen based on OS
     if sysplatform.system() == 'Windows':
