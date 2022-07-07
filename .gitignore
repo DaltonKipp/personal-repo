@@ -1,3 +1,4 @@
+.env/
 /test_files/*
 /Python_Files/__pycache__/*
 /Python_Files/Wordle/__pycache__/*
