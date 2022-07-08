@@ -23,9 +23,9 @@ bgW = Back.WHITE                 # White text background
 rst = Style.RESET_ALL            # Resets all formatting
 
 SQUARES = {                  # Dictionary for pattern squares
-    'correct_place': '\u1F7E9',
-    'correct_letter': '\u1F7E8',
-    'incorrect_letter': '\u2B1C'
+    'correct_place': u'\u1F7E9',
+    'correct_letter': u'\u1F7E8',
+    'incorrect_letter': u'\u2B1C'
 }
 
 ALLOWED_GUESSES = 6
@@ -65,7 +65,7 @@ def game(chosen_word):       # Input the chosen answer word
         guess =  str.upper(input(rst+'Choose a starting guess: '+y))     # Input starting guess
         while len(guess) != 5 or guess in already_guessed:               # If the guess is not 5 letters or was already guessed
             if guess in already_guessed:                                 # Already guessed word
-                print(tf.r('You have already guessed this word'))        # Info message
+                print(bgR+tf.w('\n You have already guessed this word \n'))        # Info message
             else:                                                        # If the word is not 5 letters
                 print(tf.r('Your guess must be a five letter word'))     # Info message
             guess =  str.upper(input(rst+'Choose a starting guess: '+y)) # Input starting guess

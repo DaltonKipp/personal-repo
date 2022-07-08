@@ -7,14 +7,19 @@ from tkinter import W
 import colorama
 from colorama import Fore, Style
 
+from rich import print
+from rich.console import Console
+
+console = Console()
+
 reset = Style.RESET_ALL             # Resets all colors
 def g(val): # Turns a string green
-    green = Fore.GREEN + Style.BRIGHT   # Green
-    g = green + str(val) + reset
-    return g
+    # green = Fore.GREEN + Style.BRIGHT   # Green
+    # g = green + str(val) + reset
+    green = console.print("[green reverse blink]"+"\n"+str(val)+"\n")
+    return green
 def y(val): # turns a string yellow
-    yellow = Fore.YELLOW + Style.BRIGHT # Yellow
-    y = yellow + str(val) + reset
+    yellow = console.print("[yellow]"+str(val))
     return y
 def r(val): # Turns a string red
     red = Fore.RED + Style.BRIGHT       # Red
@@ -31,7 +36,7 @@ def c(val): # turns a string cyan
 def w(val): # turns a string white
     white = Fore.WHITE + Style.BRIGHT   # White
     w = white + str(val) + reset
-    return W
+    return w
 def bk(val):
     black = Fore.BLACK
     bk = black + str(val) + reset

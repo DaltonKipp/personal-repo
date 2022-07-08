@@ -81,7 +81,8 @@ mgr_2 = Manager('Test','Manager',700000,[emp_2])    # Manager class instance
 
 date = datetime.date(2022,3,10) # Defines date
 
-tf.dl('[ TEST ]','=',':')
+tf.cl()
+tf.dl(' [ TEST ] ','/','/')
 
 print('\nEmployee.is_workday(date) --> ',Employee.is_workday(date)) # Calls static method from the employee class with specified date
 
@@ -107,12 +108,12 @@ print('\nmgr_1.email -->',mgr_1.email)                      # Prints mgr_1 email
 
 print(tf.g('\nisinstance(mgr_1,Employee) --> '),isinstance(mgr_1,Employee))         # Tests if mgr_1 is an instance of the Employee Class
 print(tf.y('\nisinstance(mgr_1,Developer) --> '),isinstance(mgr_1,Developer))       # Tests if the mgr_1 is an instance of the Developer class
-print('\nissubclass(Developer,Employee) --> ',issubclass(Developer,Employee)) # Tests if the Developer class is a subclass of Employee
-print('\nissubclass(Manager,Developer) --> ',issubclass(Manager,Developer))   # Tests if the Manager class is a subclass of Developer
+print(tf.b('\nissubclass(Developer,Employee) --> '),issubclass(Developer,Employee)) # Tests if the Developer class is a subclass of Employee
+print(tf.r('\nissubclass(Manager,Developer) --> '),issubclass(Manager,Developer))   # Tests if the Manager class is a subclass of Developer
 mgr_1.add_emp(dev_2)    # Adds dev_2 to mgr_1 employees
 mgr_1.add_emp(emp_1)    # Adds emp_2 to mgr_1 employees
 mgr_1.remove_emp(dev_1) # Removes dev_1 from mgr_1 employees
 mgr_1.print_emps()      # Prints manager 1 and their employees
 mgr_2.print_emps()      # Prints manager 2 and their employees
-tf.dl('[ TEST ]','=',':')
+tf.dl(' [ TEST ] ','/','/')
 tf.nl()
