@@ -63,10 +63,10 @@ class Manager(Employee):                              # Subclass of Employee
         if emp in self.employees:      # Revoves the employee from the Manager class instance
             self.employees.remove(emp) # Removes the emp from the employee list
 
-    def print_emps(self):                               # Method to print the employees tied to the manager
-        print('\nManager --> ',self.fullname())         # Print manager name
-        for emp in self.employees:                      # For each emp in the employees list
-            print('\n    Employee --> ',emp.fullname()) # Print the emp's full name from the Employee class
+    def print_emps(self):                                          # Method to print the employees tied to the manager
+        print('\nManager --> ',self.fullname())                    # Print manager name
+        for emp in self.employees:                                 # For each emp in the employees list
+            print('\n'+'  \u221F'+' Employee --> ',emp.fullname()) # Print the emp's full name from the Employee class
 
 # print(help(Employee))  # Prints information regarding the Employee class
 # print(help(Developer)) # Prints information regarding the Developer class
