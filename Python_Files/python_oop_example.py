@@ -64,7 +64,7 @@ class Manager(Employee):                              # Subclass of Employee
             self.employees.remove(emp) # Removes the emp from the employee list
 
     def print_emps(self):                                          # Method to print the employees tied to the manager
-        print('\nManager --> ',self.fullname())                    # Print manager name
+        print(tf.y('\nManager --> '),self.fullname())                    # Print manager name
         for emp in self.employees:                                 # For each emp in the employees list
             print('\n'+'  \u221F'+' Employee --> ',emp.fullname()) # Print the emp's full name from the Employee class
 
