@@ -16,11 +16,11 @@ reset = Style.RESET_ALL             # Resets all colors
 def g(val): # Turns a string green
     # green = Fore.GREEN + Style.BRIGHT   # Green
     # g = green + str(val) + reset
-    green = console.print("[green reverse blink]"+"\n"+str(val)+"\n")
+    green = console.print("[green blink]"+"\n"+str(val)+"\n")
     return green
 def y(val): # turns a string yellow
-    yellow = console.print("[yellow]"+str(val))
-    return y
+    yellow = console.print("[yellow bold underline]"+str(val))
+    return yellow
 def r(val): # Turns a string red
     red = Fore.RED + Style.BRIGHT       # Red
     r = red + str(val) + reset

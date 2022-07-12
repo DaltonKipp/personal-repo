@@ -6,6 +6,10 @@ import time
 
 from numpy import ix_
 import terminal_formatting as tf
+from rich import print
+from rich.console import Console
+
+console = Console()
 class Employee:         # Class
     numb = 0            # Class variable
     raise_amount = 1.04 # Class variable
@@ -64,9 +68,9 @@ class Manager(Employee):                              # Subclass of Employee
             self.employees.remove(emp) # Removes the emp from the employee list
 
     def print_emps(self):                                          # Method to print the employees tied to the manager
-        print(tf.y('\nManager --> '),self.fullname())                    # Print manager name
+        console.print('\n[bold yellow]Manager'+'[bold white] --> ',self.fullname())                    # Print manager name
         for emp in self.employees:                                 # For each emp in the employees list
-            print('\n'+'  \u221F'+' Employee --> ',emp.fullname()) # Print the emp's full name from the Employee class
+            print('\n'+'  \u221F'+'[bold cyan] Employee [white]--> ',emp.fullname()) # Print the emp's full name from the Employee class
 
 # print(help(Employee))  # Prints information regarding the Employee class
 # print(help(Developer)) # Prints information regarding the Developer class
@@ -82,7 +86,7 @@ mgr_2 = Manager('Test','Manager',700000,[emp_2])    # Manager class instance
 date = datetime.date(2022,3,10) # Defines date
 
 tf.cl()
-tf.dl(' [ TEST ] ','/','/')
+tf.dl(' [ TEST ] ','-','x')
 
 print('\nEmployee.is_workday(date) --> ',Employee.is_workday(date)) # Calls static method from the employee class with specified date
 
@@ -95,8 +99,8 @@ emp_str_3 = 'Jane-Doe-90000'    # Employee String to be put into from_string()
 new_emp_1 = Employee.from_string(emp_str_1)                 # Creates a class instance from a string
 new_emp_2 = Employee.from_string(emp_str_2)                 # Creates a class instance from a string
 new_emp_3 = Employee.from_string(emp_str_3)                 # Creates a class instance from a string
-print('\nnew_emp_1.email --> ',new_emp_1.email)             # Prints the employee email from emp_str_1
-print('\nEmployee.raise_amount --> ',Employee.raise_amount) # Prints the class variable raise_amount
+console.print('\nnew_emp_1.email --> ',new_emp_1.email)             # Prints the employee email from emp_str_1
+console.print('\nEmployee.raise_amount --> ',Employee.raise_amount) # Prints the class variable raise_amount
 emp_1.raise_amount = 1.25                                   # Defines class instance raise_amount
 print('\nemp_1.raise_amount --> ',emp_1.raise_amount)       # Prints the Employee class instance (emp_1) raise_amount
 emp_1.apply_raise()                                         # Applies the Employee apply_raise() to emp_1
@@ -106,7 +110,8 @@ print('\ndev_1.pay --> ',dev_1.pay)                         # Prints the pay of 
 print('\ndev_1.prog_lang --> ',dev_1.prog_lang)             # Prints dev_1 programming language
 print('\nmgr_1.email -->',mgr_1.email)                      # Prints mgr_1 email
 
-print(tf.g('\nisinstance(mgr_1,Employee) --> '),isinstance(mgr_1,Employee))         # Tests if mgr_1 is an instance of the Employee Class
+style = "bold white on red"
+console.print('\nisinstance(mgr_1,Employee) --> ',isinstance(mgr_1,Employee),style=style)         # Tests if mgr_1 is an instance of the Employee Class
 print(tf.y('\nisinstance(mgr_1,Developer) --> '),isinstance(mgr_1,Developer))       # Tests if the mgr_1 is an instance of the Developer class
 print(tf.b('\nissubclass(Developer,Employee) --> '),issubclass(Developer,Employee)) # Tests if the Developer class is a subclass of Employee
 print(tf.r('\nissubclass(Manager,Developer) --> '),issubclass(Manager,Developer))   # Tests if the Manager class is a subclass of Developer
@@ -115,5 +120,5 @@ mgr_1.add_emp(emp_1)    # Adds emp_2 to mgr_1 employees
 mgr_1.remove_emp(dev_1) # Removes dev_1 from mgr_1 employees
 mgr_1.print_emps()      # Prints manager 1 and their employees
 mgr_2.print_emps()      # Prints manager 2 and their employees
-tf.dl(' [ TEST ] ','/','/')
+tf.dl(' [ TEST ] ','-','x')
 tf.nl()
