@@ -1,10 +1,20 @@
 # Image RGB Pixels to CSV 
 # Source: https://stackoverflow.com/questions/67831382/obtaining-rgb-data-from-image-and-writing-it-to-csv-file-with-the-corresponding
 
+'''
+GOALS:
+- TAKE AN IMAGE AND CONVERT IT TO A TERMINAL PRINTOUT USING UNICODE CHARACTERS
+    - USE A FLAG TO INPUT FILE PATH
+    - SAVE TO A CSV
+    - PRINTOUT BASED ON THE HEIGHTAND WIDTH OF THE TERMINAL
+    - MAKE A NEW IMAGE FILE AFTER CONVERSION
+'''
+
 from PIL import Image
 import numpy as np
 
 img = Image.open('C:/Users/nomad/personal-repo/test_files/chicken.jpg')
+# img = Image.open('C:/Users/nomad/personal-repo/test_files/taco.jpg')
 print('Inspect a few pixels in the original image:')
 for y in np.arange(3):
     for x in np.arange(3):
