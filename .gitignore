@@ -1,3 +1,4 @@
 test_files/*
 /Python_Files/__pycache__/
 .env/
+/automate-the-boring-stuff/quiz_files/*

@@ -59,6 +59,7 @@ print(content)
 
 '''
 
+# Quiz Dictionary with States and Capitals
 capitals={'Alabama':'Montgomery','Alaska':'Juneau','Arizona':'Phoenix','Arkansas':
 'Little Rock','California':'Sacramento','Colorado':'Denver','Connecticut':'Hartford',
 'Delaware':'Dover','Florida':'Tallahassee','Georgia':'Atlanta','Hawaii':'Honolulu',
@@ -74,30 +75,37 @@ capitals={'Alabama':'Montgomery','Alaska':'Juneau','Arizona':'Phoenix','Arkansas
 'Vermont':'Montpelier','Virginia':'Richmond','Washington':'Olympia','West Virginia':
 'Charleston','Wisconsin':'Madison','Wyoming':'Cheyenne'}
 
-for quizNum in range(35):
-    quizFile = open(f'capitalsquiz{quizNum +1}.txt','w')
-    answerKeyFile = open(f'capitalsquiz_answer{quizNum +1}.txt','w')
-    quizFile.write('\nName:\n\nDate:\n\nPeriod:\n\n')
-    quizFile.write(('_'*80)+'\n\n')
-    quizFile.write((' '*20)+f'State Capitals Quiz (Form {quizNum +1})')
-    quizFile.write('\n\n')
-    states = list(capitals.keys())
-    random.shuffle(states)
+os.chdir('./quiz_files')
+
+for quizNum in range(0,35):                                                # Makes 35 tests and 35 answer keys 
     
-for questionNum in range(50):
-    correctAnswer = capitals[states[questionNum]]
-    wrongAnswers = list(capitals.values())
-    del wrongAnswers[wrongAnswers.index(correctAnswer)]
-    wrongAnswers = random.sample(wrongAnswers,3)
-    answerOptions = wrongAnswers + [correctAnswer]
-    random.shuffle(answerOptions)
+    quizFile = open(f'capitals_quiz_{quizNum +1}.txt','w')                 # Creates the quiz file
+    answerKeyFile = open(f'capitals_quiz_answer_key_{quizNum +1}.txt','w') # Creates the answer key file
     
-    quizFile.write(f'[{questionNum + 1}] - What is the capital of {states[questionNum]}?\n\n')
-    for i in range(4):
-        quizFile.write(f"        {'ABCD'[i]}. {answerOptions[i]}\n")
-        quizFile.write('\n')
-        answerKeyFile.write(f"{questionNum+1}.{'ABCD'[answerOptions.index(correctAnswer)]}")
+    quizFile.write('\nName:\n\nDate:\n\nPeriod:\n\n')                      # Writes Name, Date, and Period at the top of the file
+    quizFile.write(('_'*80)+'\n\n')                                        # Writes a divider line
+    quizFile.write((' '*20)+f'State Capitals Quiz (Form {quizNum +1})')    # Writes Title
+    quizFile.write('\n\n')                                                 # Empty Lines
+    
+    states = list(capitals.keys())                                         # Creates a list of the states
+    random.shuffle(states)                                                 # Randomly shuffles the state list
+
+    for questionNum in range(0,50):                                         # Occurs for each state
+        correctAnswer = capitals[states[questionNum]]                       # Capital answer is set to the index of the state
+        wrongAnswers = list(capitals.values())                              # Creates the list of wrong answers
+        del wrongAnswers[wrongAnswers.index(correctAnswer)]                 # Deletes the right answers from the wrong answer list
+        wrongAnswers = random.sample(wrongAnswers,3)                        # Finds 3 random wrong answers
+        answerOptions = wrongAnswers + [correctAnswer]                      # Makes answer list
+        random.shuffle(answerOptions)                                       # Shuffles order of answer list
+        
+        quizFile.write(f'[{questionNum + 1}] - What is the capital of {states[questionNum]}?\n\n') # Writes unique quiz
+        
+        for i in range(4):                                               # Makes options A, B, C, and D
+            quizFile.write(f"        {'ABCD'[i]}. {answerOptions[i]}\n") # Writes Letter with index of answerOptions
+            quizFile.write('\n')                                         # Blank line
+        
+        answerKeyFile.write(f"{questionNum+1}. {'ABCD'[answerOptions.index(correctAnswer)]}")  # Writes answer to key file
+        answerKeyFile.write('\n') # Next line
 
 quizFile.close()
 answerKeyFile.close()
-    
