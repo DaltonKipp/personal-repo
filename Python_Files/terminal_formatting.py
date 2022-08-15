@@ -39,11 +39,12 @@ def cl(): # Manages clearing the terminal screen based on OS
     if sysplatform.system() == 'Windows':
         os.system('cls')
     else:
-        os.system('clear')     
+        os.system('clear')
 
 def dl(title,div,end): # Divider line with a centered string
-    print("\n{end}{0:{div}^{col}}{end}".format(title,end=end,div=div,col=(col-2)))
-    
+    x = "\n{end}{0:{div}^{col}}{end}".format(title,end=end,div=div,col=(col-2))
+    print(x)
+
 def nl():
     print('\n')        
 
