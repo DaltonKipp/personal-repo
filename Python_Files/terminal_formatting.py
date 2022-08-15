@@ -7,6 +7,8 @@ from tkinter import W
 import colorama
 from colorama import Fore, Style
 
+# TODO: ADD TAB OPTION
+
 reset = Style.RESET_ALL             # Resets all colors
 def g(val): # Turns a string green
     green = Fore.GREEN + Style.BRIGHT   # Green
