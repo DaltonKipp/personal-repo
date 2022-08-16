@@ -38,17 +38,18 @@ while True: # Start Menu while loop
     elif startMove != '1' or '2' or '3': # Restarts the loop for an unaccepted answer
         print('\n')
         error = red + 'ERROR: PLEASE CHOOSE (1), (2), or (3)' + reset
-        print('{0:^60s}'.format(error),end='\n\n')
+        print('{0:^{col}s}'.format(error,col=full),end='\n\n')
 
 round_count = 0
 while startMove == '1': # Start Game Option.
+    round_count = round_count + 1
+    string = " ROUND {} ".format(round_count)
+    tf.dl(string,'/','/')
     print(white)
     print("{0:>{col}s} {1:<{col}}//{2:>{col}} {3:<{col}}//{4:>{col}s} {5:<{col}}".format("WINS:",wins,"LOSSES:",losses,"TIES:",ties,col=round(full/6)))
 
     while True: # The player input loop.
-        round_count = round_count + 1
-        string = "[ ROUND: {} ]".format(round_count)
-        tf.dl(string,'-','-')
+
         tf.dl(' Enter your move: (R)ock (P)aper (S)cissors or (Q)uit ','','')
         playerMove = input('\n\n'+' '*mid)
         print('\n')
@@ -56,29 +57,27 @@ while startMove == '1': # Start Game Option.
         if playerMove == 'q' or playerMove == 'Q':
 
             if wins == 0 and ties == 0 and losses == 0:
-                print('{0:^60s}'.format(("GOODBYE!"),end="\n\n"))
+                print('{0:^{col}s}'.format("GOODBYE!",col=full,end="\n\n"))
+                tf.dl('','/','/')                        
                 print('\n')
                 sys.exit()
-            print('{0:=^60s}'.format((""),end="\n\n"))
+            tf.dl('','/','/')
             print('\n')
-            print('{0:^60s}'.format("F I N A L  S C O R E"))
+            print(tf.y('{0:^{col}s}').format("F I N A L  S C O R E",col=full))
             print('\n')
             print('{0:>{col}s}{1:<{col}}'.format("WINS:  ",wins,col=mid),end="\n\n")
             print('{0:>{col}s}{1:<{col}}'.format("TIES:  ",ties,col=mid),end="\n\n")
             print('{0:>{col}s}{1:<{col}}'.format("LOSSES:  ",losses,col=mid),end="\n\n")
             games = wins + losses + ties
-            print('{0:>30s}{1:<2.0f}'.format("GAMES:  ",games),end="\n\n")
-            
+            print('{0:>{col}s}{1:<2.0f}'.format("GAMES:  ",games,col=mid),end="\n\n")
             if wins == 0 and losses == 0:
-                print('\n')
-                print('{0:=^60s}'.format((" ENDING GAME "),end="\n\n"))
+                tf.dl('','/','/')
+                print('{0:=^{col}s}'.format((" ENDING GAME "),col=full,end="\n\n"))
             
             if wins != 0 or losses != 0: 
                 winloss = wins/(wins+losses) * 100
-                print('{0:>30s}{1:<2.0f}{2:<1s}'.format("W/L RATIO:  ",winloss," %"),end="\n\n")
-                print('\n')
-                print('{0:=^60s}'.format((" ENDING GAME "),end="\n\n"))
-            
+                print('{0:>{col}s}{1:<3.0f}{2:<1s}'.format("W/L RATIO:  ",winloss," %",col=mid),end="\n\n")
+            tf.dl('','/','/')                        
             print('\n')    
             sys.exit() # Quit the program.
         
@@ -86,53 +85,21 @@ while startMove == '1': # Start Game Option.
             break # Break out of the player input loop.
         valid = red + '"' + playerMove + '"' + ' is not a valid input' + reset
         print('{0:^60s}'.format(valid),end="\n")
-        
-    load = 3 # VS load loop
-
-    if playerMove == 'r' or playerMove == 'R':
-        print('{0:^60s}'.format("ROCK"))
-        print('\n')
-        for i in range(1,load+1,1):
-            time.sleep(0.25)
-            p = white + "                             VS" + "."*i + reset
-            print('{0:^.60s}'.format(p),end="\r")
-            time.sleep(0.25)
-            i=i+1
-    elif playerMove == 'p' or playerMove == 'P':
-        print('{0:^60s}'.format("PAPER"),end="\n")
-        print('\n')
-        time.sleep(0.25)
-        for i in range(1,load+1,1):
-            p = white + "                             VS" + "."*i + reset
-            print (p,end="\r".format(p))
-            time.sleep(0.25)
-            i=i+1
-    elif playerMove == 's' or playerMove == 'S':
-        print('{0:^60s}'.format("SCISSORS"),end="\n")
-        print('\n')
-        time.sleep(0.25)
-        for i in range(1,load+1,1):
-            p = white + "                             VS" + "."*i + reset
-            print (p,end="\r")
-            time.sleep(0.25)
-            i=i+1
-    print("\n\n")
 
     # Display what the computer chose:
     randomNumber = random.randint(1, 3)
     if randomNumber == 1:
         computerMove = 'r'
-        print('{0:^60s}'.format("ROCK"),end="\n\n")
     elif randomNumber == 2:
         computerMove = 'p'
-        print('{0:^60s}'.format("PAPER"),end="\n\n")
     elif randomNumber == 3:
         computerMove = 's'
-        print('{0:^60s}'.format("SCISSORS"),end="\n\n")
 
-    win  = green + "YOU WON!"   # Win String
-    tie  = yellow + "YOU TIED!" # Tie String
-    loss = red + "YOU LOST!"    # Loss String
+    print('{0:>{col}}{1:^{col}}{2:<{col}}\n'.format(playerMove,'VS...',computerMove,col=round(full/3)))
+    
+    win  = green + '{0:^{col}s}'.format('YOU WON!',col=full-8) + reset # Win String
+    tie  = yellow + '{0:^{col}s}'.format('YOU TIED!',col=full-8) + reset # Tie String
+    loss = red + '{0:^{col}s}'.format('YOU LOST!',col=full-8) + reset # Loss String
 
     # Display and record the win/loss/tie:
     if (playerMove == 'R' or playerMove == 'r') and computerMove == 'r': # Rock Tie
@@ -165,12 +132,13 @@ while startMove == '1': # Start Game Option.
 
 while startMove == '2': # Auto Mode Option.
     tf.nl()
-    print('{0:^60s}'.format("How many games do you want to simulate?"),end="\n\n") # Start message
-    games = int(input('                            '))
+    print('{0:^60s}'.format("{0:^{col}s}".format("How many games do you want to simulate?",col=full)),end="\n\n") # Start message
+    games = input('\n\n'+' '*mid)
+    games = int(games)
     tf.cl()
     print('\n')
     tf.dl('  START  ','/','/'), tf.nl()
-    print('{0:<13s}{1:^12s}{2:^12s}{3:^12s}{4:^5s}{5:^5}'.format("GAME","USER MOVE","VS.","COMPUTER MOVE","","TALLY"))
+    print(tf.y('{0:<{col}s}  {1:<{col}s} {2:<{col}s} {3:<{col}s} {4:<{col}s} {5:<{col}}\n'.format("GAME","USER MOVE","VS.","COMPUTER MOVE","","TALLY",col=full/6)))
 
     for i in range(0,games,1):
         randomUser = random.randint(1, 3)
@@ -189,8 +157,8 @@ while startMove == '2': # Auto Mode Option.
         elif randomCPU == 3:
             computerMove = 'SCISSORS'
 
-        win  = green + " WIN" + reset   # Win String
-        tie  = yellow + " TIE" + reset # Tie String
+        win  = green + "WIN" + reset   # Win String
+        tie  = yellow + "TIE" + reset # Tie String
         loss = red + "LOSS" + reset    # Loss String
 
                 # Display and record the win/loss/tie:
@@ -242,7 +210,7 @@ while startMove == '2': # Auto Mode Option.
             t = str(losses)
 
         g = str(i+1) # GAME COUNTER   
-        print('#{0:<{col}s}{1:<{col}s}{2:<{col}s}{3:<{col}s}{4:<{col}s}{5:<{col}}'.format(g,userMove,"VS.",computerMove,"",tally,col=full/6+1))
+        print('#{0:<{col}s} {1:<{col}s} {2:<{col}s} {3:<{col}s} {4:<{col}s} {5:<{col}}'.format(g,userMove,"VS.",computerMove,"",tally,col=full/6))
         i = i+1
     
     tf.dl('  END  ','/','/')
@@ -252,13 +220,13 @@ while startMove == '2': # Auto Mode Option.
     print(tf.y(final_score))
     
     print('\n')
-    print('{0:>30s} {1:<30}'.format("WINS: ",wins),end="\n\n")
-    print('{0:>30s} {1:<30}'.format("TIES: ",ties),end="\n\n")
-    print('{0:>30s} {1:<30}'.format("LOSSES: ",losses),end="\n\n")
+    print('{0:>{col}s} {1:<{col}}'.format("WINS: ",wins,col=mid),end="\n\n")
+    print('{0:>{col}s} {1:<{col}}'.format("TIES: ",ties,col=mid),end="\n\n")
+    print('{0:>{col}s} {1:<{col}}'.format("LOSSES: ",losses,col=mid),end="\n\n")
     winloss = wins/(wins+losses) * 100
-    print('{0:>30s} {1:<2.3f}{2:<1s}'.format("W/L RATIO: ",winloss,"%"),end="\n\n")
+    print('{0:>{col}s} {1:<.3f}{2:<1s}'.format("W/L RATIO: ",winloss,"%",col=mid),end="\n\n")
     games = wins + losses + ties
-    print('{0:>30s} {1:<2.0f}'.format("GAMES: ",games),end="\n\n")
+    print('{0:>{col}s} {1:<2.0f}'.format("GAMES: ",games,col=mid),end="\n\n")
     tf.dl('','/','/')
     print('\n')
     sys.exit()
