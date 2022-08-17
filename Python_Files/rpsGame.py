@@ -65,18 +65,18 @@ while startMove == '1': # Start Game Option.
             print('\n')
             print(tf.y('{0:^{col}s}').format("F I N A L  S C O R E",col=full))
             print('\n')
-            print('{0:>{col}s}{1:<{col}}'.format("WINS:  ",wins,col=mid),end="\n\n")
-            print('{0:>{col}s}{1:<{col}}'.format("TIES:  ",ties,col=mid),end="\n\n")
-            print('{0:>{col}s}{1:<{col}}'.format("LOSSES:  ",losses,col=mid),end="\n\n")
+            print('{0:>{col}s}{1:<{col}}'.format("WINS:  ",wins,col=mid),end="\n")
+            print('{0:>{col}s}{1:<{col}}'.format("TIES:  ",ties,col=mid),end="\n")
+            print('{0:>{col}s}{1:<{col}}'.format("LOSSES:  ",losses,col=mid),end="\n")
             games = wins + losses + ties
-            print('{0:>{col}s}{1:<2.0f}'.format("GAMES:  ",games,col=mid),end="\n\n")
+            print('{0:>{col}s}{1:<2.0f}'.format("GAMES:  ",games,col=mid),end="\n")
             if wins == 0 and losses == 0:
                 tf.dl('','/','/')
-                print('{0:=^{col}s}'.format((" ENDING GAME "),col=full,end="\n\n"))
+                print('{0:=^{col}s}'.format((" ENDING GAME "),col=full,end="\n"))
             
             if wins != 0 or losses != 0: 
                 winloss = wins/(wins+losses) * 100
-                print('{0:>{col}s}{1:<3.0f}{2:<1s}'.format("W/L RATIO:  ",winloss," %",col=mid),end="\n\n")
+                print('{0:>{col}s}{1:<3.0f}{2:<1s}'.format("W/L RATIO:  ",winloss,"%",col=mid),end="\n\n")
             tf.dl('','/','/')                        
             print('\n')    
             sys.exit() # Quit the program.
@@ -216,17 +216,15 @@ while startMove == '2': # Auto Mode Option.
     tf.dl('  END  ','/','/')
     tf.nl()
     
-    final_score = '{0:^{col}s}'.format("F I N A L  S C O R E",col=full)
+    final_score = '{0:^{col}s}\n'.format("F I N A L  S C O R E",col=full)
     print(tf.y(final_score))
-    
-    print('\n')
-    print('{0:>{col}s} {1:<{col}}'.format("WINS: ",wins,col=mid),end="\n\n")
-    print('{0:>{col}s} {1:<{col}}'.format("TIES: ",ties,col=mid),end="\n\n")
-    print('{0:>{col}s} {1:<{col}}'.format("LOSSES: ",losses,col=mid),end="\n\n")
+    print('{0:>{col}s} {1:<{col}}'.format("WINS: ",wins,col=mid),end="\n")
+    print('{0:>{col}s} {1:<{col}}'.format("TIES: ",ties,col=mid),end="\n")
+    print('{0:>{col}s} {1:<{col}}'.format("LOSSES: ",losses,col=mid),end="\n")
     winloss = wins/(wins+losses) * 100
-    print('{0:>{col}s} {1:<.3f}{2:<1s}'.format("W/L RATIO: ",winloss,"%",col=mid),end="\n\n")
+    print('{0:>{col}s} {1:<.3f}{2:<1s}'.format("W/L RATIO: ",winloss,"%",col=mid),end="\n")
     games = wins + losses + ties
-    print('{0:>{col}s} {1:<2.0f}'.format("GAMES: ",games,col=mid),end="\n\n")
+    print('\n{0:>{col}s} {1:<2.0f}'.format("GAMES: ",games,col=mid),end="\n")
     tf.dl('','/','/')
     print('\n')
     sys.exit()
