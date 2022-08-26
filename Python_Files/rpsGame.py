@@ -16,20 +16,21 @@ white = Fore.WHITE + Style.BRIGHT      # White
 reset = Style.RESET_ALL                # Resets all colors
 
 tf.cl(), tf.dl('','/','/'), tf.dl('  ROCK / PARPER / SCISSORS  ','','')
-
+# Terminal size
 full = round(tf.col)
 mid = round(full/2)
 # Initial values
 wins = 0
 losses = 0
 ties = 0
+round_count = 0
 
 while True: # Start Menu while loop
     tf.dl('START GAME: [1]','','')
     tf.dl('AUTO MODE : [2]','','')
     tf.dl('QUIT GAME : [3]','','')
     startMove = input('\n\n'+' '*mid)
-    if startMove == '1': # Breaks the loop foran accepted answer
+    if startMove == '1': # Breaks the loop for an accepted answer
         break
     if startMove == '2':
         break
@@ -40,7 +41,6 @@ while True: # Start Menu while loop
         error = red + 'ERROR: PLEASE CHOOSE (1), (2), or (3)' + reset
         print('{0:^{col}s}'.format(error,col=full),end='\n\n')
 
-round_count = 0
 while startMove == '1': # Start Game Option.
     round_count = round_count + 1
     string = " ROUND {} ".format(round_count)
@@ -175,7 +175,6 @@ while startMove == '2': # Auto Mode Option.
             tally = tie
             ties = ties + 1
 
-
         elif (userMove == 'ROCK') and computerMove == 'SCISSORS': # Rock beats Scissors
             #print('{0:-^60s}'.format(""),end='\n\n')
             tally = win
@@ -213,8 +212,7 @@ while startMove == '2': # Auto Mode Option.
         print('#{0:<{col}s} {1:<{col}s} {2:<{col}s} {3:<{col}s} {4:<{col}s} {5:<{col}}'.format(g,userMove,"VS.",computerMove,"",tally,col=full/6))
         i = i+1
     
-    tf.dl('  END  ','/','/')
-    tf.nl()
+    tf.dl('  END  ','/','/'), tf.nl()
     
     final_score = '{0:^{col}s}\n'.format("F I N A L  S C O R E",col=full)
     print(tf.y(final_score))
