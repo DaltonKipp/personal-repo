@@ -29,11 +29,11 @@ reset = Style.RESET_ALL             # Resets all colors
 
 def main():
 
-    def g(val): # Turns a string green
+    def g(val) -> str:
         x = green + str(val) + reset
         return x
 
-    def y(val): # turns a string yellow
+    def y(val) -> str:
         y = yellow + str(val) + reset
         return y
 
