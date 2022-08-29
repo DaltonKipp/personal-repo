@@ -1,0 +1,26 @@
+.link1 a {
+  background-color: #00a2ff;
+  border-radius: 5px;
+  padding: 0.5em;
+  font-size: 1.2rem;
+  text-decoration: none;
+  display: inline-block;
+  color: #fff;
+  text-align: center;
+  width: 10%;
+  min-width: 70px;
+  margin: .5rem auto;
+  box-sizing: border-box;
+
+  padding: 10;
+  margin: 10;
+  max-width: 1500px;
+
+  /* flexbox */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: auto;
+  align-items: auto;
+}

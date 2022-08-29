@@ -1,3 +1,9 @@
 <h1>{{title | uppercase}}</h1>
-<app-heros></app-heros>
+<ul class="link1">
+  <nav>
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/heroes">Heroes</a>
+  </nav>
+</ul>
+<router-outlet></router-outlet>
 <app-messages></app-messages>
