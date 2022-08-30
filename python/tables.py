@@ -4,14 +4,16 @@ from rich.table import Table
 from rich import box
 console = Console()
 console.print('\n')
+
 table = Table(title="Star Wars Movies",
-              padding=(0,2),
-              box=box.SQUARE,
+              padding=(0,0),
+              box=box.SQUARE_DOUBLE_HEAD,
               caption="rich table",
-              highlight=True)
-table.add_column("Released", justify="left", style="green", no_wrap=False)
-table.add_column("Title", justify="left",style="green")
-table.add_column("Box Office", justify="left", style="green")
+            )
+
+table.add_column("Released", justify="left", style="white underline", no_wrap=False)
+table.add_column("Title", justify="left",style="white underline")
+table.add_column("Box Office", justify="left", style="green blink")
 table.add_row("Dec 20, 2019", "Star Wars: The Rise of Skywalker", "$952,110,690")
 table.add_row("May 25, 2018", "Solo: A Star Wars Story", "$393,151,347")
 table.add_row("Dec 15, 2017", "Star Wars Ep. V111: The Last Jedi", "$1,332,539,889")
