@@ -6,13 +6,13 @@ console = Console()
 console.print('\n')
 
 table = Table(title="Star Wars Movies",
-              padding=(0,0),
+              padding=(0,2),
               box=box.SQUARE_DOUBLE_HEAD,
               caption="rich table",
             )
 
-table.add_column("Released", justify="left", style="white underline", no_wrap=False)
-table.add_column("Title", justify="left",style="white underline")
+table.add_column("Released", justify="left", style="white", no_wrap=False)
+table.add_column("Title", justify="left",style="white")
 table.add_column("Box Office", justify="left", style="green blink")
 table.add_row("Dec 20, 2019", "Star Wars: The Rise of Skywalker", "$952,110,690")
 table.add_row("May 25, 2018", "Solo: A Star Wars Story", "$393,151,347")
