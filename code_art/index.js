@@ -14,7 +14,7 @@ const degToRad = (deg) => {
 canvas.addEventListener('mousemove', function (e){
     console.log(e.x,e.y);
     ctx.beginPath();
-    ctx.rect(e.x,e.y,5,5);
+    ctx.rect(e.x,e.y,10,10);
     ctx.fill();
     ctx.stroke();
 
@@ -29,7 +29,7 @@ canvas.addEventListener('click',function(c){
 })
 
 // Event that tracks the mouse click and triggers the atom animation.
-canvas.addEventListener('click',function(e){
+canvas.addEventListener('mousemove',function(e){
     for (let i = 0; i < 20; i++) {
         atoms.push(new Atom(e.x,e.y));
         console.log("Atom")
@@ -44,10 +44,20 @@ canvas.addEventListener('click',function(s){
 })
 
 const animateAtom = () => {
-    atoms.forEach(atom => {
+    atoms.forEach((atom, index) => {
         atom.draw();
-        atom.update();
+        atom.updateSpeed();
+        atom.updateSize();
+
+        if (atom.radius < 0.1){
+            atoms.splice(index, 1);
+        }
     })
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.fillRect(0,0,canvas.width,canvas.height)
+    ctx.restore();
+
     requestAnimationFrame(animateAtom)
 }
 
@@ -63,19 +73,24 @@ const animateSquare = () => {
 animateAtom();
 animateSquare();
 
+// Class that draws a series of circles moving in random directions from a point.
 class Atom {
     constructor(x,y){
         this.x = x;
         this.y = y;
-        this.radius = Math.random() + 1;
+        this.radius = Math.random() * 5 + 1;
         this.speedX = Math.random() * 4 - 2;
         this.speedY = Math.random() * 4 - 2;
         //this.rotate = Math.random();
     }
 
-    update(){
+    updateSpeed(){
         this.x += this.speedX;
         this.y += this.speedY;
+    }
+
+    updateSize(){
+        this.radius -= 0.01;
     }
 
     draw(){
@@ -86,12 +101,13 @@ class Atom {
     }
 }
 
+// Class that draws a series of 20x20 squares.
 class Square {
     constructor(x,y){
         this.x = x;
         this.y = y;
-        this.x2 = x - 25;
-        this.y2 = y - 25;
+        this.x2 = x - 50;
+        this.y2 = y - 50;
     }
 
     update(){
