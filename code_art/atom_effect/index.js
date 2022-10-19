@@ -90,7 +90,7 @@ class Atom {
     }
 
     updateSize(){
-        this.radius -= 0.01;
+        this.radius -= 0.1;
     }
 
     draw(){
