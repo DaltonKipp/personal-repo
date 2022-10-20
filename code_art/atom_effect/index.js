@@ -190,7 +190,7 @@ const generateAtoms = () => {
 
 // Draw a hexagon grid
 const a = 2 * Math.PI / 6;
-const r = 11;
+const r = 32;
 
 function init() {
   drawGrid(canvas.width, canvas.height);
@@ -213,11 +213,11 @@ function drawHexagon(x, y) {
   }
   ctx.closePath();
   ctx.lineWidth = 2.5;
-  ctx.strokeStyle = 'rgba(50,50,50,0.1)';
+  ctx.strokeStyle = 'rgba(50,50,50,0.15)';
   ctx.stroke();
 }
 
 // Draws atoms along a path
-atomPath();
+//atomPath();
 // Generates random atoms on the canvas
 generateAtoms();
