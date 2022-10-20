@@ -48,13 +48,14 @@ const animateAtom = () => {
         atom.draw();
         atom.updateSpeed();
         atom.updateSize();
+        atom.updateColor();
 
         if (atom.radius < 0.1){
             atoms.splice(index, 1);
         }
     })
     ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.fillRect(0,0,canvas.width,canvas.height)
     ctx.restore();
 
@@ -78,10 +79,10 @@ class Atom {
     constructor(x,y){
         this.x = x;
         this.y = y;
-        this.radius = Math.random() * 5 + 1;
+        this.radius = Math.random() * 8 + 1;
         this.speedX = Math.random() * 4 - 2;
         this.speedY = Math.random() * 4 - 2;
-        //this.rotate = Math.random();
+        this.rotate = Math.random();
     }
 
     updateSpeed(){
@@ -90,11 +91,26 @@ class Atom {
     }
 
     updateSize(){
-        this.radius -= 0.1;
+        this.radius -= 0.05;
+    }
+
+    updateColor(){
+        ctx.beginPath();
+        if (this.radius >= 2) {
+            ctx.fillStyle = 'blue';
+        }
+        if (this.radius >= 4) {
+            ctx.fillStyle = 'limegreen';
+        }
+        if (this.radius >= 6) {
+            ctx.fillStyle = 'cyan';
+        }
+        if (this.radius >= 6.1) {
+            ctx.fillStyle = 'purple';
+        }
     }
 
     draw(){
-        ctx.beginPath();
         ctx.arc(this.x,this.y, this.radius,0,Math.PI*2)
         //ctx.rotate(this.rotate)
         ctx.fill();
@@ -111,10 +127,10 @@ class Square {
     }
 
     update(){
-        this.x += 25;
-        this.y += 25;
-        this.x2 -= 25;
-        this.y2 -= 25;
+        this.x += 20;
+        this.y += 20;
+        this.x2 -= 20;
+        this.y2 -= 20;
     }
 
     draw(){
@@ -132,3 +148,25 @@ class Square {
         ctx.stroke();
     }
 }
+
+const point = {
+    x: 0,
+    y: 0
+}
+let degree = 0;
+
+const atomPath = () => {
+    atoms.push(new Atom(canvas.width * point.x, canvas.height * point.y))
+    point.x += Math.cos(degree);
+    point.y += 1;
+    degree++;
+    requestAnimationFrame(atomPath)
+}
+
+const generateAtoms = () => {
+    atoms.push(new Atom(Math.random() * canvas.width, Math.random() * canvas.height))
+    requestAnimationFrame(generateAtoms)
+}
+
+atomPath();
+generateAtoms();

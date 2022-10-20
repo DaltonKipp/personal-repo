@@ -34,22 +34,24 @@ class Particle {
         // Maps the 1D brightness array to the correct 2D pixel position
         this.brightness = brightnessArray[Math.floor(this.y-1) * canvas.width + Math.floor(this.x)];
         //console.log("update");
-
+        if (this.x <= this.y+100) {
+            this.color = 'red'
+        }
+        if (this.x >= this.y+100) {
+            this.color = 'purple'
+        }
         if (this.y <= this.x) {
             this.color = 'yellow'
         }
         if (this.y >= this.x) {
             this.color = 'cyan'
         }
-        if (this.x <= this.y) {
-            this.color = 'yellow'
-        }
-        if (this.x >= this.y) {
-            this.color = 'cyan'
-        }
         // if (this.brightness <= 10) {
         //     this.brightness = 10;
         //     this.color = 'white'
+        // }
+        // if (this.y >= canvas.heightt) {
+        //     ctx.clearRect(0, 0, canvas.width, canvas.height)\
         // }
     }
 
