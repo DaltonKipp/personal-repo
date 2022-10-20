@@ -10,6 +10,15 @@ const degToRad = (deg) => {
     return deg/ 180 * Math.PI
 }
 
+var slider = document.getElementById("myRange");
+// var output = document.getElementById("demo");
+// output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+// slider.oninput = function() {
+//   output.innerHTML = this.value;
+// }
+
 // Event that tracks mouse movement and draws a rectangle when the mouse location changes
 canvas.addEventListener('mousemove', function (e){
     // console.log(e.x,e.y);
@@ -30,7 +39,7 @@ canvas.addEventListener('click',function(c){
 
 // Event that tracks the mouse click and triggers the atom animation.
 canvas.addEventListener('mousemove',function(e){
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
         atoms.push(new Atom(e.x,e.y));
         // console.log("Atom")
     }
@@ -83,7 +92,7 @@ class Atom {
     constructor(x,y){
         this.x = x;
         this.y = y;
-        this.radius = Math.random() * 8 + 1;
+        this.radius = Math.random() * 10 + 1;
         this.speedX = Math.random() * 4 - 2;
         this.speedY = Math.random() * 4 - 2;
         this.rotate = Math.random();
@@ -101,21 +110,22 @@ class Atom {
     updateColor(){
         ctx.beginPath();
         if (this.radius >= 2) {
-            ctx.fillStyle = 'purple';
+            ctx.fillStyle = 'black';
         }
         if (this.radius >= 4) {
-            ctx.fillStyle = 'limegreen';
+            ctx.fillStyle = 'red';
         }
         if (this.radius >= 5) {
             ctx.fillStyle = 'cyan';
         }
         if (this.radius >= 6) {
-            ctx.fillStyle = 'blue';
+            ctx.fillStyle = 'white';
         }
     }
     // Draws the atom particle
     draw(){
-        ctx.arc(this.x,this.y, this.radius,0,Math.PI*2)
+        //ctx.arc(this.x,this.y, this.radius,0,Math.PI*2) // Draws circle particles
+        ctx.rect(this.x,this.y,this.radius*5,this.radius*5) // Draws rectangle particles
         //ctx.rotate(this.rotate)
         ctx.fill();
     }
@@ -159,15 +169,15 @@ class Square {
 }
 
 const point = {
-    x: 0,
-    y: 0
+    x: canvas.width / 2,
+    y: canvas.height / 2
 }
 let degree = 0;
 
 const atomPath = () => {
-    atoms.push(new Atom(canvas.width * point.x, canvas.height * point.y))
-    point.x += Math.cos(degree);
-    point.y += 1;
+    atoms.push(new Atom(point.x, point.y))
+    point.x += Math.cos(degree)*100;
+    point.y += Math.cos(degree)*100;
     degree++;
     requestAnimationFrame(atomPath)
 }
@@ -180,10 +190,11 @@ const generateAtoms = () => {
 
 // Draw a hexagon grid
 const a = 2 * Math.PI / 6;
-const r = 50;
+const r = 11;
 
 function init() {
   drawGrid(canvas.width, canvas.height);
+  requestAnimationFrame(init);
 }
 init();
 
@@ -201,6 +212,8 @@ function drawHexagon(x, y) {
     ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
   }
   ctx.closePath();
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = 'rgba(50,50,50,0.1)';
   ctx.stroke();
 }
 
