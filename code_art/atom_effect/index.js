@@ -251,7 +251,7 @@ const generateParticles = () => {
 
 // Draw a hexagon grid
 const a = 2 * Math.PI / 6;
-const r = canvas.width / 100;
+const r = canvas.width / 90;
 
 function init() {
   drawGrid(canvas.width, canvas.height);
