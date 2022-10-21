@@ -3,8 +3,9 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let atoms = [];
+let Particles = [];
 let squares = [];
+let hexagons = [];
 
 const degToRad = (deg) => {
     return deg/ 180 * Math.PI
@@ -31,49 +32,57 @@ canvas.addEventListener('mousemove', function (e){
 
 // Event that tracks mouse clicks and draws a circle when the left mouse button is clicked
 canvas.addEventListener('click',function(c){
-    console.log(c.x,c.y);
+    // console.log(c.x,c.y);
     ctx.beginPath();
     ctx.arc(c.x,c.y,10,0,degToRad(360))
     ctx.fill();
 })
 
-// Event that tracks the mouse click and triggers the atom animation.
+// Event that tracks the mouse click and triggers the Particle animation.
 canvas.addEventListener('mousemove',function(e){
-    for (let i = 0; i < 10; i++) {
-        atoms.push(new Atom(e.x,e.y));
-        // console.log("Atom")
+    for (let i = 0; i < 5; i++) {
+        Particles.push(new Particle(e.x,e.y));
+        // console.log("Particle")
     }
 })
 
 // Event that tracks the mouse click and triggers the square animation.
 canvas.addEventListener('click',function(s){
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         squares.push(new Square(s.x,s.y));
         // console.log("Squares")
     }
 })
 
-// Animate atom function
-const animateAtom = () => {
-    atoms.forEach((atom, index) => {
-        atom.draw();
-        atom.updateSpeed();
-        atom.updateSize();
-        atom.updateColor();
+// Event that tracks the mouse click and triggers the square animation.
+canvas.addEventListener('click',function(hex){
+    for (let i = 0; i < 10; i++) {
+        hexagons.push(new Hexagon(hex.x,hex.y));
+        // console.log("Hexagons")
+    }
+})
 
-        if (atom.radius < 0.1){
-            atoms.splice(index, 1);
+// Animates the Particle function
+const animateParticle = () => {
+    Particles.forEach((Particle, index) => {
+        Particle.draw();
+        Particle.updateSpeed();
+        Particle.updateSize();
+        Particle.updateColor();
+
+        if (Particle.radius < 0.1){
+            Particles.splice(index, 1);
         }
     })
     ctx.save();
-    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
     ctx.fillRect(0,0,canvas.width,canvas.height)
     ctx.restore();
     // Requests a new animation frame is created
-    requestAnimationFrame(animateAtom)
+    requestAnimationFrame(animateParticle)
 }
 
-// Animate square function
+// Animates the square function
 const animateSquare = () => {
     squares.forEach(square => {
         square.updateSize();
@@ -83,12 +92,23 @@ const animateSquare = () => {
     requestAnimationFrame(animateSquare)
 }
 
+// Animates the hexagon function
+const animateHexagon = () => {
+    hexagons.forEach(hexagon => {
+        hexagon.update();
+        hexagon.drawHexagon();
+        hexagon.drawGrid();
+    })
+    requestAnimationFrame(animateHexagon)
+}
+
 // Calls animation functions
-animateAtom();
+animateParticle();
 animateSquare();
+animateHexagon();
 
 // Class that draws a series of circles moving in random directions from a point.
-class Atom {
+class Particle {
     constructor(x,y){
         this.x = x;
         this.y = y;
@@ -97,37 +117,39 @@ class Atom {
         this.speedY = Math.random() * 4 - 2;
         this.rotate = Math.random();
     }
-    // Updates the speed of the atom
+    // Updates the speed of the Particle
     updateSpeed(){
         this.x += this.speedX;
         this.y += this.speedY;
     }
-    // Updates the size of the atom
+    // Updates the size of the Particle
     updateSize(){
         this.radius -= 0.05;
     }
-    // Updates the color of the atom based on size
+    // Updates the color of the Particle based on size
     updateColor(){
         ctx.beginPath();
-        if (this.radius >= 2) {
+        if (this.radius >= 0) {
             ctx.fillStyle = 'black';
         }
-        if (this.radius >= 4) {
+        if (this.radius >= 2) {
             ctx.fillStyle = 'red';
         }
-        if (this.radius >= 5) {
+        if (this.radius >= 4) {
             ctx.fillStyle = 'cyan';
         }
         if (this.radius >= 6) {
             ctx.fillStyle = 'white';
         }
     }
-    // Draws the atom particle
+    // Draws the Particle particle
     draw(){
-        //ctx.arc(this.x,this.y, this.radius,0,Math.PI*2) // Draws circle particles
+        ctx.strokeStyle = 'black';
+        // ctx.arc(this.x,this.y, this.radius,0,Math.PI*2) // Draws circle particles
         ctx.rect(this.x,this.y,this.radius*5,this.radius*5) // Draws rectangle particles
-        //ctx.rotate(this.rotate)
+        // ctx.rotate(this.rotate)
         ctx.fill();
+        ctx.stroke();
     }
 }
 
@@ -153,19 +175,58 @@ class Square {
     }
     // Draw the squares
     draw(){
+        ctx.strokeStyle = 'black'
         ctx.beginPath();
         ctx.rect(this.x,this.y,this.size,this.size)
         ctx.fill();
+        ctx.stroke();
         ctx.beginPath();
         ctx.rect(this.x2,this.y2,this.size,this.size)
+        ctx.stroke();
         ctx.fill();
         ctx.beginPath();
         ctx.rect(this.x2,this.y,this.size,this.size)
+        ctx.stroke();
         ctx.fill();
         ctx.beginPath();
         ctx.rect(this.x,this.y2,this.size,this.size)
+        ctx.stroke();
         ctx.fill();
     }
+}
+
+class Hexagon {
+    constructor(x,y){
+        this.x = x;
+        this.y = y;
+        this.speed = 1;
+        this.a = 2 * Math.PI / 6;
+        this.r = canvas.width/60;
+    }
+    // Updates the size of the square
+    update(){
+        this.x += this.speed
+        this.y += this.speed
+    }
+    
+    drawHexagon(x, y) {
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          ctx.lineTo(x + this.r * Math.cos(this.a * i), y + this.r * Math.sin(this.a * i));
+        }
+        ctx.closePath();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = 'rgba(50,50,50,0.25)';
+        ctx.stroke();
+        }
+    
+    drawGrid(width, height) {
+        for (let y = this.r; y + this.r * Math.sin(this.a) < height; y += this.r * Math.sin(this.a)) {
+          for (let x = this.r, j = 0; x + this.r * (1 + Math.cos(this.a)) < width; x += this.r * (1 + Math.cos(this.a)), y += (-1) ** j++ * this.r * Math.sin(this.a)) {
+            drawHexagon(x, y);
+          }
+        }
+        }
 }
 
 const point = {
@@ -174,23 +235,23 @@ const point = {
 }
 let degree = 0;
 
-const atomPath = () => {
-    atoms.push(new Atom(point.x, point.y))
-    point.x += Math.cos(degree)*100;
-    point.y += Math.cos(degree)*100;
+const ParticlePath = () => {
+    Particles.push(new Particle(point.x, point.y))
+    point.x += Math.cos(degree)*1000;
+    point.y += Math.cos(degree)*1000;
     degree++;
-    requestAnimationFrame(atomPath)
+    requestAnimationFrame(ParticlePath)
 }
 
-// Random atom generation function
-const generateAtoms = () => {
-    atoms.push(new Atom(Math.random() * canvas.width, Math.random() * canvas.height))
-    requestAnimationFrame(generateAtoms)
+// Random Particle generation function
+const generateParticles = () => {
+    Particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height))
+    requestAnimationFrame(generateParticles)
 }
 
 // Draw a hexagon grid
 const a = 2 * Math.PI / 6;
-const r = 32;
+const r = canvas.width / 100;
 
 function init() {
   drawGrid(canvas.width, canvas.height);
@@ -213,11 +274,11 @@ function drawHexagon(x, y) {
   }
   ctx.closePath();
   ctx.lineWidth = 2.5;
-  ctx.strokeStyle = 'rgba(50,50,50,0.15)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.005)';
   ctx.stroke();
 }
 
-// Draws atoms along a path
-//atomPath();
-// Generates random atoms on the canvas
-generateAtoms();
+// Draws Particles along a path
+ParticlePath();
+// Generates random Particles on the canvas
+generateParticles();
