@@ -10,7 +10,7 @@ const sketch = () => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
-    context.fillStyle
+    context.fillStyle = 'black';
     const myCircle = new Circle(100,100,50);
     myCircle.draw(context);
   };
@@ -21,7 +21,7 @@ canvasSketch(sketch, settings);
 class Circle {
   constructor(x,y,radius){
   this.x = x;
-  thix.y =y;
+  thix.y = y;
   this.radius = radius;
   }
 
