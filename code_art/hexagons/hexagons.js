@@ -4,6 +4,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let Hexagons = [];
+let frameRate = 60;
 
 // Animates the Hexagon function
 const animateHexagon = () => {
@@ -13,13 +14,13 @@ const animateHexagon = () => {
         Hexagon.updateSize();
         Hexagon.updateColor();
 
-        if (Hexagon.radius > 100){
+        if (Hexagon.radius > 2000){
             Hexagons.splice(index, 1);
         }
-        if (Hexagon.x > canvas.width){
+        if (Hexagon.x > canvas.width*1.1){
             Hexagons.splice(index, 1);
         }
-        if (Hexagon.y > canvas.height){
+        if (Hexagon.y > canvas.height*1.1){
             Hexagons.splice(index, 1);
         }
     })
@@ -36,7 +37,7 @@ class Hexagon {
     constructor(x,y){
         this.x = x;
         this.y = y;
-        this.radius = Math.random() * canvas.width/1000 + 1;
+        this.radius = Math.random() * canvas.width/100 + 1;
         this.speedX = Math.random() * 20 - 10;
         this.speedY = Math.random() * 20 - 10;
         this.color = 0;
@@ -77,7 +78,7 @@ class Hexagon {
           ctx.lineTo(this.x + r * Math.cos(a * i), this.y + r * Math.sin(a * i));
         }
         ctx.closePath();
-        ctx.lineWidth = this.radius/20;
+        ctx.lineWidth = this.radius/50;
         ctx.stroke();
         ctx.fill();
     }
@@ -91,8 +92,8 @@ let degree = 0;
 
 // Random Hexagon generation function
 const generateHexagons = () => {
-    Hexagons.push(new Hexagon(0, canvas.height/2))
-    Hexagons.push(new Hexagon(canvas.width, canvas.height/2))
+    //Hexagons.push(new Hexagon(0, canvas.height/2))
+    //Hexagons.push(new Hexagon(canvas.width, canvas.height/2))
     Hexagons.push(new Hexagon(canvas.width/2,canvas.height/2))
     requestAnimationFrame(generateHexagons)
 }
