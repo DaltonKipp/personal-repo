@@ -1,14 +1,14 @@
 var noiseArray = []; // Initializes noise array variable
 var colorArray = []; // Initializes color array variable
 
-const scl = 100; // Sets noise scaling
+const scl = 200; // Sets noise scaling
 
 function setup() {
 
   createCanvas(windowWidth, windowHeight); // Defines canvas size
   frameRate(60);
   background(0); // Sets background color
-  noiseDetail(3); // Sets perlin noise detail
+  noiseDetail(12); // Sets perlin noise detail
   
   // Creates noise matrix
   for (x = 0; x < width; x++) {
@@ -87,7 +87,7 @@ function drawCircles() {
     stroke(0, 0, 0); // Red with varying alpha
     
     // Set thickness of the stroke
-    let thickness = scl/100; // Adjust the thickness range
+    let thickness = 1; // Adjust the thickness range
     strokeWeight(thickness);
     
     noFill();
