@@ -1,10 +1,12 @@
+// Dalton Kipp
+
 var noiseArray = []; // Initializes Noise Array Variable
 var colorArray = []; // Initializes Color Array Variable
 let Circles = []; // Initializes Circle Array Variable
 let truth = true;
 
-const noiseScale = 50; // Sets noise scaling (increase for smoother gradient)
-var gridScale = 10; // Sets grid scale (increase for larger grid size)
+const noiseScale = 5; // Sets noise scaling (increase for smoother gradient)
+var gridScale = 20; // Sets grid scale (increase for larger grid size)
 
 var xOffset = 0; // Initial Value Of X Offset
 var yOffset = 0; // Initial Value Of Y Offset
@@ -16,14 +18,14 @@ function setup() {
   noiseDetail(8); // Sets Perlin Noise Detail
 
   const cols = windowWidth / gridScale; // Sets Number of Columns
-  const rows = windowHeight / gridScale; // Sets Number of Rows
+  const rows = windowHeight / gridScale + 1; // Sets Number of Rows
 
   generateNoise(cols, rows); // Generates Noise Arrays
   generateCircles(cols, rows); // Generates Circle Class Instances
 }
 
 function draw() {
-  background(0); // Clear background
+  background(10); // Clear background
 
   Circles.forEach((Circle, index) => {
     Circle.drawCircle(); // Draw circles
@@ -41,9 +43,9 @@ class Circle {
     this.circleRadius = circleRadius;
     this.circleColor = circleColor;
     // this.speedX = 0.25*sin(this.x); // Random speed in X direction
-    this.speedX = random(-0.25, 0.25); // Random speed in X direction
+    this.speedX = 0.25 * sin(this.y) // Random speed in X direction
     // this.speedY = 0.25*sin(this.y); // Random speed in Y direction
-    this.speedY = random(-0.25, 0.25); // Random speed in Y direction
+    this.speedY = 0.0 * sin(this.y); // Random speed in Y direction
   }
   
   // Update circle position
@@ -58,25 +60,25 @@ class Circle {
     let distanceY = abs(this.y - this.initialY);
     
     // Check If The Distance Is Within 10 Percent Of The gridScale
-    if (distanceX > 0.5 * gridScale || distanceY > 0.5 * gridScale) {
+    if (distanceX > 5.0 * gridScale || distanceY > 5.0 * gridScale) {
       this.speedX *= -1;
       this.speedY *= -1;
     }
     
-    // Boundary Conditions To Bounce Back The Circles
-    if (this.x < 0 || this.x > width) {
-      this.speedX *= -1;
-    }
-    if (this.y < 0 || this.y > height) {
-      this.speedY *= -1;
-    }
+    // // Boundary Conditions To Bounce Back The Circles
+    // if (this.x < 0 || this.x > width) {
+    //   this.speedX *= -1;
+    // }
+    // if (this.y < 0 || this.y > height) {
+    //   this.speedY *= -1;
+    // }
   }
 
   // Draw the circle
   drawCircle() {
     fill(this.circleColor); // Ellipse Fill Color
-    ellipse(this.x, this.y, this.circleRadius * 1.5, this.circleRadius * 1.5); // Ellipse
-    stroke(0); // No Outline
+    ellipse(this.x, this.y, this.circleRadius * 3.0, this.circleRadius * 3.0); // Ellipse
+    noStroke(); // No Outline
   }
 }
 
@@ -92,11 +94,9 @@ function generateNoise(cols, rows) {
     }
   }
 
-  // Assigns perlin noise values to noiseArray matrix
+  // Assigns Perlin Noise Values to noiseArray Matrix
   for (let x = 0; x < cols; x++) {
-    xOffset += 0.1;
     for (let y = 0; y < rows; y++) {
-      yOffset += 0.1;
       noiseArray[x][y] = noise(x / noiseScale, y / noiseScale); // Calculates noise values
       colorArray[x][y] = map(noiseArray[x][y], 0, 1, 0, 255); // Maps noise values between 0 and 255
     }
@@ -121,19 +121,19 @@ function generateCircles(cols, rows) {
 // Get Color Based On Noise Value
 function getColorBasedOnNoise(x, y) {
   let noiseValue = colorArray[x][y];
-  if (noiseValue <= 100) {
+  if (noiseValue <= 80) {
     return [0, 255, 255]; // Cyan
-  } else if (noiseValue <= 120) {
+  } else if (noiseValue <= 100) {
     return [255, 0, 0]; // Red
+  } else if (noiseValue <= 120) {
+    return [255, 255, 255]; // White
   } else if (noiseValue <= 140) {
-    return [0, 200, 200]; // Cyan
+    return [0, 150, 150]; // Red
   } else if (noiseValue <= 160) {
-    return [200, 0, 0]; // Red
+    return [0, 150, 150]; // Cyan
   } else if (noiseValue <= 180) {
-    return [0, 100, 100];
-  } else if (noiseValue <= 200) {
-    return [100, 0, 0];
+    return [150, 0, 0]; // Red
   } else {
-    return [10, 10, 10];
+    return [150, 150, 150]; //White
   }
 }
