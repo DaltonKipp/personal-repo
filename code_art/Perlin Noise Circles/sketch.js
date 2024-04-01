@@ -2,35 +2,54 @@
 
 var noiseArray = []; // Initializes Noise Array Variable
 var colorArray = []; // Initializes Color Array Variable
-let Circles = []; // Initializes Circle Array Variable
-let truth = true;
+let Circles = [];    // Initializes Circle Array Variable
 
-const noiseScale = 5; // Sets noise scaling (increase for smoother gradient)
-var gridScale = 20; // Sets grid scale (increase for larger grid size)
+let framerate = 60; // Capture frame rate
+
+const noiseScale = 1;    // Sets noise scaling (increase for smoother gradient)
+const detail = 8.0;      // Noise Detail
+const gridScale = 20;    // Sets grid scale (increase for larger grid size)
+const radScale = 20.0;   // Circle radius scale
+const xScale = 0.5;      // X speed scale
+const yScale = 0.5;      // Y Speed Scale
+const maxDistance = 1.5; // Maximum distance scale
+const alpha = 255;       // Circle transparency
+const pad = 10;          // Pad with extra columns and rows
 
 var xOffset = 0; // Initial Value Of X Offset
 var yOffset = 0; // Initial Value Of Y Offset
 
+// Create CCapture object
+var capturer = new CCapture({
+  format: "png",
+  framerate,
+  name: "circles",
+  quality: 100
+});
+
 function setup() {
-  size = min(windowHeight, windowWidth);
-  createCanvas(windowWidth, windowHeight); // Defines Canvas Size
+
+  console.log('Window Width =',windowWidth,'Window Height =', windowHeight)
+  let p5canvas = createCanvas(windowWidth, windowHeight); // Defines Canvas Size
+  canvas = p5canvas.canvas;
   background(0); // Sets Background Color
-  noiseDetail(8); // Sets Perlin Noise Detail
+  noiseDetail(detail); // Sets Perlin Noise Detail
 
-  const cols = windowWidth / gridScale; // Sets Number of Columns
-  const rows = windowHeight / gridScale + 1; // Sets Number of Rows
+  const cols = windowWidth / gridScale + pad;   // Sets Number of Columns
+  const rows = windowHeight / gridScale + pad;  // Sets Number of Rows
+  console.log('Columns =', cols,'Rows =', rows) // Logs columns and rows to the console
 
-  generateNoise(cols, rows); // Generates Noise Arrays
+  generateNoise(cols, rows);   // Generates Noise Arrays
   generateCircles(cols, rows); // Generates Circle Class Instances
 }
 
 function draw() {
-  background(10); // Clear background
-
+  background(0)
   Circles.forEach((Circle, index) => {
     Circle.drawCircle(); // Draw circles
-    Circle.update(); // Update circle position
+    Circle.update();     // Update circle position
   });
+  capturer.capture(canvas)
 }
 
 // Circle Class
@@ -43,9 +62,9 @@ class Circle {
     this.circleRadius = circleRadius;
     this.circleColor = circleColor;
     // this.speedX = 0.25*sin(this.x); // Random speed in X direction
-    this.speedX = 0.25 * sin(this.y) // Random speed in X direction
+    this.speedX = xScale * sin(this.x) // Random speed in X direction
     // this.speedY = 0.25*sin(this.y); // Random speed in Y direction
-    this.speedY = 0.0 * sin(this.y); // Random speed in Y direction
+    this.speedY = yScale * sin(this.y); // Random speed in Y direction
   }
   
   // Update circle position
@@ -60,8 +79,8 @@ class Circle {
     let distanceY = abs(this.y - this.initialY);
     
     // Check If The Distance Is Within 10 Percent Of The gridScale
-    if (distanceX > 5.0 * gridScale || distanceY > 5.0 * gridScale) {
-      this.speedX *= -1;
+    if (distanceX > maxDistance * gridScale || distanceY > maxDistance * gridScale) {
+      this.speedX *= -1; // Reverses Direction
       this.speedY *= -1;
     }
     
@@ -77,8 +96,9 @@ class Circle {
   // Draw the circle
   drawCircle() {
     fill(this.circleColor); // Ellipse Fill Color
-    ellipse(this.x, this.y, this.circleRadius * 3.0, this.circleRadius * 3.0); // Ellipse
+    ellipse(this.x, this.y, this.circleRadius * radScale, this.circleRadius * radScale); // Ellipse
     noStroke(); // No Outline
+    // stroke(0);
   }
 }
 
@@ -122,18 +142,27 @@ function generateCircles(cols, rows) {
 function getColorBasedOnNoise(x, y) {
   let noiseValue = colorArray[x][y];
   if (noiseValue <= 80) {
-    return [0, 255, 255]; // Cyan
+    return [0, 255, 255, alpha]; // Cyan
   } else if (noiseValue <= 100) {
-    return [255, 0, 0]; // Red
+    return [255, 0, 0, alpha]; // Red
   } else if (noiseValue <= 120) {
-    return [255, 255, 255]; // White
+    return [255, 255, 255, alpha]; // White
   } else if (noiseValue <= 140) {
-    return [0, 150, 150]; // Red
+    return [0, 150, 150, alpha]; // Red
   } else if (noiseValue <= 160) {
-    return [0, 150, 150]; // Cyan
+    return [0, 150, 150, alpha]; // Cyan
   } else if (noiseValue <= 180) {
-    return [150, 0, 0]; // Red
+    return [150, 0, 0, alpha]; // Red
   } else {
-    return [150, 150, 150]; //White
+    return [150, 150, 150, alpha]; //White
+  }
+}
+
+function keyPressed() {
+  if (key === 's' && capturer !== null) {
+    capturer.stop(); // Stop capturing
+    capturer.save(); // Save the captured animation
+    noLoop();
+    console.log('Saved Successfully')
   }
 }

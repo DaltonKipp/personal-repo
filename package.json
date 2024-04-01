@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ccapture.js": "^1.1.0",
+    "p5js": "^1.2.18"
+  }
+}
