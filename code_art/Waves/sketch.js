@@ -8,10 +8,10 @@ const numShapes = 100;   // Number of shapes
 
 function setup() {
   createCanvas(windowWidth, windowHeight); // Creates Canvas
-  background(255); // Sets initial background color
-  generateRings();  // Creates rings in the ringArray
-  console.log('Ring Array: ', ringArray) // Logs ring array to console
-  generateShapes();  // Creates shapes in the shapeArray
+  background(255);                         // Sets initial background color
+  generateRings();                         // Creates rings in the ringArray
+  console.log('Ring Array: ', ringArray)   // Logs ring array to console
+  generateShapes();                        // Creates shapes in the shapeArray
   console.log('Shape Array: ', shapeArray) // Logs shape array to console
 }
 
@@ -22,18 +22,18 @@ function draw() {
 
   ringArray.forEach((Ring, index) => {
     Ring.createPoints(); // Creates points
-    Ring.createRings(); // Creates rings
-    Ring.update(); // Updates objects
+    Ring.createRings();  // Creates rings
+    Ring.update();       // Updates objects
   });
 
   shapeArray.forEach((Shape, index) => {
     Shape.drawCircle(); // Draws circles
-    Shape.update(); // Updates objects
+    Shape.update();     // Updates objects
   });
 }
 
 function generateRings() { // Stores Ring class instances in the ringArray
-  for (let i = 0; i < numRings; i++) {
+  for (let i = 0; i < numRings; i++) { 
     ringArray.push(new Ring(windowWidth/2, windowHeight/2, i * ringSpacing, [0, 255, 255]));
   }
 }
@@ -44,7 +44,7 @@ function generateShapes() { // Stores Shape class instances in the shapeArray
       let angle = map(i, 0, numPoints, 0, TWO_PI);
       let xPos = ringArray[j].x;
       let yPos = ringArray[j].y;
-      let radPos = ringArray[j].ringRadius
+      let radPos = ringArray[j].ringRadius;
       let x = xPos + cos(angle) * radPos;
       let y = yPos + sin(angle) * radPos;
       shapeArray.push(new Shape(x, y, radPos, 15, angle, [255, 255, 255]));
@@ -85,9 +85,9 @@ class Ring {
 
   update() { // Updates rings
     this.ringRadius += this.radSpeed;
-    if (this.ringRadius >= this.initRadius + 2*ringSpacing 
+    if (this.ringRadius >= this.initRadius + 2*ringSpacing
       || this.ringRadius <= this.initRadius - 2*ringSpacing) {
-      this.radSpeed *= -1
+      this.radSpeed *= -1;
     }
   }
 }
@@ -96,7 +96,7 @@ class Shape {
   constructor(x, y, radPos, size, angle, color) {
     this.x = x;
     this.y = y;
-    this.radPos = radPos
+    this.radPos = radPos;
     this.size = size;
     this.angle = angle;
     this.color = color;
