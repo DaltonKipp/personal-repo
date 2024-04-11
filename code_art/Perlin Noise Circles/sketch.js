@@ -4,20 +4,19 @@ var noiseArray = []; // Initializes Noise Array Variable
 var colorArray = []; // Initializes Color Array Variable
 let Circles = [];    // Initializes Circle Array Variable
 
-let framerate = 60; // Capture frame rate
-
-const noiseScale = 1;    // Sets noise scaling (increase for smoother gradient)
-const detail = 8.0;      // Noise Detail
-const gridScale = 20;    // Sets grid scale (increase for larger grid size)
-const radScale = 20.0;   // Circle radius scale
-const xScale = 0.5;      // X speed scale
-const yScale = 0.5;      // Y Speed Scale
-const maxDistance = 1.5; // Maximum distance scale
-const alpha = 255;       // Circle transparency
-const pad = 10;          // Pad with extra columns and rows
-
-var xOffset = 0; // Initial Value Of X Offset
-var yOffset = 0; // Initial Value Of Y Offset
+// Global Variables
+let framerate = 60;       // Capture frame rate
+const noiseScale = 1;     // Sets noise scaling (increase for smoother gradient)
+const detail = 3.0;       // Noise Detail
+const gridScale = 20;     // Sets grid scale (increase for larger grid size)
+const radScale = 5.0;     // Circle radius scale
+const xScale = 0.5;       // X speed scale
+const yScale = 0.5;       // Y Speed Scale
+const maxDistance = 10.0; // Maximum distance scale
+const alpha = 255;        // Circle transparency
+const pad = 10;           // Pad with extra columns and rows
+var xOffset = 0;          // Initial Value Of X Offset
+var yOffset = 0;          // Initial Value Of Y Offset
 
 // Create CCapture object
 var capturer = new CCapture({
@@ -44,7 +43,7 @@ function setup() {
 }
 
 function draw() {
-  background(0)
+  background(20)
   Circles.forEach((Circle, index) => {
     Circle.drawCircle(); // Draw circles
     Circle.update();     // Update circle position
@@ -59,12 +58,12 @@ class Circle {
     this.y = y;
     this.initialX = x; // Store initial position of x
     this.initialY = y; // Store initial position of y
+    this.initialRad = circleRadius // Strore initial radius
     this.circleRadius = circleRadius;
     this.circleColor = circleColor;
-    // this.speedX = 0.25*sin(this.x); // Random speed in X direction
-    this.speedX = xScale * sin(this.x) // Random speed in X direction
-    // this.speedY = 0.25*sin(this.y); // Random speed in Y direction
-    this.speedY = yScale * sin(this.y); // Random speed in Y direction
+    this.speedX = xScale * random(-1,1) // Random speed in X direction
+    this.speedY = yScale * random(-1,1); // Random speed in Y direction
+    this.radSpeed = random(-0.1, 0.1); // Random radius size speed
   }
   
   // Update circle position
@@ -73,6 +72,7 @@ class Circle {
     // Updates Position By Adding Speed Vector
     this.x += this.speedX
     this.y += this.speedY
+    this.circleRadius += this.radSpeed;
 
     // Calculate Distance From Initial Position
     let distanceX = abs(this.x - this.initialX);
@@ -82,8 +82,12 @@ class Circle {
     if (distanceX > maxDistance * gridScale || distanceY > maxDistance * gridScale) {
       this.speedX *= -1; // Reverses Direction
       this.speedY *= -1;
+    }    
+    // Check If The Distance Is Within 10 Percent Of The gridScale
+    if (this.circleRadius > this.initialRad * 1.5 || this.circleRadius < this.initialRad * 0.50) {
+      this.radSpeed *= -1;
     }
-    
+
     // // Boundary Conditions To Bounce Back The Circles
     // if (this.x < 0 || this.x > width) {
     //   this.speedX *= -1;
@@ -97,7 +101,7 @@ class Circle {
   drawCircle() {
     fill(this.circleColor); // Ellipse Fill Color
     ellipse(this.x, this.y, this.circleRadius * radScale, this.circleRadius * radScale); // Ellipse
-    noStroke(); // No Outline
+    stroke(0); // No Outline
     // stroke(0);
   }
 }
