@@ -5,7 +5,7 @@ var colorArray = []; // Initializes Color Array Variable
 let Circles = [];    // Initializes Circle Array Variable
 
 // Global Variables
-let framerate = 60;       // Capture frame rate
+const framerate = 60;     // Capture frame rate
 const noiseScale = 1;     // Sets noise scaling (increase for smoother gradient)
 const detail = 3.0;       // Noise Detail
 const gridScale = 20;     // Sets grid scale (increase for larger grid size)
@@ -43,7 +43,8 @@ function setup() {
 }
 
 function draw() {
-  background(20)
+  background(10)
+  // translate(-windowWidth/2, -windowHeight/2)
   Circles.forEach((Circle, index) => {
     Circle.drawCircle(); // Draw circles
     Circle.update();     // Update circle position
