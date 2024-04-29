@@ -1,64 +1,60 @@
-let particles = []; // Creates particle array
-let numParticles = 4000; // Sets number of particles
-let sinAmplitude = 2
+let PARTICLES = []; // Creates particle array
+const NUM_PARTICLES = 2000; // Sets number of particles
+const X_SIN_AMPLITUDE = 0.02; // Particle X Sine Motion Amplitude
+const RAD_AMPLITUDE = 0.0; // Particle Sine Radius Size Amplitude
+const BACKGROUND_ALPHA = 20; // Background Alpha (acts like a fade effect)
+const PARTICLE_ALPHA = 255; // Particle alpha value
 
 // Sets up project
 function setup() {
-    createCanvas(1080, 1080); // Sets the canvas size
-    frameRate(60); // Sets the frame rate
-    background(25); // Sets background color
+  createCanvas(windowWidth, windowHeight); // Sets the canvas size
+  frameRate(60); // Sets the frame rate
+  background(25); // Sets background color
 
-    // Populates particle array
-    for (let i = 0; i < numParticles; i++) {
-    particles.push(new Particle());
-  }
+  generateParticles();
 }
 
 function draw() {
-  for (let particle of particles) {
-    particle.update(); // Updates each particle
+  background(0, BACKGROUND_ALPHA)
+  for (let particle of PARTICLES) {
     particle.draw(); // Draws each particle
-    saveCanvas('Img','png')
-}
+    particle.update(); // Updates each particle
+  }
 }
 
 class Particle {
-  constructor() {
-    this.reset();
-  }
-  // Resets particles
-  reset() {
+  constructor(x, y, color) {
     this.x = random(0, width); // Particles start at a random x position
-    this.y = -50; // Particles start 50 pixels out of the canvas
-    this.radius = random(5, 50); // Particles are a random size
-    this.speed = random(1, 10); // Particles travel at a random speed
+    this.y = random(0, height); // Particles start at a random y position
+    this.radius = random(5, 25); // Particles are a random size
+    this.speed = random(0.5, 1.5); // Particles travel at a random speed
     this.angle = random(0, TWO_PI); // Random angle between 0 and 2pi
     this.angle2 = random(0, TWO_PI); // Random angle between 0 and 2pi
-    this.colorscale = (40 * this.x) / width; // Scale as a function of x position
+    this.colorscale = (50 * this.x) / width; // Scale as a function of x position
 
     // Sets color to colorscale
-    this.color = [this.colorscale, this.colorscale, this.colorscale, 255];
-
-    // Sets color to red if radius is between 10 and 15
-    if (this.radius >= 10 && this.radius <= 15) {
-      this.color = [255, 0, 0, 255]; // Sets color to red
-    }
-
-    // Sets color to cyan if radius is between 15 and 20
-    if (this.radius >= 15 && this.radius <= 20) {
-      this.color = [0, 255, 255, 255]; // Sets color to cyan
-    }
+    this.color = [this.colorscale, this.colorscale, this.colorscale, PARTICLE_ALPHA];
   }
 
   // Updates parameters of particles
   update() {
-    this.radius += 0.5 * sin(this.angle2);
-    this.x = this.x + sinAmplitude * sin(this.angle);
+
+    this.radius += RAD_AMPLITUDE * sin(this.angle2);
+    this.x += X_SIN_AMPLITUDE * sin(this.angle);
     this.y += this.speed;
-    this.angle += random(0, 0.2);
-    this.angle2 += random(0, 0.2);
+    this.angle += random(0, 0.01);
+    this.angle2 += random(0, 0.01);
+
     if (this.y >= height + 50) {
-      this.reset();
+      this.y = 0;
+    }
+    
+    // Sets color to red if radius is between 10 and 15
+    if (this.radius >= 5 && this.radius <= 15) {
+      this.color = [255, 0, 0, PARTICLE_ALPHA]; // Sets color to red
+
+    } else if (this.radius >= 15 && this.radius <= 25) {
+      this.color = [0, 255, 255, PARTICLE_ALPHA]; // Sets color to cyan
     }
   }
 
@@ -67,5 +63,12 @@ class Particle {
     fill(this.color); // Fills each particle
     ellipse(this.x, this.y, this.radius);
     noStroke();
+  }
+}
+
+function generateParticles() {
+  // Populates particle array
+  for (let i = 0; i < NUM_PARTICLES; i++) {
+    PARTICLES.push(new Particle());
   }
 }
