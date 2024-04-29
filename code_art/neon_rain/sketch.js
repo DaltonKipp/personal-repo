@@ -15,7 +15,7 @@ function setup() {
 }
 
 function draw() {
-  background(0, BACKGROUND_ALPHA)
+  background(0, BACKGROUND_ALPHA);
   for (let particle of PARTICLES) {
     particle.draw(); // Draws each particle
     particle.update(); // Updates each particle
@@ -33,12 +33,16 @@ class Particle {
     this.colorscale = (50 * this.x) / width; // Scale as a function of x position
 
     // Sets color to colorscale
-    this.color = [this.colorscale, this.colorscale, this.colorscale, PARTICLE_ALPHA];
+    this.color = [
+      this.colorscale,
+      this.colorscale,
+      this.colorscale,
+      PARTICLE_ALPHA,
+    ];
   }
 
   // Updates parameters of particles
   update() {
-
     this.radius += RAD_AMPLITUDE * sin(this.angle2);
     this.x += X_SIN_AMPLITUDE * sin(this.angle);
     this.y += this.speed;
@@ -48,11 +52,10 @@ class Particle {
     if (this.y >= height + 50) {
       this.y = 0;
     }
-    
+
     // Sets color to red if radius is between 10 and 15
     if (this.radius >= 5 && this.radius <= 15) {
       this.color = [255, 0, 0, PARTICLE_ALPHA]; // Sets color to red
-
     } else if (this.radius >= 15 && this.radius <= 25) {
       this.color = [0, 255, 255, PARTICLE_ALPHA]; // Sets color to cyan
     }
