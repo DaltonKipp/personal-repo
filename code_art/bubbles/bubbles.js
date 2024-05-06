@@ -8,8 +8,8 @@ const NOISE_SCALE = 1; // Sets noise scaling (increase for smoother gradient)
 const PERLIN_NOISE_DETAIL = 3.0; // Noise Detail
 const GRID_SCALE = 20; // Sets grid scale (increase for larger grid size)
 const RAD_SCALE = 3.0; // Circle radius scale
-const X_SCALE = 0.5; // X speed scale
-const Y_SCALE = 0.5; // Y Speed Scale
+const X_SCALE = 0.50; // X speed scale
+const Y_SCALE = 0.50; // Y Speed Scale
 const MAX_DISTANCE = 10.0; // Maximum distance scale
 const ALPHA = 255; // Circle transparency
 const pad = 10; // Pad with extra columns and rows
@@ -20,7 +20,7 @@ var yOffset = 0; // Initial Value Of Y Offset
 var capturer = new CCapture({
   format: "png",
   framerate,
-  name: "circles",
+  name: "bubbles",
   quality: 100
 });
 
@@ -39,7 +39,7 @@ function setup() {
 }
 
 function draw() {
-  background(0, 0, 0, 5)
+  background(0, 0, 0, 2.5)
   Circles.forEach((Circle, index) => {
     Circle.drawCircle(); // Draw circles
     Circle.update();     // Update circle position

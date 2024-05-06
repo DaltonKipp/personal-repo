@@ -1,9 +1,9 @@
 var CircleNum 
-var size = 10;
-var amplitude = 180;
+var size = 20;
+var amplitude = 280;
 var speed = 100;
 var CircleNum = 1000;
-var cols = 20;
+var cols = 200;
 var radScale = 2;
 var radius = 10;
 let set1 = [];
@@ -16,7 +16,7 @@ function setup() {
 } 
 
 function draw() { 
-  background(10,10,10,25);
+  background(10,10,10,50);
   originalDNA()  
 
   // set1.forEach((Circle, index) => {
@@ -42,7 +42,7 @@ function originalDNA(){
   	var b = map(x, 0, windowWidth, 255, 255);
       
     // Falling Circles
-		fill(r,g,b,20);
+		fill(r,g,b,10);
 		noStroke();
 		ellipse(x,height/2+amplitude*tan(50*i+frameCount/speed/10),2*size,size);
 
