@@ -1,10 +1,10 @@
 let PARTICLES = []; // Creates particle array
 const NUM_PARTICLES = 2000; // Sets number of particles
-const X_SIN_AMPLITUDE = 2.0; // Particle X Sine Motion Amplitude
+const X_SIN_AMPLITUDE = 0.0; // Particle X Sine Motion Amplitude
 const RAD_AMPLITUDE = 0.0; // Particle Sine Radius Size Amplitude
-const BACKGROUND_ALPHA = 15; // Background Alpha (acts like a fade effect)
+const BACKGROUND_ALPHA = 5; // Background Alpha (acts like a fade effect)
 const PARTICLE_ALPHA = 255; // Particle alpha value
-const Y_SPEED_MAX = 2.0; // Maximum y speed
+const Y_SPEED_MAX = 1.0; // Maximum y speed
 
 // Sets up project
 function setup() {
@@ -15,7 +15,7 @@ function setup() {
 }
 
 function draw() {
-  background(0, BACKGROUND_ALPHA);
+  background(0, 0, 0, BACKGROUND_ALPHA);
   for (let particle of PARTICLES) {
     particle.draw(); // Draws each particle
     particle.update(); // Updates each particle
@@ -39,11 +39,14 @@ class Particle {
     this.x += this.xSpeed;
     this.y += this.ySpeed;
 
-    if (this.y <= -this.radius*2 || this.y >= windowHeight + this.radius*2) {
-      this.ySpeed *= -1; // Reverses y direction if outside of the boundaries
-    }
+    // if (this.y <= -this.radius*2 || this.y >= windowHeight + this.radius*2) {
+    //   this.ySpeed *= -1; // Reverses y direction if outside of the boundaries
+    // }
     if (this.x <= -this.radius*2 || this.x >= windowWidth + this.radius*2) {
       this.xSpeed *= -1; // Reverses x direction if outside of the boundaries
+    }
+    if (this.y >= windowHeight + this.radius*2) {
+      this.y = -this.radius*2; // Reverses y direction if outside of the boundaries
     }
   }
 
