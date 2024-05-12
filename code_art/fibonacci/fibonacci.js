@@ -1,9 +1,9 @@
-const SPIRAL_SCALE = 2; // Adjust this value to control the scale of the spiral
+const SPIRAL_SCALE = 2.0; // Adjust this value to control the scale of the spiral
 const ANGLE_SCALE = 100;
 const RAD_SCALE = 50;
 const DIST_SCALE = 50;
 const PHI = (1 + Math.sqrt(5)) / 2;
-const nth = 8000;
+const nth = 6000;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -14,9 +14,8 @@ function draw() {
   background(0);
   translate(width / 2, height / 2); // Move origin to center of canvas
   // noStroke()
+  strokeWeight(0.5)
   fill(255)
-  rotate(100)
-
   drawSpiral();
 }
 
@@ -30,7 +29,7 @@ function drawSpiral() {
     let x = DIST_SCALE * cos(angle * TWO_PI) * distance;
     let y = DIST_SCALE * sin(angle * TWO_PI) * distance;
     drawPolygon(x, y, radius, 6)
-    rotate(0.1)
+    rotate(0.08)
   }
 }
 
