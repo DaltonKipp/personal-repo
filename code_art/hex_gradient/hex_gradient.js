@@ -49,14 +49,14 @@ class Hexagon {
 		let BLUE = 500 * noiseValue * (1 - this.colorFactor);
 
 		// Sets the Fill of the Hexagons
-		if (this.colorFactor >= 0.0 && this.colorFactor < 0.20) {
-			fill(RED, 0, 0);
+		if (this.colorFactor >= 0.00 && this.colorFactor < 0.20) {
+			fill(RED, 25, 0);
 		} else if (this.colorFactor >= 0.20 && this.colorFactor < 0.25) {
 			fill(RED - 50, 0, 0); // Slightly darker
 		} else if (this.colorFactor >= 0.25 && this.colorFactor <= 0.30) {
 			fill(RED - 100, 0, 0); // Slightly darker
 		} else {
-			fill(RED);
+			fill(RED-25);
 		}
 	}
 
