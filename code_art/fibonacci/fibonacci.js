@@ -1,4 +1,4 @@
-const SPIRAL_SCALE = 2; // Adjust this value to control the scale of the spiral
+const SPIRAL_SCALE = 4; // Adjust this value to control the scale of the spiral
 const ANGLE_SCALE = 800;
 const RAD_SCALE = 50;
 const DIST_SCALE = 50;
