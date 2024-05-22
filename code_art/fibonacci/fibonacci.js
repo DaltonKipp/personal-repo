@@ -22,7 +22,7 @@ function draw() {
   drawSpiral();
 
   GLOBAL_ROTATION_ANGLE += 0.1; // Increment the global rotation angle
-  POLYGON_ROTATION_ANGLE += 1; // Increment the polygon rotation angle
+  POLYGON_ROTATION_ANGLE += 1.0; // Increment the polygon rotation angle
 }
 
 function drawSpiral() {
