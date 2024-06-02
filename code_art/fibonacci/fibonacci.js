@@ -1,10 +1,10 @@
-const SPIRAL_SCALE = 4; // Adjust this value to control the scale of the spiral
+const SPIRAL_SCALE = 3; // Adjust this value to control the scale of the spiral
 const ANGLE_SCALE = 800;
 const RAD_SCALE = 50;
 const DIST_SCALE = 50;
 const BACKGROUND_ALPHA = 5.0; // Acts like a blur/refres rate
 const PHI = (1 + Math.sqrt(5)) / 2; // Global calulation of PHI
-const nth = 4000; // nth degree of the drawSpiral iterations
+const nth = 3000; // nth degree of the drawSpiral iterations
 let polySides = 6; // Set default number of polygon sides
 
 var GLOBAL_ROTATION_ANGLE = 0; // Add a global variable for the overall rotation
@@ -21,7 +21,7 @@ function draw() {
   rotate(GLOBAL_ROTATION_ANGLE); // Apply the global rotation to the canvas
   drawSpiral();
 
-  GLOBAL_ROTATION_ANGLE += 0.1; // Increment the global rotation angle
+  GLOBAL_ROTATION_ANGLE += 0.15; // Increment the global rotation angle
   POLYGON_ROTATION_ANGLE += 1.0; // Increment the polygon rotation angle
 }
 

@@ -1,21 +1,22 @@
-let RADIUS = 10; // Sets hexagon radius
+let RADIUS = 15; // Sets hexagon radius
 let SIDE_LENGTH = Math.sqrt((3 * Math.pow(RADIUS, 2)) / 4); // Calculates Side length
-let hexagons = [];
-let canvasWidth, canvasHeight;
+let hexagons = []; // Initializes hexagon class instance array
+let canvasWidth, canvasHeight; // Sets global canvas variables
+const NOISE_SCALE = 50; // Sets scale of perlin noise
 
 function setup() {
   canvasWidth = windowWidth; // Sets canvas width
   canvasHeight = windowHeight; // Sets canvas height
   colorMode(RGB); // Defines color mode
   createCanvas(canvasWidth, canvasHeight); // Creates canvas
+  noiseDetail(4); // Sets perlin noise detail value
   generateHexagons(); // Populates Hexagon array
-  noiseDetail(3); // Sets perlin noise detail value
   frameRate(60);
 }
 
 // Draws Hexagon
 function draw() {
-  background(0);
+  //background(0);
   hexagons.forEach((hexagon) => {
     hexagon.color(); // Gets hexagon color
     hexagon.drawPolygon(6); // Draws hexagons
@@ -43,22 +44,22 @@ class Hexagon {
   color() {
     // Calculate color based on precomputed values
     let noiseValue = noise(
-      this.x + this.noiseOffset,
-      this.y + this.noiseOffset
+      this.x / NOISE_SCALE + this.noiseOffset,
+      this.y / NOISE_SCALE + this.noiseOffset
     );
-    var RED = 500 * noiseValue * (1 - this.colorFactor);
+    var RED = 500 * Math.sin(noiseValue) * (1 - this.colorFactor);
     var GREEN = 500 * noiseValue * (1 - this.colorFactor);
     var BLUE = 500 * noiseValue * (1 - this.colorFactor);
 
     // Sets the Fill of the Hexagons
     if (this.colorFactor >= 0.0 && this.colorFactor < 0.2) {
-      fill(RED, 25, 0);
+      fill(RED, 0, 0);
     } else if (this.colorFactor >= 0.2 && this.colorFactor < 0.25) {
       fill(RED - 50, 0, 0); // Slightly darker
     } else if (this.colorFactor >= 0.25 && this.colorFactor <= 0.3) {
       fill(RED - 100, 0, 0); // Slightly darker
     } else {
-      fill(RED - 25);
+      fill(RED - 50);
     }
   }
 
@@ -78,7 +79,7 @@ class Hexagon {
   }
 
   update() {
-    this.noiseOffset += 0.01;
+    this.noiseOffset += 0.075;
   }
 }
 
