@@ -79,7 +79,7 @@ class Hexagon {
   }
 
   update() {
-    this.noiseOffset += 0.075;
+    this.noiseOffset += 0.025;
   }
 }
 
