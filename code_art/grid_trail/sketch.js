@@ -1,19 +1,3 @@
-// CONSTANTS
-const CELL_SIZE = 50; // size of each cell in the grid
-const COLOR_R = 55;
-const COLOR_G = 55;
-const COLOR_B = 55;
-const STROKE_WEIGHT = 2;
-const STARTING_ALPHA = 255;
-const BACKGROUND_COLOR = 0;
-const BACKGROUND_ALPHA = 20;
-const PROB_OF_NEIGHBOR = 0.2;
-const AMT_FADE_PER_FRAME = 10;
-const NUM_OF_NEIGHBORS = 10;
-const MOVEMENT_SPEED = 0.01;
-const SHAKE = 0.02;
-
-// VARIABLES
 let colorWithAlpha;
 let numRows;
 let numCols;
@@ -26,68 +10,117 @@ let fpsUpdateInterval = 10; // FPS update interval
 let frameCounter = 0; // Counter to keep track of frames
 let currentFPS = 0; // Initial FPS count
 
+document.addEventListener("DOMContentLoaded", function() {
+  const toggleButton = document.getElementById('toggleButton');
+  const controls = document.getElementById('controls');
+
+  toggleButton.addEventListener('click', function() {
+    controls.classList.toggle('hidden');
+    if (controls.classList.contains('hidden')) {
+      toggleButton.textContent = 'Show Controls';
+    } else {
+      toggleButton.textContent = 'Hide Controls';
+    }
+  });
+});
+
 function setup() {
   let cnv = createCanvas(windowWidth, windowHeight);
-  background(0)
-  angleMode(DEGREES)
-  colorWithAlpha = color(COLOR_R, COLOR_G, COLOR_B, STARTING_ALPHA);
+  background(0);
+  angleMode(DEGREES);
   noFill();
-  stroke(colorWithAlpha);
-  strokeWeight(STROKE_WEIGHT);
-  numRows = Math.ceil(windowHeight / CELL_SIZE); // number of rows in the grid
-  numCols = Math.ceil(windowWidth / CELL_SIZE); // number of columns in the grid
+  numRows = Math.ceil(windowHeight / getSliderValue('cellSize')); // number of rows in the grid
+  numCols = Math.ceil(windowWidth / getSliderValue('cellSize')); // number of columns in the grid
 }
 
 function draw() {
-  background(BACKGROUND_COLOR, BACKGROUND_ALPHA);
+  let cellSize = getSliderValue('cellSize');
+  let colorR = getSliderValue('colorR');
+  let colorG = getSliderValue('colorG');
+  let colorB = getSliderValue('colorB');
+  let strokeWeightValue = getSliderValue('strokeWeight');
+  let startingAlpha = getSliderValue('startingAlpha');
+  let backgroundColor = getSliderValue('backgroundColor');
+  let backgroundAlpha = getSliderValue('backgroundAlpha');
+  let probOfNeighbor = getSliderValue('probOfNeighbor');
+  let amtFadePerFrame = getSliderValue('amtFadePerFrame');
+  let numOfNeighbors = getSliderValue('numOfNeighbors');
+  let movementSpeed = getSliderValue('movementSpeed');
+  let shake = getSliderValue('shake');
+
+  // Update labels with current slider values
+  updateLabel('cellSize', cellSize);
+  updateLabel('colorR', colorR);
+  updateLabel('colorG', colorG);
+  updateLabel('colorB', colorB);
+  updateLabel('strokeWeight', strokeWeightValue);
+  updateLabel('startingAlpha', startingAlpha);
+  updateLabel('backgroundColor', backgroundColor);
+  updateLabel('backgroundAlpha', backgroundAlpha);
+  updateLabel('probOfNeighbor', probOfNeighbor);
+  updateLabel('amtFadePerFrame', amtFadePerFrame);
+  updateLabel('numOfNeighbors', numOfNeighbors);
+  updateLabel('movementSpeed', movementSpeed);
+  updateLabel('shake', shake);
+
+  background(backgroundColor, backgroundAlpha);
+  colorWithAlpha = color(colorR, colorG, colorB, startingAlpha);
+  stroke(colorWithAlpha);
+  strokeWeight(strokeWeightValue);
 
   // Calculate the row and column of the cell that the mouse is currently over
-  let row = floor(getPosition().yPosition / CELL_SIZE);
-  let col = floor(getPosition().xPosition / CELL_SIZE);
+  let row = floor(getPosition(movementSpeed).yPosition / cellSize);
+  let col = floor(getPosition(movementSpeed).xPosition / cellSize);
 
   // Check if the mouse has moved to a different cell
   if (row !== currentRow || col !== currentCol) {
     currentRow = row;
     currentCol = col;
     // Add new neighbors to the allNeighbors array
-    allNeighbors.push(...getRandomNeighbors(row, col));
+    allNeighbors.push(...getRandomNeighbors(row, col, numOfNeighbors, probOfNeighbor, cellSize));
   }
 
   // Use the calculated row and column to determine the position of the cell
-  let x = col * CELL_SIZE;
-  let y = row * CELL_SIZE;
-
-  // Draw a highlighted rectangle over the cell under the mouse cursor
-  // stroke(colorWithAlpha);
-  // rect(x, y, CELL_SIZE, CELL_SIZE);
+  let x = col * cellSize;
+  let y = row * cellSize;
 
   // Draw and update all neighbors
   for (let neighbor of allNeighbors) {
-    let neighborX = neighbor.col * CELL_SIZE;
-    let neighborY = neighbor.row * CELL_SIZE;
+    let neighborX = neighbor.col * cellSize;
+    let neighborY = neighbor.row * cellSize;
 
     // Update the opacity of the neighbor
-    neighbor.opacity = max(0, neighbor.opacity - AMT_FADE_PER_FRAME); // Decrease opacity by 5 each frame
-    neighbor.color = max(0, neighbor.color - AMT_FADE_PER_FRAME); // Decrease opacity by 5 each frame
-    neighbor.row = max(0, neighbor.row + random(-SHAKE, SHAKE)*AMT_FADE_PER_FRAME); // Decrease opacity by 5 each frame
-    neighbor.col = max(0, neighbor.col + random(-SHAKE, SHAKE)*AMT_FADE_PER_FRAME); // Decrease opacity by 5 each frame
+    neighbor.opacity = max(0, neighbor.opacity - amtFadePerFrame); // Decrease opacity by amtFadePerFrame each frame
+    neighbor.color = max(0, neighbor.color - amtFadePerFrame); // Decrease opacity by amtFadePerFrame each frame
+    neighbor.row = max(0, neighbor.row + random(-shake, shake) * amtFadePerFrame); // Shake the row
+    neighbor.col = max(0, neighbor.col + random(-shake, shake) * amtFadePerFrame); // Shake the col
 
     stroke(255, 0, neighbor.color, neighbor.opacity);
     fill(neighbor.color, 0, 255, neighbor.opacity);
-    rect(neighborX, neighborY, CELL_SIZE, CELL_SIZE);
+    rect(neighborX, neighborY, cellSize, cellSize);
   }
+
   // Remove neighbors with zero opacity
   allNeighbors = allNeighbors.filter((neighbor) => neighbor.opacity > 0);
+
   // Display FPS Counter
   fpsCounter();
 }
 
-function getRandomNeighbors(row, col) {
+function getSliderValue(id) {
+  return parseFloat(document.getElementById(id).value);
+}
+
+function updateLabel(id, value) {
+  document.getElementById(id + 'Value').innerText = value;
+}
+
+function getRandomNeighbors(row, col, numOfNeighbors, probOfNeighbor, cellSize) {
   let neighbors = []; // Initialize an empty array to store neighbor cells
 
   // Loop through the cells surrounding the given cell (row, col)
-  for (let dRow = -NUM_OF_NEIGHBORS; dRow <= NUM_OF_NEIGHBORS; dRow++) {
-    for (let dCol = -NUM_OF_NEIGHBORS; dCol <= NUM_OF_NEIGHBORS; dCol++) {
+  for (let dRow = -numOfNeighbors; dRow <= numOfNeighbors; dRow++) {
+    for (let dCol = -numOfNeighbors; dCol <= numOfNeighbors; dCol++) {
       // Calculate the neighboring cell's row and column indices
       let neighborRow = row + dRow;
       let neighborCol = col + dCol;
@@ -102,14 +135,14 @@ function getRandomNeighbors(row, col) {
         neighborCol >= 0 &&
         neighborCol < numCols;
 
-      // If the cell is not the given cell, is within bounds, and has a 50% chance,
+      // If the cell is not the given cell, is within bounds, and has a probability of being a neighbor,
       // add the neighboring cell to the neighbors array
-      if (!isCurrentCell && isInBounds && Math.random() < PROB_OF_NEIGHBOR) {
+      if (!isCurrentCell && isInBounds && Math.random() < probOfNeighbor) {
         neighbors.push({
           row: neighborRow,
           col: neighborCol,
           opacity: 255, // Initial opacity of the neighbor
-          color: 255
+          color: 255,
         });
       }
     }
@@ -119,14 +152,14 @@ function getRandomNeighbors(row, col) {
   return neighbors;
 }
 
-function getPosition() {
-  let radius = min(windowWidth, windowHeight)/1.5; // Radius of the infinity symbol
+function getPosition(movementSpeed) {
+  let radius = min(windowWidth, windowHeight) / 1.5; // Radius of the infinity symbol
   let centerX = windowWidth / 2;
   let centerY = windowHeight / 2;
 
   let xPosition = centerX + radius * Math.sin(angle) / (1 + Math.pow(Math.cos(angle), 2));
   let yPosition = centerY + radius * Math.sin(angle) * Math.cos(angle) / (1 + Math.pow(Math.cos(angle), 2));
-  angle += MOVEMENT_SPEED; // Adjust the increment to control the speed of movement
+  angle += movementSpeed; // Adjust the increment to control the speed of movement
 
   return { xPosition, yPosition };
 }
@@ -161,6 +194,6 @@ function fpsCounter() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-  numRows = Math.ceil(windowHeight / CELL_SIZE); // number of rows in the grid
-  numCols = Math.ceil(windowWidth / CELL_SIZE); // number of columns in the grid
+  numRows = Math.ceil(windowHeight / getSliderValue('cellSize')); // number of rows in the grid
+  numCols = Math.ceil(windowWidth / getSliderValue('cellSize')); // number of columns in the grid
 }

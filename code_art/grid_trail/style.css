@@ -6,3 +6,52 @@ html, body {
 canvas {
   display: block;
 }
+
+#controls {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  background-color: rgba(55, 55, 55, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 300px;
+}
+
+#controls.hidden {
+  display: none;
+}
+
+#controls div {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: white;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+#controls span {
+  font-weight: bold;
+}
+
+#toggleButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#toggleButton:hover {
+  background-color: #0056b3;
+}
