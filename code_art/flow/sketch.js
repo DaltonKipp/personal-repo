@@ -7,7 +7,7 @@ function setup() {
   background(0);
   angleMode(DEGREES);
   // Create particles
-  for (let i = 0; i < 2000; i++) {
+  for (let i = 0; i < 4000; i++) {
     particles.push(new Particle());
   }
 }
