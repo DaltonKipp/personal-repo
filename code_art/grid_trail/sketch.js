@@ -35,9 +35,6 @@ function setup() {
 
 function draw() {
   let cellSize = getSliderValue('cellSize');
-  let colorR = getSliderValue('colorR');
-  let colorG = getSliderValue('colorG');
-  let colorB = getSliderValue('colorB');
   let strokeWeightValue = getSliderValue('strokeWeight');
   let startingAlpha = getSliderValue('startingAlpha');
   let backgroundColor = getSliderValue('backgroundColor');
@@ -50,9 +47,6 @@ function draw() {
 
   // Update labels with current slider values
   updateLabel('cellSize', cellSize);
-  updateLabel('colorR', colorR);
-  updateLabel('colorG', colorG);
-  updateLabel('colorB', colorB);
   updateLabel('strokeWeight', strokeWeightValue);
   updateLabel('startingAlpha', startingAlpha);
   updateLabel('backgroundColor', backgroundColor);
@@ -64,7 +58,7 @@ function draw() {
   updateLabel('shake', shake);
 
   background(backgroundColor, backgroundAlpha);
-  colorWithAlpha = color(colorR, colorG, colorB, startingAlpha);
+  colorWithAlpha = color(255, 255, 255, startingAlpha);
   stroke(colorWithAlpha);
   strokeWeight(strokeWeightValue);
 
@@ -168,6 +162,9 @@ function getPosition(movementSpeed) {
 function keyPressed() {
   if (keyCode === 70) { // Check if the pressed key is 'f'
     showFPS = !showFPS; // Toggle showFPS variable
+  }
+  if (keyCode === 32) { // Check if the pressed key is 'f'
+    windowResized(); // Toggle showFPS variable
   }
 }
 
