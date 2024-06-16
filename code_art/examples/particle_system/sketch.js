@@ -1,3 +1,6 @@
+// Frank's Laboratory
+// Video Link: https://www.youtube.com/watch?v=5dIbK0auaB8&list=PLsPnqXfykr1cMSF0ew3NS4hAx0NwfYnOA&index=4&ab_channel=Frankslaboratory
+
 // setup
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
