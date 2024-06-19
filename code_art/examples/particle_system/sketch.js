@@ -7,28 +7,36 @@ const ctx = canvas.getContext("2d"); // Defines 2D Context
 canvas.width = window.innerWidth; // Sets canvas width to window width
 canvas.height = window.innerHeight; // Sets canvas height to window height
 
-console.log(ctx); // Logs canvas parameter
-const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height); // Creates linear color gradient
 // Defines color gradient stops
-gradient.addColorStop(0, "blue");
-gradient.addColorStop(0.5, "purple");
+const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height); // Creates linear color gradient
+gradient.addColorStop(0, "cyan");
+gradient.addColorStop(0.5, "white");
 gradient.addColorStop(1, "red");
+
+// Canvas Styling
 ctx.fillStyle = gradient; // Sets global fill style
-ctx.strokeStyle = "white"; // Sets global stroke style
+ctx.strokeStyle = gradient; // Sets global stroke style
+ctx.linewidth = 5;
+
+// Global Constants
+const NUM_PARTICLES = 500;
+const MAX_PARTICLE_SIZE = 20;
+const MAX_PARTICLE_SPEED = 0.5;
+const MAX_LINE_DISTANCE = 150;
+const MOUSE_RADIUS = 100;
+const PARTICLE_FRICTION = 0.9;
 
 class Particle {
   constructor(effect) {
     this.effect = effect;
-    this.radius = Math.floor(Math.random() * 20 + 1);
-    this.x =
-      this.radius + Math.random() * (this.effect.width - this.radius * 2);
-    this.y =
-      this.radius + Math.random() * (this.effect.height - this.radius * 2);
-    this.vx = Math.random() * 0.5 - 0.25;
-    this.vy = Math.random() * 0.5 - 0.25;
+    this.radius = Math.abs(Math.random() * MAX_PARTICLE_SIZE + 2);
+    this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
+    this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
+    this.vx = Math.random() * MAX_PARTICLE_SPEED - MAX_PARTICLE_SPEED / 2;
+    this.vy = Math.random() * MAX_PARTICLE_SPEED - MAX_PARTICLE_SPEED / 2;
     this.pushX = 0;
     this.pushY = 0;
-    this.friction = 0.95;
+    this.friction = PARTICLE_FRICTION;
   }
   draw(context) {
     context.beginPath();
@@ -37,6 +45,7 @@ class Particle {
     //context.stroke();
   }
   update() {
+    // Calculates distance from mouse position to the particle
     if (this.effect.mouse.pressed) {
       const dx = this.x - this.effect.mouse.x;
       const dy = this.y - this.effect.mouse.y;
@@ -52,6 +61,7 @@ class Particle {
     this.x += (this.pushX *= this.friction) + this.vx;
     this.y += (this.pushY *= this.friction) + this.vy;
 
+    // Bounces particles back if they leave the window area
     if (this.x < this.radius) {
       this.x = this.radius;
       this.vx *= -1;
@@ -67,11 +77,10 @@ class Particle {
       this.vy *= -1;
     }
   }
+  // Handles resetting particles after window resize
   reset() {
-    this.x =
-      this.radius + Math.random() * (this.effect.width - this.radius * 2);
-    this.y =
-      this.radius + Math.random() * (this.effect.height - this.radius * 2);
+    this.x = this.radius + Math.random() * (this.effect.width - this.radius * 2);
+    this.y = this.radius + Math.random() * (this.effect.height - this.radius * 2);
   }
 }
 
@@ -82,30 +91,33 @@ class Effect {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.particles = [];
-    this.numberOfParticles = 1000;
+    this.numberOfParticles = NUM_PARTICLES;
     this.createParticles();
 
     this.mouse = {
       x: 0,
       y: 0,
       pressed: false,
-      radius: 200,
+      radius: MOUSE_RADIUS,
     };
-
+    // Listens for resizing of the canvas
     window.addEventListener("resize", (e) => {
       this.resize(e.target.window.innerWidth, e.target.window.innerHeight);
     });
+    // Listens for mouse movement
     window.addEventListener("mousemove", (e) => {
       if (this.mouse.pressed) {
         this.mouse.x = e.x;
         this.mouse.y = e.y;
       }
     });
+    // Listens for left mouse click
     window.addEventListener("mousedown", (e) => {
       this.mouse.pressed = true;
       this.mouse.x = e.x;
       this.mouse.y = e.y;
     });
+    // Listens for mouse up
     window.addEventListener("mouseup", (e) => {
       this.mouse.pressed = false;
     });
@@ -126,7 +138,7 @@ class Effect {
   }
   // Connects Particles With a Line
   connectParticles(context) {
-    const maxDistance = 100;
+    const maxDistance = MAX_LINE_DISTANCE;
     for (let a = 0; a < this.particles.length; a++) {
       for (let b = a; b < this.particles.length; b++) {
         const dx = this.particles[a].x - this.particles[b].x;
@@ -145,18 +157,18 @@ class Effect {
       }
     }
   }
-  // Handles resizing of the window
+  // Updates canvas after resizing the window
   resize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
     this.width = width;
     this.height = height;
     const gradient = this.context.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, "blue");
-    gradient.addColorStop(0.5, "purple");
+    gradient.addColorStop(0, "cyan");
+    gradient.addColorStop(0.5, "white");
     gradient.addColorStop(1, "red");
     this.context.fillStyle = gradient;
-    this.context.strokeStyle = "white";
+    this.context.strokeStyle = gradient;
     this.particles.forEach((particle) => {
       particle.reset();
     });
