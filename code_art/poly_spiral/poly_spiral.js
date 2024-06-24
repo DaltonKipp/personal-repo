@@ -1,5 +1,5 @@
 let angles = []; // Array to store rotation angles for each ring
-let NUM_RINGS = 21; // Number of rings
+let NUM_RINGS = 25; // Number of rings
 const BACKGROUND_ALPHA = 25; // Set background refresh effect
 
 function setup() {
@@ -14,12 +14,12 @@ function setup() {
 }
 
 function draw() {
-  background(50, BACKGROUND_ALPHA); // 
+  background(50, BACKGROUND_ALPHA); //
   translate(windowWidth / 2, windowHeight / 2);
   for (let index = 0; index < NUM_RINGS; index++) {
-    getColor(index)
-    let rotationDirection = (index % 2 === 0) ? 1 : -1; // Alternate rotation direction
-    ring(index, index * 50, 25, index * 5, 3, 0.005 * rotationDirection);
+    getColor(index);
+    let rotationDirection = index % 2 === 0 ? 1 : -1; // Alternate rotation direction
+    ring(index, index * 50, 25, index * 5, 6, 0.005 * rotationDirection);
   }
 }
 
@@ -57,4 +57,10 @@ function getColor(index) {
     ringColor = color(255, 255, 255); // White
   }
   fill(ringColor); // Set the fill color
+}
+
+// Resize the canvas when the window is resized
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight); // Resizes canvas to new window dimensions
+  background(0); // Reset the background
 }

@@ -86,3 +86,9 @@ function drawPolygon(x, y, radius, nPoints, rotationAngle) {
   pop(); // Store transformations
   noStroke(); //
 }
+
+// Resize the canvas when the window is resized
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight); // Resizes canvas to new window dimensions
+  background(0); // Reset the background
+}
