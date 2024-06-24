@@ -8,9 +8,9 @@ var time = 0;
 
 // Constants
 const NUM_PARTICLES = 1000;
-const MAX_PARTICLE_SIZE = 25;
+const MAX_PARTICLE_SIZE = 10;
 const MAX_PARTICLE_SPEED = 0.5;
-const LINE_WIDTH = 5;
+const LINE_WIDTH = 1;
 const MAX_LINE_DISTANCE = 100;
 const SIN_FACTOR = 100;
 
