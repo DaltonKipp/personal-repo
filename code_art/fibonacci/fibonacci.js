@@ -52,18 +52,18 @@ function drawSpiral() {
     var col; // Initializes color variable
 
     // Map colors based on the distance from the center
-    if (colorValue <= 0.33) {
+    if (colorValue <= 0.5) {
       // Black to Red
       let t = map(colorValue, 0, 0.33, 0, 1);
-      col = lerpColor(color(0, 0, 0), color(255, 0, 0), t);
-    } else if (colorValue <= 0.66) {
+      col = lerpColor(color(0, 0, 0), color(100, 100, 100), t);
+    } else if (colorValue <= 0.75) {
       // Red to Cyan
       let t = map(colorValue, 0.33, 0.66, 0, 1);
-      col = lerpColor(color(255, 0, 0), color(0, 255, 255), t);
+      col = lerpColor(color(100, 100, 100), color(155, 155, 155), t);
     } else {
       // Cyan to White
       let t = map(colorValue, 0.66, 1, 0, 1);
-      col = lerpColor(color(0, 255, 255), color(255, 255, 255), t);
+      col = lerpColor(color(155, 155, 155), color(255, 255, 255), t);
     }
 
     fill(col);

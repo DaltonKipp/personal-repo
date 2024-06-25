@@ -23,7 +23,7 @@ function draw() {
     strokeWeight(2);
     // Left
     let x1 = i;
-    let y1 = (10 * windowHeight) / i;
+    let y1 = (20 * windowHeight) / i;
     let x2 = spacing * i;
     let y2 = 0;
     line(x1, y1, x2, y2);
@@ -37,10 +37,10 @@ function draw() {
   iterations += iterSpeed;
   spacing += spacingSpeed;
 
-  if (iterations >= 1000 || iterations <= 1) {
+  if (iterations >= 200 || iterations <= 1) {
     iterSpeed *= -1;
   }
-  if (spacing >= 100 || spacing <= 1) {
+  if (spacing >= 200 || spacing <= 1) {
     spacingSpeed *= -1;
   }
 
