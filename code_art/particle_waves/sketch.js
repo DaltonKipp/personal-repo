@@ -29,7 +29,7 @@ class Particle {
     this.effect = effect;
     this.radius = Math.abs(Math.random() * MAX_PARTICLE_SIZE + 1);
     this.x = x;
-    this.y = canvas.height / 2 + (canvas.height / 2) * Math.sin(this.x / SIN_FACTOR);
+    this.y = canvas.height / 2 + (canvas.height / 3) * Math.sin(this.x / SIN_FACTOR);
     this.vx = 1 + MAX_PARTICLE_SPEED / 2 + MAX_PARTICLE_SPEED * Math.sin(this.y / SIN_FACTOR);
     this.vy = 1 + Math.sin(this.x);
   }
