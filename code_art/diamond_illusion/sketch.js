@@ -2,6 +2,8 @@ var iterations = 1;
 var spacing = 1;
 
 var iterSpeed = 1;
+var spacingSpeed = 0.2;
+var rotationSpeed = 0.25; // Rotation speed in degrees
 var spacingSpeed = 0.1;
 var rotationSpeed = 0.25; // Rotation speed in degrees
 var angle = 0; // Initial rotation angle
@@ -14,12 +16,19 @@ function setup() {
 
 function draw() {
   background(0, 5);
+  translate(windowWidth / 2, windowHeight / 2);
+  background(0, 5);
   // translate(-windowWidth / 4, -windowHeight / 2);
   rotate(angle); // Rotate the entire coordinate system
 
   for (i = 0; i < floor(iterations); i++) {
     push();
     stroke(255, 255, 255);
+    strokeWeight(1);
+    // Lef
+    let x1 = i;
+    let y1 = (10 * windowHeight) / i;
+    let x2 = spacing * 2 * i;
     strokeWeight(2);
     // Left
     let x1 = 0;
@@ -39,11 +48,17 @@ function draw() {
 
   if (iterations >= 100 || iterations <= 1) {
     iterSpeed *= -0;
+  if (iterations >= 100 || iterations <= 1) {
+    iterSpeed *= -0;
   }
+  if (spacing >= 200 || spacing <= 0) {
+    spacingSpeed *= -1;
   if (spacing >= 50 || spacing <= 1) {
     spacingSpeed *= -0;
   }
-
+  // if (frameCount % 300 == 1) {
+  //   rotationSpeed *= -0.9;
+  // }
   angle += rotationSpeed; // Update the rotation angle
 
   // gridlines();
@@ -51,7 +66,7 @@ function draw() {
 
 function gridlines() {
   stroke(255, 255, 255);
-  strokeWeight(10);
+  strokeWeight(2);
   length = Math.sqrt(windowWidth ** 2 + windowHeight ** 2);
   line(0, 0, length, length);
   line(0, 0, length, -length);
