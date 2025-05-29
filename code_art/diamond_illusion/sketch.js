@@ -26,13 +26,13 @@ function draw() {
     stroke(255, 255, 255);
     strokeWeight(1);
     // Lef
-    let x1 = i;
-    let y1 = (10 * windowHeight) / i;
-    let x2 = spacing * 2 * i;
+    x1 = i;
+    y1 = (10 * windowHeight) / i;
+    x2 = spacing * 2 * i;
     strokeWeight(2);
     // Left
     let x1 = 0;
-    let y1 = (windowHeight)/i;
+    let y1 = windowHeight / i;
     let x2 = spacing * i;
     let y2 = 0;
     line(x1, y1, x2, y2);
@@ -42,17 +42,19 @@ function draw() {
     line(-x2, -y2, x1, y1);
     pop();
   }
+}
 
-  iterations += iterSpeed;
-  spacing += spacingSpeed;
+iterations += iterSpeed;
+spacing += spacingSpeed;
 
-  if (iterations >= 100 || iterations <= 1) {
-    iterSpeed *= -0;
-  if (iterations >= 100 || iterations <= 1) {
-    iterSpeed *= -0;
-  }
-  if (spacing >= 200 || spacing <= 0) {
-    spacingSpeed *= -1;
+if (iterations >= 100 || iterations <= 1) {
+  iterSpeed *= -0;
+}
+if (iterations >= 100 || iterations <= 1) {
+  iterSpeed *= -0;
+}
+if (spacing >= 200 || spacing <= 0) {
+  spacingSpeed *= -1;
   if (spacing >= 50 || spacing <= 1) {
     spacingSpeed *= -0;
   }
