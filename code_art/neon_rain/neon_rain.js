@@ -1,10 +1,11 @@
 let PARTICLES = []; // Creates particle array
 const NUM_PARTICLES = 2000; // Sets number of particles
-const X_SIN_AMPLITUDE = 0.0; // Particle X Sine Motion Amplitude
+const MAX_PARTICLE_SIZE = 15; // Sets maximum particle size
+const X_SIN_AMPLITUDE = 0.5; // Particle X Sine Motion Amplitude
 const RAD_AMPLITUDE = 0.0; // Particle Sine Radius Size Amplitude
-const BACKGROUND_ALPHA = 5; // Background Alpha (acts like a fade effect)
+const BACKGROUND_ALPHA = 20; // Background Alpha (acts like a fade effect)
 const PARTICLE_ALPHA = 255; // Particle alpha value
-const Y_SPEED_MAX = 1.0; // Maximum y speed
+const Y_SPEED_MAX = 2.5; // Maximum y speed
 
 // Sets up project
 function setup() {
@@ -26,7 +27,7 @@ class Particle {
   constructor(x, y, color) {
     this.x = random(0, windowWidth); // Particles start at a random x position
     this.y = random(0, windowHeight); // Particles start at a random y position
-    this.radius = random(0, 30); // Particles are a random size
+    this.radius = random(0, MAX_PARTICLE_SIZE); // Particles are a random size
     this.xAngle = sin(this.y); // Random angle between 0 and 2pi
     this.angle2 = random(0, TWO_PI); // Random angle between 0 and 2pi
     this.xSpeed = X_SIN_AMPLITUDE * this.xAngle;
@@ -52,9 +53,9 @@ class Particle {
 
   // Draws the particles
   draw() {
-    if (this.radius > 10 && this.radius <= 20) {
+    if (this.radius > MAX_PARTICLE_SIZE * 0.33 && this.radius <= MAX_PARTICLE_SIZE * 0.66) {
       this.color = [255, 0, 0, PARTICLE_ALPHA];
-    } else if (this.radius > 20 && this.radius <= 30) {
+    } else if (this.radius > MAX_PARTICLE_SIZE * 0.66 && this.radius <= MAX_PARTICLE_SIZE) {
       this.color = [0, 255, 255, PARTICLE_ALPHA];
     } else {
       this.color = [255, 255, 255, PARTICLE_ALPHA];
