@@ -26,17 +26,45 @@ colored_text() {
 }
 
 # Box drawing characters (ASCII alternatives for better compatibility)
-H_LINE="-"
-V_LINE="|"
-TL_CORNER="+"
-TR_CORNER="+"
-BL_CORNER="+"
-BR_CORNER="+"
-L_JOINT="+"
-R_JOINT="+"
-T_JOINT="+"
-B_JOINT="+"
-CROSS="+"
+H_LINE="─"
+V_LINE="│"
+TL_CORNER="┌"
+TR_CORNER="┐"
+BL_CORNER="└"
+BR_CORNER="┘"
+L_JOINT="├"
+R_JOINT="┤"
+T_JOINT="┬"
+B_JOINT="┴"
+CROSS="┼"
+
+# Detect whether the current locale is using UTF-8
+if [[ "$(locale charmap 2>/dev/null)" == "UTF-8" ]]; then
+    H_LINE="─"
+    V_LINE="│"
+    TL_CORNER="┌"
+    TR_CORNER="┐"
+    BL_CORNER="└"
+    BR_CORNER="┘"
+    L_JOINT="├"
+    R_JOINT="┤"
+    T_JOINT="┬"
+    B_JOINT="┴"
+    CROSS="┼"
+else
+    # Fallback to plain ASCII if not UTF-8
+    H_LINE="-"
+    V_LINE="|"
+    TL_CORNER="+"
+    TR_CORNER="+"
+    BL_CORNER="+"
+    BR_CORNER="+"
+    L_JOINT="+"
+    R_JOINT="+"
+    T_JOINT="+"
+    B_JOINT="+"
+    CROSS="+"
+fi
 
 # Calculate terminal width if possible
 if command -v tput &>/dev/null; then
@@ -144,7 +172,7 @@ create_table_row() {
     fi
     
     # Calculate padding
-    local padding=$((WIDTH-key_width-${#visible_value}-4))
+    local padding=$((WIDTH-key_width-${#visible_value}-5))
     
     # Ensure padding is never negative
     if [ $padding -lt 0 ]; then
@@ -223,7 +251,7 @@ format_command_output() {
         fi
         
         # Calculate padding for right alignment
-        local padding=$((WIDTH-indent-${#visible_line}-1))
+        local padding=$((WIDTH-indent-${#visible_line}-3))
         
         # Ensure padding is never negative
         if [ $padding -lt 0 ]; then
