@@ -7,7 +7,7 @@ function preload() {
     () => console.log("✅ remote image loaded"),
     () => {
       console.warn("❌ remote failed, loading local fallback");
-      cardImg = loadImage("assets/lenny.png");
+      cardImg = loadImage("assets/elemental2.png");
     }
   );
   titleFont = loadFont(
