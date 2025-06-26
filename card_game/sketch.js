@@ -7,7 +7,7 @@ function preload() {
     () => console.log("✅ remote image loaded"),
     () => {
       console.warn("❌ remote failed, loading local fallback");
-      cardImg = loadImage("assets/elemental2.png");
+      cardImg = loadImage("assets/turtle1.png");
     }
   );
   titleFont = loadFont(
@@ -21,7 +21,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(400, 560);
+  createCanvas(1000, 1000);
   noLoop();
 }
 
@@ -45,7 +45,7 @@ function drawCard(x, y, w, h, data) {
   stroke(200);
   strokeWeight(4);
   fill(30);
-  rect(0, 0, w, h, 20);
+  rect(0, 0, w, h, 5);
 
   // TITLE BAR
   noStroke();
@@ -62,7 +62,7 @@ function drawCard(x, y, w, h, data) {
   fill(200, 50, 50);
   stroke(200);
   strokeWeight(2);
-  ellipse(w - 30, 25, 40);
+  ellipse(w - 30, 25, 25);
   noStroke();
   fill(255);
   textAlign(CENTER, CENTER);
