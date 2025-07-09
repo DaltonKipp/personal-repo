@@ -1,11 +1,14 @@
 let kaleidoShader; // Holds the custom shader
 
 let params = {
-  tileCount: 16.0,       // Number of times to tile the square pattern
-  squareSize: 0.4,      // Size of the square in each tile
-  thickness: 0.18,      // Thickness of the square border
-  kaleidoSides: 12.0,    // Number of angular kaleidoscope slices
-  distortionAmp: 0.09  // Refraction wobble strength
+  tileCount: 16.0,     // Number of times to tile the square pattern
+  squareSize: 0.4,     // Size of the square in each tile
+  thickness: 0.18,     // Thickness of the square border
+  kaleidoSides: 12.0,  // Number of angular kaleidoscope slices
+  distortionAmp: 0.09, // Refraction wobble strength
+  chromaOffset: 0.05,  // Chromatic Aberration
+  chromaBlur: 1.5,     // Chromatic Blur
+  glowStrength: 0.4    // Edge Glow
 };
 
 function preload() {
@@ -25,6 +28,9 @@ function setup() {
   gui.add(params, 'thickness', 0.001, 0.2).step(0.001).name('Border Thickness');
   gui.add(params, 'kaleidoSides', 1, 16).step(1).name('Kaleido Sides');
   gui.add(params, 'distortionAmp', 0.0, 0.1).step(0.001).name('Distortion Amp');
+  gui.add(params, 'chromaOffset', 0.0, 0.1).step(0.001).name('Chroma Offset');
+  gui.add(params, 'chromaBlur', 0.0, 5.0).step(0.1).name('Chroma Blur');
+  gui.add(params, 'glowStrength', 0.0, 1.0).step(0.01).name('Edge Glow');
 }
 
 function draw() {
@@ -36,9 +42,16 @@ function draw() {
   kaleidoShader.setUniform('u_thickness', params.thickness);
   kaleidoShader.setUniform('u_kaleidoSides', params.kaleidoSides);
   kaleidoShader.setUniform('u_distortionAmp', params.distortionAmp);
+  kaleidoShader.setUniform('u_chromaOffset', params.chromaOffset);
+  kaleidoShader.setUniform('u_chromaBlur', params.chromaBlur);
+  kaleidoShader.setUniform('u_glowStrength', params.glowStrength);
 
   // Draw a fullscreen quad in clip-space (-1 to 1) to run the shader across every pixel
   quad(-1, -1, 1, -1, 1, 1, -1, 1);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 // GLSL Vertex Shader (just passes vertex position to the fragment shader)
@@ -61,67 +74,75 @@ const fragSrc = `
 precision mediump float;
 #endif
 
-// Inputs
 uniform vec2 u_resolution;
 uniform float u_time;
 
-uniform float u_tileCount;     // how many tiles across screen
-uniform float u_squareSize;    // size of each square
-uniform float u_thickness;     // border thickness
-uniform float u_kaleidoSides;  // number of symmetry wedges
-uniform float u_distortionAmp; // refraction amplitude
+uniform float u_tileCount;
+uniform float u_squareSize;
+uniform float u_thickness;
+uniform float u_kaleidoSides;
+uniform float u_distortionAmp;
+uniform float u_chromaOffset;
+uniform float u_chromaBlur;
+uniform float u_glowStrength;
 
 varying vec2 vUv;
 
-// Square pattern: returns 1.0 inside the square, 0.0 outside
+// Square pattern
 float square(vec2 uv, float size) {
-  vec2 d = abs(uv - 0.5); // distance from center
+  vec2 d = abs(uv - 0.5);
   return step(max(d.x, d.y), size);
 }
 
-// Kaleidoscope transformation using polar angle mirroring
+// Kaleidoscope transformation
 vec2 kaleido(vec2 uv, float sides) {
   uv -= 0.5;
   float angle = atan(uv.y, uv.x);
   float radius = length(uv);
-  angle = mod(angle, 6.28318 / sides); // 2π = 6.28318
+  angle = mod(angle, 6.28318 / sides);
   angle = abs(angle - 3.14159 / sides);
   return vec2(cos(angle), sin(angle)) * radius + 0.5;
 }
 
-// Refractive wave distortion (like wobbling glass)
-vec2 refractDistort(vec2 uv, float time) {
+// Refraction distortion
+vec2 refractDistort(vec2 uv, float time, float offset) {
   float freq = 5.0;
   float amp = u_distortionAmp;
-  uv.x += sin(uv.y * freq + time * 2.0) * amp;
-  uv.y += cos(uv.x * freq - time * 2.0) * amp;
+  uv.x += sin(uv.y * freq + time * 2.0 + offset) * amp;
+  uv.y += cos(uv.x * freq - time * 2.0 + offset) * amp;
   return uv;
 }
 
-void main() {
-  vec2 uv = vUv;
-
-  // Fix for non-square screens
+// Render function with glow falloff
+float renderPattern(vec2 uv, float offset, float blurAmount) {
+  // Fix aspect ratio
   uv -= 0.5;
   uv.x *= u_resolution.x / u_resolution.y;
   uv += 0.5;
 
-  // Apply kaleidoscope symmetry
   uv = kaleido(uv, u_kaleidoSides);
-
-  // Apply refraction distortion
-  uv = refractDistort(uv, u_time);
-
-  // Tile the pattern multiple times
+  uv = refractDistort(uv, u_time, offset);
   uv = fract(uv * u_tileCount);
 
-  // Create bordered square pattern (outline only)
-  float outer = square(uv, u_squareSize);
-  float inner = square(uv, u_squareSize - u_thickness);
-  float border = outer - inner;
+  float outer = square(uv, u_squareSize + blurAmount);
+  float inner = square(uv, u_squareSize - u_thickness - blurAmount);
+  return outer - inner;
+}
 
-  // Color: black background, white border
-  vec3 color = mix(vec3(0.0), vec3(1.0), border);
+void main() {
+  float blur = u_chromaBlur * 0.01; // scale blur to shader space
+
+  // Each channel gets slight blur + offset
+  float r = renderPattern(vUv,  u_chromaOffset, blur);
+  float g = renderPattern(vUv,  0.0,               blur * 0.5);
+  float b = renderPattern(vUv, -u_chromaOffset,    blur);
+
+  // Basic glow based on sharp center pattern
+  float glowCore = renderPattern(vUv, 0.0, 0.0);
+  float glow = smoothstep(0.0, 1.0, glowCore) * u_glowStrength;
+
+  // Compose final color
+  vec3 color = vec3(r, g, b) + glow;
 
   gl_FragColor = vec4(color, 1.0);
 }`;
