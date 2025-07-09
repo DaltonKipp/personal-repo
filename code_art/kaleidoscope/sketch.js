@@ -1,5 +1,10 @@
 let kaleidoShader; // Holds the custom shader
 
+let capturer;
+let isRecording = false;
+let recordStartTime = 0;
+let recordDuration = 0; // in seconds
+
 let params = {
   tileCount: 16.0,     // Number of times to tile the square pattern
   squareSize: 0.4,     // Size of the square in each tile
@@ -8,7 +13,8 @@ let params = {
   distortionAmp: 0.09, // Refraction wobble strength
   chromaOffset: 0.05,  // Chromatic Aberration
   chromaBlur: 1.5,     // Chromatic Blur
-  glowStrength: 0.4    // Edge Glow
+  glowStrength: 0.4,   // Edge Glow
+  speed: 1.0           // Animation Speed
 };
 
 function preload() {
@@ -27,16 +33,31 @@ function setup() {
   gui.add(params, 'squareSize', 0.05, 0.5).step(0.01).name('Square Size');
   gui.add(params, 'thickness', 0.001, 0.2).step(0.001).name('Border Thickness');
   gui.add(params, 'kaleidoSides', 1, 16).step(1).name('Kaleido Sides');
-  gui.add(params, 'distortionAmp', 0.0, 0.1).step(0.001).name('Distortion Amp');
-  gui.add(params, 'chromaOffset', 0.0, 0.1).step(0.001).name('Chroma Offset');
+  gui.add(params, 'distortionAmp', 0.0, 0.5).step(0.001).name('Distortion Amp');
+  gui.add(params, 'chromaOffset', 0.0, 0.2).step(0.001).name('Chroma Offset');
   gui.add(params, 'chromaBlur', 0.0, 5.0).step(0.1).name('Chroma Blur');
   gui.add(params, 'glowStrength', 0.0, 1.0).step(0.01).name('Edge Glow');
+  gui.add(params, 'speed', 0.1, 4.0).step(0.1).name('Speed');
+
+  let captureParams = {
+    duration: 5, // seconds
+    startCapture: () => {
+      capturer = new CCapture({ format: 'png', framerate: 30 });
+      isRecording = true;
+      recordStartTime = millis();
+      recordDuration = captureParams.duration * 1000;
+      capturer.start();
+      console.log("🎥 Recording started...");
+    }
+  };
+  gui.add(captureParams, 'duration', 1, 60).step(1).name('Capture Duration');
+  gui.add(captureParams, 'startCapture').name('🎬 Start Recording');
 }
 
 function draw() {
   // Send updated uniforms to the shader
   kaleidoShader.setUniform('u_resolution', [width, height]);
-  kaleidoShader.setUniform('u_time', millis() / 2000.0);
+  kaleidoShader.setUniform('u_time', millis() / 1000.0);
   kaleidoShader.setUniform('u_tileCount', params.tileCount);
   kaleidoShader.setUniform('u_squareSize', params.squareSize);
   kaleidoShader.setUniform('u_thickness', params.thickness);
@@ -45,9 +66,22 @@ function draw() {
   kaleidoShader.setUniform('u_chromaOffset', params.chromaOffset);
   kaleidoShader.setUniform('u_chromaBlur', params.chromaBlur);
   kaleidoShader.setUniform('u_glowStrength', params.glowStrength);
+  kaleidoShader.setUniform('u_speed', params.speed);
 
   // Draw a fullscreen quad in clip-space (-1 to 1) to run the shader across every pixel
   quad(-1, -1, 1, -1, 1, 1, -1, 1);
+
+  // CCapture: record frame
+  if (isRecording) {
+    capturer.capture(document.querySelector('canvas'));
+
+    if (millis() - recordStartTime >= recordDuration) {
+      isRecording = false;
+      capturer.stop();
+      capturer.save();
+      console.log("🎬 Recording complete.");
+    }
+  }
 }
 
 function windowResized() {
@@ -85,6 +119,7 @@ uniform float u_distortionAmp;
 uniform float u_chromaOffset;
 uniform float u_chromaBlur;
 uniform float u_glowStrength;
+uniform float u_speed;
 
 varying vec2 vUv;
 
@@ -121,7 +156,7 @@ float renderPattern(vec2 uv, float offset, float blurAmount) {
   uv += 0.5;
 
   uv = kaleido(uv, u_kaleidoSides);
-  uv = refractDistort(uv, u_time, offset);
+  uv = refractDistort(uv, u_time * u_speed, offset);
   uv = fract(uv * u_tileCount);
 
   float outer = square(uv, u_squareSize + blurAmount);
