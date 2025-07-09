@@ -1,13 +1,11 @@
-
-// sketch.js
-
 let kaleidoShader; // Holds the custom shader
+
 let params = {
-  tileCount: 5.0,       // Number of times to tile the square pattern
-  squareSize: 0.3,      // Size of the square in each tile
-  thickness: 0.03,      // Thickness of the square border
-  kaleidoSides: 8.0,    // Number of angular kaleidoscope slices
-  distortionAmp: 0.015  // Refraction wobble strength
+  tileCount: 16.0,       // Number of times to tile the square pattern
+  squareSize: 0.4,      // Size of the square in each tile
+  thickness: 0.18,      // Thickness of the square border
+  kaleidoSides: 12.0,    // Number of angular kaleidoscope slices
+  distortionAmp: 0.09  // Refraction wobble strength
 };
 
 function preload() {
@@ -93,7 +91,7 @@ vec2 kaleido(vec2 uv, float sides) {
 
 // Refractive wave distortion (like wobbling glass)
 vec2 refractDistort(vec2 uv, float time) {
-  float freq = 10.0;
+  float freq = 5.0;
   float amp = u_distortionAmp;
   uv.x += sin(uv.y * freq + time * 2.0) * amp;
   uv.y += cos(uv.x * freq - time * 2.0) * amp;
@@ -126,5 +124,4 @@ void main() {
   vec3 color = mix(vec3(0.0), vec3(1.0), border);
 
   gl_FragColor = vec4(color, 1.0);
-}
-`;
+}`;
