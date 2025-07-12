@@ -4,6 +4,7 @@ let capturer;
 let isRecording = false;
 let recordStartTime = 0;
 let recordDuration = 0; // in seconds
+let gui; // Declare GUI
 
 let params = {
   tileCount: 16.0,     // Number of times to tile the square pattern
@@ -28,16 +29,17 @@ function setup() {
   shader(kaleidoShader); // Apply the custom shader
 
   // Create dat.GUI sliders for the parameters
-  const gui = new dat.GUI();
+  gui = new dat.GUI();
   gui.add(params, 'tileCount', 1, 20).step(0.1).name('Tile Count');
   gui.add(params, 'squareSize', 0.05, 0.5).step(0.01).name('Square Size');
-  gui.add(params, 'thickness', 0.001, 0.2).step(0.001).name('Border Thickness');
+  gui.add(params, 'thickness', 0.001, 0.5).step(0.001).name('Border Thickness');
   gui.add(params, 'kaleidoSides', 1, 16).step(1).name('Kaleido Sides');
   gui.add(params, 'distortionAmp', 0.0, 0.5).step(0.001).name('Distortion Amp');
   gui.add(params, 'chromaOffset', 0.0, 0.2).step(0.001).name('Chroma Offset');
   gui.add(params, 'chromaBlur', 0.0, 5.0).step(0.1).name('Chroma Blur');
   gui.add(params, 'glowStrength', 0.0, 1.0).step(0.01).name('Edge Glow');
   gui.add(params, 'speed', 0.1, 4.0).step(0.1).name('Speed');
+  gui.add({ randomizeParams }, 'randomizeParams').name('🎲 Randomize Settings');
 
   let captureParams = {
     duration: 5, // seconds
@@ -52,6 +54,23 @@ function setup() {
   };
   gui.add(captureParams, 'duration', 1, 60).step(1).name('Capture Duration');
   gui.add(captureParams, 'startCapture').name('🎬 Start Recording');
+}
+
+function randomizeParams() {
+  params.tileCount     = random(1, 20);
+  params.squareSize    = random(0.05, 0.5);
+  params.thickness     = random(0.001, 0.5);
+  params.kaleidoSides  = floor(random(1, 17));
+  params.distortionAmp = random(0.0, 0.5);
+  params.chromaOffset  = random(0.0, 0.2);
+  params.chromaBlur    = random(0.0, 5.0);
+  params.glowStrength  = random(0.0, 1.0);
+  params.speed         = random(0.1, 4.0);
+
+  // Force dat.GUI to update displayed slider values
+  for (let controller of gui.__controllers) {
+    controller.updateDisplay();
+  }
 }
 
 function draw() {
