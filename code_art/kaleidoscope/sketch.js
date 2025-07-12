@@ -40,6 +40,8 @@ function setup() {
   gui.add(params, 'glowStrength', 0.0, 1.0).step(0.01).name('Edge Glow');
   gui.add(params, 'speed', 0.1, 4.0).step(0.1).name('Speed');
   gui.add({ randomizeParams }, 'randomizeParams').name('🎲 Randomize Settings');
+  gui.add({ savePreset }, 'savePreset').name('💾 Save Preset');
+  gui.add({ loadPreset }, 'loadPreset').name('📂 Load Preset');
 
   let captureParams = {
     duration: 5, // seconds
@@ -71,6 +73,53 @@ function randomizeParams() {
   for (let controller of gui.__controllers) {
     controller.updateDisplay();
   }
+}
+
+function savePreset() {
+  const blob = new Blob([JSON.stringify(params, null, 2)], {
+    type: 'application/json'
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'kaleido-preset.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadPreset() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const loaded = JSON.parse(event.target.result);
+
+        // Update each parameter if it's defined in the file
+        for (let key in loaded) {
+          if (params.hasOwnProperty(key)) {
+            params[key] = loaded[key];
+          }
+        }
+
+        // Update all GUI sliders to match loaded values
+        for (let controller of gui.__controllers) {
+          controller.updateDisplay();
+        }
+
+        console.log("✅ Preset loaded!");
+      } catch (err) {
+        console.error("❌ Error loading preset:", err);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 function draw() {
