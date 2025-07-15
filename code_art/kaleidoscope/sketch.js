@@ -26,7 +26,7 @@ const glowStrengthMax   = 5.0;
 const speedMin          = 0.0;
 const speedMax          = 2.0;
 const spiralStrengthMin = 0.0;
-const spiralStrengthMax = 1.0;
+const spiralStrengthMax = 0.5;
 const spiralSpeedMin    = 0.0;
 const spiralSpeedMax    = 1.0;
 
@@ -59,11 +59,11 @@ function setup() {
   gui = new dat.GUI();
   gui.add(params, 'tileCount', tileCountMin, tileCountMax).step(1.0).name('Tile Count');
   gui.add(params, 'squareSize', squareSizeMin, squareSizeMax).step(0.01).name('Square Size');
-  gui.add(params, 'thickness', thicknessMin, thicknessMax).step(0.001).name('Border Thickness');
+  gui.add(params, 'thickness', thicknessMin, thicknessMax).step(0.01).name('Border Thickness');
   gui.add(params, 'kaleidoSides', kaleidoSidesMin, kaleidoSidesMax).step(1).name('Kaleido Sides');
-  gui.add(params, 'distortionAmp', distortionAmpMin, distortionAmpMax).step(0.001).name('Distortion Amp');
-  gui.add(params, 'chromaOffset', chromaOffsetMin, chromaOffsetMax).step(0.001).name('Chroma Offset');
-  gui.add(params, 'chromaBlur', chromaBlurMin, chromaBlurMax).step(0.1).name('Chroma Blur');
+  gui.add(params, 'distortionAmp', distortionAmpMin, distortionAmpMax).step(0.01).name('Distortion Amp');
+  gui.add(params, 'chromaOffset', chromaOffsetMin, chromaOffsetMax).step(0.01).name('Chroma Offset');
+  gui.add(params, 'chromaBlur', chromaBlurMin, chromaBlurMax).step(0.01).name('Chroma Blur');
   gui.add(params, 'glowStrength', glowStrengthMin, glowStrengthMax).step(0.01).name('Edge Glow');
   gui.add(params, 'speed', speedMin, speedMax).step(0.1).name('Speed');
   gui.add(params, 'spiralStrength', spiralStrengthMin, spiralStrengthMax).step(0.01).name('Spiral Strength');
