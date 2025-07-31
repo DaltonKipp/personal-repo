@@ -16,11 +16,11 @@ const kaleidoSidesMax = 32;
 const distortionAmpMin = 0.0;
 const distortionAmpMax = 0.5;
 const chromaOffsetMin = 0.0;
-const chromaOffsetMax = 0.5;
+const chromaOffsetMax = 0.2;
 const chromaBlurMin = 0.0;
-const chromaBlurMax = 5.0;
+const chromaBlurMax = 0.5;
 const glowStrengthMin = 0.0;
-const glowStrengthMax = 5.0;
+const glowStrengthMax = 1.0;
 const speedMin = 0.0;
 const speedMax = 2.0;
 const spiralStrengthMin = 0.0;
@@ -83,15 +83,16 @@ function setup() {
   kaleidoFolder.add(params, 'spiralSpeed', spiralSpeedMin, spiralSpeedMax).step(0.01).name('Spiral Speed');
 
   const glitchFolder = gui.addFolder('Glitch Effect');
-  glitchFolder.add(glitchParams, 'strength', glitchStrengthMin, glitchStrengthMax).step(0.01).name('Glitch Strength');
+  glitchFolder.add(glitchParams, 'strength', glitchStrengthMin, glitchStrengthMax).step(0.001).name('Glitch Strength');
   glitchFolder.add(glitchParams, 'chunkSize', glitchChunkSizeMin, glitchChunkSizeMax).step(1).name('Chunk Size');
   glitchFolder.add(glitchParams, 'speed', glitchSpeedMin, glitchSpeedMax).step(0.1).name('Glitch Speed');
   glitchFolder.add(glitchParams, 'chance', glitchChanceMin, glitchChanceMax).step(0.01).name('Glitch Chance');
   glitchFolder.add({ disableGlitch }, 'disableGlitch').name('Disable Glitch');
 
-  gui.add({ randomize }, 'randomize').name('Randomize Parameters');
-  gui.add({ savePreset }, 'savePreset').name('Save Preset');
-  gui.add({ loadPreset }, 'loadPreset').name('Load Preset');
+  const presetFolder = gui.addFolder('Preset Folder');
+  presetFolder.add({ randomize }, 'randomize').name('Randomize Parameters');
+  presetFolder.add({ savePreset }, 'savePreset').name('Save Preset');
+  presetFolder.add({ loadPreset }, 'loadPreset').name('Load Preset');
 }
 
 function disableGlitch() {
@@ -107,7 +108,7 @@ function randomize() {
     if (typeof params[key] === 'number') {
       let c = gui.__folders['Kaleidoscope'].__controllers.find(c => c.property === key);
       if (c) {
-        let min = c.__min, max = c.__max;
+        let min = c.__min, max = c.__max * randomDamping;
         params[key] = random(min, max);
         c.updateDisplay();
       }
@@ -117,7 +118,7 @@ function randomize() {
     if (typeof glitchParams[key] === 'number') {
       let c = gui.__folders['Glitch Effect'].__controllers.find(c => c.property === key);
       if (c) {
-        let min = c.__min, max = c.__max;
+        let min = c.__min, max = c.__max * randomDamping;
         glitchParams[key] = random(min, max);
         c.updateDisplay();
       }
@@ -157,7 +158,6 @@ function loadPreset() {
         if (json.kaleido) Object.assign(params, json.kaleido);
         if (json.glitch) Object.assign(glitchParams, json.glitch);
 
-        // Update all GUI sliders to reflect loaded values
         for (const folderName of ['Kaleidoscope', 'Glitch Effect']) {
           const folder = gui.__folders[folderName];
           if (folder) folder.__controllers.forEach(ctrl => ctrl.updateDisplay());
@@ -258,7 +258,7 @@ vec2 refractDistort(vec2 uv, float time, float offset) {
   return uv;
 }
 
-float renderPattern(vec2 uv, float offset, float blurAmount) {
+float renderPattern(vec2 uv, float offset) {
   float time = u_time * u_speed;
   uv -= 0.5;
   uv.x *= u_resolution.x / u_resolution.y;
@@ -275,19 +275,46 @@ float renderPattern(vec2 uv, float offset, float blurAmount) {
   uv = refractDistort(uv, time, offset);
   uv = fract(uv * u_tileCount);
 
-  float outer = square(uv, u_squareSize + blurAmount);
-  float inner = square(uv, u_squareSize - u_thickness - blurAmount);
-  return outer - inner;
+  float outer = square(uv, u_squareSize);
+  float inner = square(uv, u_squareSize - u_thickness);
+  return outer-inner;
+}
+
+vec3 chromaBlur(vec2 uv) {
+  float blurRadius = u_chromaBlur * 0.01;
+  vec3 col = vec3(0.0);
+  float total = 0.0;
+
+  for (int i = -2; i <= 2; i++) {
+    float offset = float(i) * blurRadius;
+    float weight = 1.0 - abs(float(i)) * 0.2;
+    col.r += renderPattern(uv + vec2(offset + u_chromaOffset, 0.0),  u_chromaOffset) * weight;
+    col.g += renderPattern(uv + vec2(offset,               0.0),  0.0) * weight;
+    col.b += renderPattern(uv + vec2(offset - u_chromaOffset, 0.0), -u_chromaOffset) * weight;
+    total += weight;
+  }
+
+  return col/total;
+}
+
+float glowAround(vec2 uv) {
+  float total = 0.0;
+  float glow = 0.0;
+  float radius = u_glowStrength * 0.01;
+  const int STEPS = 20;
+  for (int i = 0; i < STEPS; i++) {
+    float angle = float(i) * 6.28318 / float(STEPS);
+    vec2 offset = vec2(cos(angle), sin(angle)) * radius;
+    glow += renderPattern(uv + offset, 0.0);
+    total += 1.0;
+  }
+  return glow / total;
 }
 
 void main() {
-  float blur = u_chromaBlur * 0.01;
-  float r = renderPattern(vUv,  u_chromaOffset, blur);
-  float g = renderPattern(vUv,  0.0,               blur * 0.5);
-  float b = renderPattern(vUv, -u_chromaOffset,    blur);
-  float glowCore = renderPattern(vUv, 0.0, 0.0);
-  float glow = smoothstep(0.0, 1.0, glowCore) * u_glowStrength;
-  vec3 color = vec3(r, g, b) + glow;
+  vec3 color = chromaBlur(vUv);
+  float glow = glowAround(vUv);
+  color += vec3(glow) * u_glowStrength;
   gl_FragColor = vec4(color, 1.0);
 }`;
 
@@ -311,13 +338,8 @@ float rand(float y) {
 }
 
 void main() {
-  // Divide screen vertically into chunks based on chunkSize
   float chunkIndex = floor(vUv.y / u_chunkSize);
-  
-  // Determine if this chunk should glitch
   float shouldGlitch = step(1.0 - u_glitchChance, rand(chunkIndex));
-  
-  // Compute per-chunk horizontal offset
   float offset = (rand(chunkIndex + 1.0) * 2.0 - 1.0) * u_glitchStrength * shouldGlitch;
 
   vec2 uv = vUv;
