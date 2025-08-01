@@ -15,19 +15,21 @@ const paramDefs = {
   kaleidoSides:   { min: 1, max: 32, step: 1, default: 8 },
   distortionAmp:  { min: 0.0, max: 0.5, step: 0.01, default: 0.05 },
   distortionFreq: { min: 0.0, max: 100.0, step: 1, default: 5 },
-  chromaOffset:   { min: 0.0, max: 0.2, step: 0.001, default: 0.01 },
+  chromaOffset:   { min: 0.0, max: 2.0, step: 0.001, default: 0.01 },
   chromaBlur:     { min: 0.0, max: 0.5, step: 0.01, default: 0.05 },
   glowStrength:   { min: 0.0, max: 1.0, step: 0.01, default: 0.5 },
   glowSteps:      { min: 1, max: 20, step: 1, default: 5 },
   speed:          { min: 0.0, max: 2.0, step: 0.01, default: 0.5 },
   spiralStrength: { min: 0.0, max: 1.0, step: 0.01, default: 0.5 },
   spiralSpeed:    { min: 0.0, max: 1.0, step: 0.01, default: 0.5 },
+  spiralMode:     { min: 0, max: 1, step: 1, default: 0 }, // 0 = oscillating, 1 = compounding
   strength:       { min: 0.0, max: 0.2, step: 0.001, default: 0.005 },
   chunkSize:      { min: 1, max: 100, step: 1, default: 10 },
   glitchSpeed:    { min: 0.0, max: 10, step: 0.1, default: 0.0 },
   chance:         { min: 0.0, max: 1.0, step: 0.01, default: 1.0 },
 };
 
+// Randomizer Button Damping Factor
 const randomDamping = 0.75;
 
 let params = {};
@@ -50,7 +52,7 @@ function setup() {
   setupFolder('Kaleidoscope', ['tileCount', 'squareSize', 'thickness', 'kaleidoSides', 'speed']);
   setupFolder('Distortion', ['distortionAmp', 'distortionFreq']);
   setupFolder('Chromatic Effect', ['chromaOffset', 'chromaBlur', 'glowStrength', 'glowSteps']);
-  setupFolder('Spiral Effect', ['spiralStrength', 'spiralSpeed']);
+  setupFolder('Spiral Effect', ['spiralStrength', 'spiralSpeed', 'spiralMode']);
   setupFolder('Glitch Effect', ['strength', 'chunkSize', 'glitchSpeed', 'chance'], true);
 
   // Preset Manager Folder
@@ -70,20 +72,54 @@ function setup() {
 
   loadAllPresets();
   updatePresetDropdown();
+  presets.add({ Reset: resetToDefaults }, 'Reset').name('Reset to Default');
 }
 
 function setupFolder(name, keys, isGlitch = false) {
   const folder = gui.addFolder(name);
+
   keys.forEach(k => {
+    if (k === 'spiralMode') return; // handled separately below
     const def = paramDefs[k];
     const controller = folder.add(params, k, def.min, def.max).step(def.step).name(k);
     params[`_${k}Controller`] = controller;
   });
+
+  // Special toggle button for spiralMode
+  if (keys.includes('spiralMode')) {
+    const toggleWrapper = {
+      toggle: function () {
+        params.spiralMode = 1 - params.spiralMode;
+        spiralController.name(`Spiral Mode: ${getSpiralModeName()}`);
+      }
+    };
+    const spiralController = folder.add(toggleWrapper, 'toggle').name(`Spiral Mode: ${getSpiralModeName()}`);
+    params._spiralModeController = spiralController;
+  }
+
+  // Add randomize button
   folder.add({ randomize: () => {
     randomizeParams(keys);
     updateAllControllers();
   } }, 'randomize').name('Randomize');
-  if (isGlitch) folder.add({ disableGlitch }, 'disableGlitch').name('Disable Glitch');
+
+  if (isGlitch) {
+    folder.add({ disableGlitch }, 'disableGlitch').name('Disable Glitch');
+  }
+}
+
+function resetToDefaults() {
+  for (const key in paramDefs) {
+    params[key] = paramDefs[key].default;
+  }
+  updateAllControllers();
+  activePreset = 'None';
+  updatePresetDropdown();
+}
+
+// Helper function to map mode to string
+function getSpiralModeName() {
+  return params.spiralMode === 1 ? 'Compounding' : 'Oscillating';
 }
 
 function randomizeParams(keys) {
@@ -130,7 +166,7 @@ function importPreset() {
         updateAllControllers();
         updatePresetDropdown();
       } catch (err) {
-        console.error('❌ Failed to import preset:', err);
+        console.error('Failed to import preset:', err);
       }
     };
     reader.readAsText(file);
@@ -238,7 +274,7 @@ uniform float u_time;
 uniform float u_tileCount, u_squareSize, u_thickness;
 uniform float u_kaleidoSides, u_distortionAmp, u_distortionFreq;
 uniform float u_chromaOffset, u_chromaBlur, u_glowStrength, u_glowSteps;
-uniform float u_speed, u_spiralStrength, u_spiralSpeed;
+uniform float u_speed, u_spiralStrength, u_spiralSpeed, u_spiralMode;
 
 varying vec2 vUv;
 
@@ -264,12 +300,18 @@ vec2 refractDistort(vec2 uv, float time, float offset) {
   return uv;
 }
 
+// Spiral warping with selectable mode
 vec2 spiralWarp(vec2 uv, float time) {
   vec2 centered = uv - 0.5;
   float r = length(centered);
   float normR = r / 0.7071;
   float angle = atan(centered.y, centered.x);
-  angle += normR * u_spiralStrength * time * u_spiralSpeed;
+  
+  float twist = (u_spiralMode > 0.5)
+    ? time * u_spiralSpeed  // compounding
+    : sin(time * u_spiralSpeed);  // oscillating
+
+  angle += normR * u_spiralStrength * twist;
   return vec2(cos(angle), sin(angle)) * r + 0.5;
 }
 
