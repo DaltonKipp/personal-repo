@@ -77,32 +77,39 @@ function setup() {
 
 function setupFolder(name, keys, isGlitch = false) {
   const folder = gui.addFolder(name);
+  folder.open(); // show it by default so you can see the toggle
 
+  // If this folder manages spiralMode, insert the toggle button first
+  let spiralController = null;
+  if (keys.includes('spiralMode')) {
+    const toggleWrapper = {
+      toggle: () => {
+        params.spiralMode = 1 - params.spiralMode; // 0 ↔ 1
+        updateSpiralModeLabel(spiralController);
+      }
+    };
+    spiralController = folder
+      .add(toggleWrapper, 'toggle')
+      .name(`Spiral Mode: ${getSpiralModeName()}`);
+    // stash so we can refresh its label later
+    params._spiralModeController = spiralController;
+  }
+
+  // Add numeric sliders (skip spiralMode here because we handled it above)
   keys.forEach(k => {
-    if (k === 'spiralMode') return; // handled separately below
+    if (k === 'spiralMode') return;
     const def = paramDefs[k];
     const controller = folder.add(params, k, def.min, def.max).step(def.step).name(k);
     params[`_${k}Controller`] = controller;
   });
 
-  // Special toggle button for spiralMode
-  if (keys.includes('spiralMode')) {
-    const toggleWrapper = {
-      toggle: function () {
-        params.spiralMode = 1 - params.spiralMode;
-        spiralController.name(`Spiral Mode: ${getSpiralModeName()}`);
-      }
-    };
-    const spiralController = folder.add(toggleWrapper, 'toggle').name(`Spiral Mode: ${getSpiralModeName()}`);
-    params._spiralModeController = spiralController;
-  }
-
-  // Add randomize button
+  // Randomize button for this folder
   folder.add({ randomize: () => {
     randomizeParams(keys);
     updateAllControllers();
-  } }, 'randomize').name('Randomize');
+  }}, 'randomize').name('Randomize');
 
+  // Optional folder-specific actions
   if (isGlitch) {
     folder.add({ disableGlitch }, 'disableGlitch').name('Disable Glitch');
   }
@@ -113,6 +120,7 @@ function resetToDefaults() {
     params[key] = paramDefs[key].default;
   }
   updateAllControllers();
+  updateSpiralModeLabel();
   activePreset = 'None';
   updatePresetDropdown();
 }
@@ -122,8 +130,16 @@ function getSpiralModeName() {
   return params.spiralMode === 1 ? 'Compounding' : 'Oscillating';
 }
 
+function updateSpiralModeLabel(controller) {
+  // prefer the passed controller; fall back to the stashed one
+  const c = controller || params._spiralModeController;
+  if (c) c.name(`Spiral Mode: ${getSpiralModeName()}`);
+}
+
 function randomizeParams(keys) {
   keys.forEach(k => {
+    // Don't randomize the mode toggle
+    if (k === 'spiralMode') return;
     const def = paramDefs[k];
     params[k] = random(def.min, def.max * randomDamping);
   });
@@ -194,6 +210,7 @@ function loadPresetFromLocal(name) {
   if (presetList[name]) {
     Object.assign(params, presetList[name]);
     updateAllControllers();
+    updateSpiralModeLabel();
     activePreset = name;
     updatePresetDropdown();
   }
