@@ -1,0 +1,20 @@
+{
+  "tileCount": 1,
+  "squareSize": 0.3,
+  "thickness": 0.5,
+  "kaleidoSides": 7,
+  "speed": 0.23,
+  "distortionAmp": 0.38,
+  "distortionFreq": 31,
+  "chromaOffset": 0.015,
+  "chromaBlur": 0,
+  "glowStrength": 0,
+  "glowSteps": 1,
+  "spiralStrength": 1,
+  "spiralSpeed": 1,
+  "spiralMode": 0,
+  "strength": 0.02,
+  "chunkSize": 20,
+  "glitchSpeed": 0,
+  "chance": 1
+}
