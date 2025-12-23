@@ -57,9 +57,11 @@ function init() {
 
     // Spiral
     spiralEnabled: true,
-    spiralStrength: 0.35, // u_spiralStrength
-    spiralSpeed: 0.6,     // u_spiralSpeed
-    spiralMode: 1,
+    spiralStrength: 0.35,
+    spiralSpeed: 0.6,
+    spiralMode: 0,           // 0 = non-compounding, 1 = compounding
+    spiralRadius: 1.0,       // 0..1 edge; >1 extends beyond
+    spiralFalloffExp: 1.0,   // softness; try 0.6..2.0
 
     // Chromatic Blur
     chromaEnabled:    true,
@@ -124,8 +126,11 @@ function syncParams() {
 
   // Spiral
   if (spiralPass) spiralPass.enabled = !!params.spiralEnabled;
-  setU(spiralPass, 'u_spiralStrength', params.spiralStrength);
-  setU(spiralPass, 'u_spiralSpeed',    params.spiralSpeed);
+  setU(spiralPass, 'u_strength', params.spiralStrength);
+  setU(spiralPass, 'u_speed',    params.spiralSpeed);
+  setU(spiralPass, 'u_mode',     (params.spiralMode|0));
+  setU(spiralPass, 'u_radius',       params.spiralRadius);
+  setU(spiralPass, 'u_falloffExp',   params.spiralFalloffExp);
 
   // Chromatic Blur (Gaussian)
   if (chromaPass) chromaPass.enabled = !!params.chromaEnabled;

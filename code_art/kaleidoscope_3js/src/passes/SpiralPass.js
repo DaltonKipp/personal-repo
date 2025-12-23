@@ -1,65 +1,92 @@
 import * as THREE from 'three';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 
-// Warps UVs with oscillating or compounding twist
 export function SpiralPass(params) {
   const shader = {
     uniforms: {
-      tDiffuse:      { value: null },
-      u_resolution:  { value: new THREE.Vector2(1,1) },
-      u_time:        { value: 0 },
-      u_spiralStrength: { value: params.spiralStrength },
-      u_spiralSpeed:    { value: params.spiralSpeed },
-      u_spiralMode:     { value: params.spiralMode }, // 0/1
+      tDiffuse:       { value: null },
+      u_resolution:   { value: new THREE.Vector2(1, 1) },
+      u_time:         { value: 0.0 }, // updated from main loop
+      u_strength:     { value: params.spiralStrength },   // 0..1-ish
+      u_speed:        { value: params.spiralSpeed },      // Hz-ish
+      u_mode:         { value: (params.spiralMode | 0) }, // 0 non-comp, 1 comp
+      u_radius:       { value: params.spiralRadius },     // 0..1.5 normalized
+      u_falloffExp:   { value: params.spiralFalloffExp }, // 0.2..4
     },
-    vertexShader:`
+    vertexShader: `
       varying vec2 vUv;
-      void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }
+      void main(){ vUv = uv; gl_Position = vec4(position,1.0); }
     `,
-    fragmentShader:`
+    fragmentShader: `
       precision mediump float;
+
       uniform sampler2D tDiffuse;
       uniform vec2  u_resolution;
-      uniform float u_time;
-      uniform float u_spiralStrength, u_spiralSpeed, u_spiralMode;
-      varying vec2 vUv;
+      uniform float u_time, u_strength, u_speed;
+      uniform float u_radius, u_falloffExp;
+      uniform int   u_mode;
+      varying vec2  vUv;
 
-      vec2 spiralWarp(vec2 uv, float time){
-        vec2 c = uv - 0.5;
-        float r = length(c);
-        float normR = r / 0.7071;
-        float a = atan(c.y, c.x);
-        float twist = (u_spiralMode > 0.5)
-          ? time * u_spiralSpeed
-          : sin(time * u_spiralSpeed);
-        a += normR * u_spiralStrength * twist;
-        return vec2(cos(a), sin(a)) * r + 0.5;
+      // Mirror wrapping to avoid edge smearing
+      float mirror1D(float x){
+        float m = mod(x, 2.0);
+        return (m > 1.0) ? (2.0 - m) : m;
       }
+      vec2 mirrorUV(vec2 uv){ return vec2(mirror1D(uv.x), mirror1D(uv.y)); }
 
-      void main() {
-        float t = u_time;
-        vec2 uv = vUv;
+      void main(){
+        float aspect = u_resolution.x / u_resolution.y;
 
-        // aspect preserve
-        uv -= 0.5;
-        uv.x *= u_resolution.x / u_resolution.y;
-        uv += 0.5;
+        // NDC around center, aspect corrected
+        vec2 p = vUv * 2.0 - 1.0;
+        p.x *= aspect;
 
-        uv = spiralWarp(uv, t);
+        // Normalize radius so corners ≈ 1.0 regardless of aspect
+        float r = length(p);
+        float maxR = length(vec2(aspect, 1.0));
+        float rNorm = r / maxR;     // 0 at center, ~1 at furthest corner
+
+        // Falloff you can control: radius + exponent
+        float falloff = pow(smoothstep(u_radius, 0.0, rNorm), u_falloffExp);
+
+        // Twist amount: non-compounding vs compounding
+        float twist;
+        if (u_mode == 0) {
+          // oscillates (no long-term accumulation)
+          twist = u_strength * sin(u_time * (6.28318530718 * u_speed)) * rNorm * falloff;
+        } else {
+          // increases over time (keeps spinning)
+          twist = u_strength * (u_time * u_speed) * rNorm * falloff;
+        }
+
+        float ang = atan(p.y, p.x) + twist;
+
+        // Reproject to UV
+        vec2 q = vec2(cos(ang), sin(ang)) * r;
+        q.x /= aspect;
+        vec2 uv = q * 0.5 + 0.5;
+
+        // Prevent out-of-range sampling artifacts
+        uv = mirrorUV(uv);
+
         gl_FragColor = texture2D(tDiffuse, uv);
-      }`
+      }
+    `
   };
 
   const pass = new ShaderPass(shader);
   pass.name = 'SpiralPass';
+  pass.uniforms = pass.material.uniforms;
 
   const u = pass.material.uniforms;
   pass.onBeforeRender = () => {
-    const { innerWidth:w, innerHeight:h } = window;
-    u.u_resolution.value.set(w, h);
-    u.u_spiralStrength.value = params.spiralStrength;
-    u.u_spiralSpeed.value    = params.spiralSpeed;
-    u.u_spiralMode.value     = params.spiralMode; // will be exactly 0 or 1 from GUI
+    u.u_resolution.value.set(window.innerWidth, window.innerHeight);
+    u.u_strength.value   = params.spiralStrength;
+    u.u_speed.value      = params.spiralSpeed;
+    u.u_mode.value       = (params.spiralMode | 0);
+    u.u_radius.value     = params.spiralRadius;
+    u.u_falloffExp.value = params.spiralFalloffExp;
+    // u_time is updated from main loop if present
   };
 
   return pass;
