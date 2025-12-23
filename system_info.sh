@@ -25,46 +25,22 @@ colored_text() {
     echo -e "${color}${text}${NC}"
 }
 
-# Box drawing characters (ASCII alternatives for better compatibility)
-H_LINE=$'\u2500'    # ─
-V_LINE=$'\u2502'    # │
-TL_CORNER=$'\u250C' # ┌
-TR_CORNER=$'\u2510' # ┐
-BL_CORNER=$'\u2514' # └
-BR_CORNER=$'\u2518' # ┘
-L_JOINT=$'\u251C'   # ├
-R_JOINT=$'\u2524'   # ┤
-T_JOINT=$'\u252C'   # ┬
-B_JOINT=$'\u2534'   # ┴
-CROSS=$'\u253C'     # ┼
+# Box drawing characters - improved detection and fallback
+# First, set safe ASCII defaults
+H_LINE="-"
+V_LINE="|"
+TL_CORNER="+"
+TR_CORNER="+"
+BL_CORNER="+"
+BR_CORNER="+"
+L_JOINT="+"
+R_JOINT="+"
+T_JOINT="+"
+B_JOINT="+"
+CROSS="+"
 
-# Detect whether the current locale is using UTF-8
-if [[ "$(locale charmap 2>/dev/null)" == "UTF-8" ]]; then
-    H_LINE="─"
-    V_LINE="│"
-    TL_CORNER="┌"
-    TR_CORNER="┐"
-    BL_CORNER="└"
-    BR_CORNER="┘"
-    L_JOINT="├"
-    R_JOINT="┤"
-    T_JOINT="┬"
-    B_JOINT="┴"
-    CROSS="┼"
-else
-    # Fallback to plain ASCII if not UTF-8
-    H_LINE="-"
-    V_LINE="|"
-    TL_CORNER="+"
-    TR_CORNER="+"
-    BL_CORNER="+"
-    BR_CORNER="+"
-    L_JOINT="+"
-    R_JOINT="+"
-    T_JOINT="+"
-    B_JOINT="+"
-    CROSS="+"
-fi
+# Will be set after command line parsing
+use_unicode=false
 
 # Calculate terminal width if possible
 if command -v tput &>/dev/null; then
@@ -93,6 +69,8 @@ PRINT_NETWORK=0
 PRINT_LOAD=0
 PRINT_USB=0
 PRINT_BIOS=0
+FORCE_ASCII=0
+DEBUG_MODE=0
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -106,6 +84,8 @@ while [[ $# -gt 0 ]]; do
         --load)          PRINT_LOAD=1 ;;
         --usb)           PRINT_USB=1 ;;
         --bios)          PRINT_BIOS=1 ;;
+        --ascii)         FORCE_ASCII=1 ;;
+        --debug)         DEBUG_MODE=1 ;;
         -h|--help)
             cat <<EOF
 
@@ -114,20 +94,25 @@ Usage: $0 [flags]
 If you run $0 with no flags, ALL sections will be printed.
 Otherwise, specify one or more of:
 
-  --overview     Show only the “SYSTEM OVERVIEW” section
-  --cpu          Show only the “CPU INFORMATION” section
-  --memory       Show only the “MEMORY INFORMATION” section
-  --gpu          Show only the “GPU INFORMATION” section
-  --screen       Show only the “SCREEN INFORMATION” section
-  --disk         Show only the “DISK INFORMATION” section
-  --network      Show only the “NETWORK INFORMATION” section
-  --load         Show only the “SYSTEM LOAD” section
-  --usb          Show only the “USB DEVICES” section
-  --bios         Show only the “BIOS/FIRMWARE INFORMATION” section
+  --overview     Show only the "SYSTEM OVERVIEW" section
+  --cpu          Show only the "CPU INFORMATION" section
+  --memory       Show only the "MEMORY INFORMATION" section
+  --gpu          Show only the "GPU INFORMATION" section
+  --screen       Show only the "SCREEN INFORMATION" section
+  --disk         Show only the "DISK INFORMATION" section
+  --network      Show only the "NETWORK INFORMATION" section
+  --load         Show only the "SYSTEM LOAD" section
+  --usb          Show only the "USB DEVICES" section
+  --bios         Show only the "BIOS/FIRMWARE INFORMATION" section
+
+Compatibility options:
+  --ascii        Force ASCII characters instead of Unicode box drawing
+  --debug        Show locale and encoding information for troubleshooting
 
 Combine flags as needed, e.g.:
 
   $0 --cpu --disk --network
+  $0 --ascii --overview
 
 EOF
             exit 0
@@ -161,7 +146,7 @@ if [[ $PRINT_OVERVIEW -eq 0 && $PRINT_CPU -eq 0 && $PRINT_MEMORY -eq 0 && \
 fi
 
 ########################################
-# 7) HELPER FUNCTIONS
+# HELPER FUNCTIONS
 ########################################
 
 # Strip ANSI color codes to measure visible length
@@ -169,7 +154,7 @@ strip_ansi() {
     echo "$1" | sed 's/\x1b\[[0-9;]*m//g'
 }
 
-# Truncate a string to max_len (accounting for ANSI), adding “...” if truncated
+# Truncate a string to max_len (accounting for ANSI), adding "..." if truncated
 truncate_string() {
     local str="$1"
     local max_len="$2"
@@ -177,7 +162,7 @@ truncate_string() {
     visible_str=$(strip_ansi "$str")
 
     if [ "${#visible_str}" -gt "$max_len" ]; then
-        # Truncate at (max_len - 3) visible chars, then append “...”
+        # Truncate at (max_len - 3) visible chars, then append "..."
         # But we must cut the raw string; ANSI codes remain intact up to that point.
         echo "${str:0:$((max_len - 3))}..."
     else
@@ -207,7 +192,37 @@ run_command() {
     fi
 }
 
-# Create the main box header (centered title)
+########################################
+# CONFIGURE UNICODE/ASCII CHARACTERS
+########################################
+
+# Enhanced UTF-8 detection and testing (now that FORCE_ASCII is set)
+# Skip Unicode detection if ASCII is forced
+use_unicode_vertical=false
+
+if [[ $FORCE_ASCII -eq 0 ]]; then
+    # Check multiple conditions for UTF-8 support
+    charmap_result="$(locale charmap 2>/dev/null)"
+    
+    if [[ "$charmap_result" == "UTF-8" ]] && \
+       [[ "$LANG" =~ \.UTF-8$ || "$LC_ALL" =~ \.UTF-8$ || "$LC_CTYPE" =~ \.UTF-8$ ]] && \
+       [[ "$TERM" != "dumb" ]] && [[ -t 1 ]]; then
+        
+        # Test vertical characters (these usually work better)
+        test_vertical="│"
+        if command -v wc &>/dev/null; then
+            vert_bytes=$(echo -n "$test_vertical" | wc -c)
+            if [[ $vert_bytes -eq 3 ]]; then
+                use_unicode_vertical=true
+            fi
+        else
+            if [[ ${#test_vertical} -le 3 ]]; then
+                use_unicode_vertical=true
+            fi
+        fi
+    fi
+fi
+
 create_box_header() {
     local title="$1"
     # Strip ANSI for length:
@@ -318,9 +333,9 @@ create_table_row() {
     local key="$1"
     local value="$2"
     local key_width=25
-    # Max visible length for value:
-    local max_value_width=$(( WIDTH - key_width - 7 ))
-
+    
+    # Truncate value if needed
+    local max_value_width=$(( WIDTH - key_width - 6 ))
     local visible_value
     visible_value=$(strip_ansi "$value")
 
@@ -329,15 +344,14 @@ create_table_row() {
         visible_value=$(strip_ansi "$value")
     fi
 
-    local padding=$(( WIDTH - key_width - ${#visible_value} - 5 ))
-    if [ $padding -lt 0 ]; then padding=0; fi
-
     local key_len=${#key}
-    local key_space
-    key_space=$(printf '%*s' "$(( key_width - key_len ))" '')
-
-    local right_space
-    right_space=$(printf '%*s' "$padding" '')
+    local value_len=${#visible_value}
+    
+    # Calculate exact padding: WIDTH - (V_LINE + space + key_width + colon_space + value_len + V_LINE)
+    # = WIDTH - (1 + 1 + 25 + 2 + value_len + 1) = WIDTH - (30 + value_len)
+    local total_fixed=$(( 1 + 1 + key_width + 2 + value_len + 1 ))
+    local padding=$(( WIDTH - total_fixed ))
+    if [ $padding -lt 0 ]; then padding=0; fi
 
     printf "${LCYAN}${V_LINE}${NC} "
     printf "${YELLOW}%s${NC}" "$key"
@@ -352,7 +366,7 @@ create_table_row() {
 format_command_output() {
     local output="$1"
     local indent=4
-    local max_content_width=$(( WIDTH - indent - 3 ))
+    local max_content_width=$(( WIDTH - indent - 4 ))
 
     # Read each line of output
     echo "$output" | while IFS= read -r line; do
@@ -364,13 +378,13 @@ format_command_output() {
             visible_line=$(strip_ansi "$line")
         fi
 
-        local padding=$(( WIDTH - indent - ${#visible_line} - 3 ))
+        local line_len=${#visible_line}
+        # Calculate padding: WIDTH - (V_LINE + space + indent + line_len + V_LINE)
+        local padding=$(( WIDTH - 1 - 1 - indent - line_len - 1 ))
         if [ $padding -lt 0 ]; then padding=0; fi
 
         local indent_space
         indent_space=$(printf '%*s' "$indent" '')
-        local right_space
-        right_space=$(printf '%*s' "$padding" '')
 
         printf "${LCYAN}${V_LINE}${NC} "
         printf "${indent_space}%s${NC}" "$line"
@@ -379,10 +393,48 @@ format_command_output() {
     done
 }
 
+# Configure characters based on what works
+if [[ "$use_unicode_vertical" == "true" ]]; then
+    V_LINE="│"
+    TL_CORNER="┌"
+    TR_CORNER="┐"
+    BL_CORNER="└"
+    BR_CORNER="┘"
+    L_JOINT="├"
+    R_JOINT="┤"
+    T_JOINT="┬"
+    B_JOINT="┴"
+    CROSS="┼"
+fi
 
+# Always use ASCII dash for horizontal lines since Unicode horizontal lines
+# often have rendering issues in various terminal environments
+H_LINE="-"
+
+########################################
 # SCRIPT START
+########################################
 clear
 timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+
+# Show debug information if requested (after clear so it's visible)
+if [[ $DEBUG_MODE -eq 1 ]]; then
+    echo "DEBUG: Locale and encoding information:"
+    echo "  LANG: $LANG"
+    echo "  LC_ALL: $LC_ALL"
+    echo "  LC_CTYPE: $LC_CTYPE"
+    echo "  TERM: $TERM"
+    echo "  Charmap: $(locale charmap 2>/dev/null)"
+    echo "  Force ASCII: $FORCE_ASCII"
+    echo "  Use Unicode Vertical: $use_unicode_vertical"
+    echo "  H_LINE character: '$H_LINE'"
+    echo "  V_LINE character: '$V_LINE'"
+    echo "  Terminal width: $(tput cols 2>/dev/null || echo "unknown")"
+    echo "  Calculated WIDTH: $WIDTH"
+    echo "  Vertical char bytes: $(echo -n "│" | wc -c 2>/dev/null || echo "unknown")"
+    echo "  Horizontal char bytes: $(echo -n "─" | wc -c 2>/dev/null || echo "unknown")"
+    echo ""
+fi
 
 # Main Header: SYSTEM INFORMATION REPORT
 echo ""
